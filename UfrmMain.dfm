@@ -20,12 +20,12 @@ object frmMain: TfrmMain
     Left = 0
     Top = 37
     Width = 209
-    Height = 461
+    Height = 442
     Align = alLeft
     TabOrder = 0
     object Label1: TLabel
       Left = 24
-      Top = 432
+      Top = 416
       Width = 104
       Height = 13
       Caption = #20849#8212#8212#20154#27425#26410#25171#21360
@@ -76,7 +76,7 @@ object frmMain: TfrmMain
     end
     object BitBtn1: TBitBtn
       Left = 88
-      Top = 304
+      Top = 296
       Width = 75
       Height = 25
       Caption = #26597#35810
@@ -84,17 +84,17 @@ object frmMain: TfrmMain
     end
     object RadioGroup1: TRadioGroup
       Left = 8
-      Top = 344
+      Top = 328
       Width = 193
       Height = 81
       Columns = 2
       ItemIndex = 0
       Items.Strings = (
+        #19981#38480
         #24403#22825
         #26368#36817'3'#22825
         #26368#36817'1'#21608
-        #26368#36817'1'#26376
-        #19981#38480)
+        #26368#36817'1'#26376)
       TabOrder = 5
     end
     object RadioGroup2: TRadioGroup
@@ -105,16 +105,16 @@ object frmMain: TfrmMain
       Columns = 2
       ItemIndex = 0
       Items.Strings = (
+        #19981#38480
         #24403#22825
         #26368#36817'3'#22825
         #26368#36817'1'#21608
-        #26368#36817'1'#26376
-        #19981#38480)
+        #26368#36817'1'#26376)
       TabOrder = 6
     end
     object RadioGroup3: TRadioGroup
       Left = 8
-      Top = 112
+      Top = 104
       Width = 193
       Height = 41
       Columns = 2
@@ -165,39 +165,120 @@ object frmMain: TfrmMain
         Height = 22
         Caption = #25171#21360#35813#30149#20154
       end
+      object ToolButton1: TToolButton
+        Left = 305
+        Top = 2
+        Width = 3
+        Caption = 'ToolButton1'
+        Style = tbsSeparator
+      end
+      object SpeedButton4: TSpeedButton
+        Left = 308
+        Top = 2
+        Width = 88
+        Height = 22
+        Caption = #36873#39033
+        OnClick = SpeedButton4Click
+      end
     end
   end
-  object DBGrid1: TDBGrid
-    Left = 216
-    Top = 56
-    Width = 289
-    Height = 417
+  object Panel2: TPanel
+    Left = 209
+    Top = 37
+    Width = 703
+    Height = 442
+    Align = alClient
     TabOrder = 2
-    TitleFont.Charset = ANSI_CHARSET
-    TitleFont.Color = clWindowText
-    TitleFont.Height = -13
-    TitleFont.Name = #23435#20307
-    TitleFont.Style = []
+    object Splitter1: TSplitter
+      Left = 290
+      Top = 1
+      Height = 440
+    end
+    object DBGrid1: TDBGrid
+      Left = 1
+      Top = 1
+      Width = 289
+      Height = 440
+      Align = alLeft
+      TabOrder = 0
+      TitleFont.Charset = ANSI_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -13
+      TitleFont.Name = #23435#20307
+      TitleFont.Style = []
+    end
+    object Panel3: TPanel
+      Left = 293
+      Top = 1
+      Width = 409
+      Height = 440
+      Align = alClient
+      TabOrder = 1
+      object Splitter2: TSplitter
+        Left = 1
+        Top = 292
+        Width = 407
+        Height = 3
+        Cursor = crVSplit
+        Align = alBottom
+      end
+      object DBGrid2: TDBGrid
+        Left = 1
+        Top = 1
+        Width = 407
+        Height = 291
+        Align = alClient
+        TabOrder = 0
+        TitleFont.Charset = ANSI_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -13
+        TitleFont.Name = #23435#20307
+        TitleFont.Style = []
+      end
+      object Memo1: TMemo
+        Left = 1
+        Top = 295
+        Width = 407
+        Height = 144
+        Align = alBottom
+        Lines.Strings = (
+          'Memo1')
+        TabOrder = 1
+      end
+    end
   end
-  object DBGrid2: TDBGrid
-    Left = 520
-    Top = 56
-    Width = 369
-    Height = 281
-    TabOrder = 3
-    TitleFont.Charset = ANSI_CHARSET
-    TitleFont.Color = clWindowText
-    TitleFont.Height = -13
-    TitleFont.Name = #23435#20307
-    TitleFont.Style = []
-  end
-  object Memo1: TMemo
-    Left = 520
-    Top = 352
-    Width = 369
-    Height = 121
-    Lines.Strings = (
-      'Memo1')
-    TabOrder = 4
+  object StatusBar1: TStatusBar
+    Left = 0
+    Top = 479
+    Width = 912
+    Height = 19
+    Panels = <
+      item
+        Width = 50
+      end
+      item
+        Text = #25805#20316#20154#21592#24037#21495':'
+        Width = 90
+      end
+      item
+        Width = 100
+      end
+      item
+        Text = #25805#20316#20154#21592#22995#21517':'
+        Width = 100
+      end
+      item
+        Width = 70
+      end
+      item
+        Text = #25480#26435#20351#29992#21333#20301':'
+        Width = 100
+      end
+      item
+        Width = 300
+      end
+      item
+        Width = 50
+      end>
   end
 end

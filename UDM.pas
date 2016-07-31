@@ -78,7 +78,6 @@ var
   bAppendMakeTjDesc:string;//是否允许追加生成体检结论
   SmoothNum:integer;//直方图光滑次数
   LisConn:string;//Lis连接字符串,MakeDBConn过程中被赋值,然后传入QC.DLL、CalcItemPro.dll
-  OrderType:string;//基本信息排序方式
   ifBatchOperater:boolean;//是否批量操作,批量操作时结果不跟随基本信息滚动.滚动太耗时,使批打慢
   LoginTime:integer;//弹出登录窗口的时间
 
