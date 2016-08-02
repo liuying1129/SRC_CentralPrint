@@ -13,6 +13,8 @@ object frmMain: TfrmMain
   OldCreateOrder = False
   Position = poScreenCenter
   WindowState = wsMaximized
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
@@ -62,6 +64,7 @@ object frmMain: TfrmMain
       EditLabel.Caption = #36865#26816#31185#23460
       LabelPosition = lpLeft
       TabOrder = 2
+      OnKeyDown = LabeledEdit3KeyDown
     end
     object LabeledEdit4: TLabeledEdit
       Left = 72
@@ -73,6 +76,7 @@ object frmMain: TfrmMain
       EditLabel.Caption = #36865#26816#21307#29983
       LabelPosition = lpLeft
       TabOrder = 3
+      OnKeyDown = LabeledEdit4KeyDown
     end
     object BitBtn1: TBitBtn
       Left = 88
@@ -81,10 +85,11 @@ object frmMain: TfrmMain
       Height = 25
       Caption = #26597#35810
       TabOrder = 4
+      OnClick = BitBtn1Click
     end
     object RadioGroup1: TRadioGroup
       Left = 8
-      Top = 328
+      Top = 16
       Width = 193
       Height = 81
       Columns = 2
@@ -99,7 +104,7 @@ object frmMain: TfrmMain
     end
     object RadioGroup2: TRadioGroup
       Left = 8
-      Top = 16
+      Top = 328
       Width = 193
       Height = 81
       Columns = 2
@@ -180,6 +185,22 @@ object frmMain: TfrmMain
         Caption = #36873#39033
         OnClick = SpeedButton4Click
       end
+      object ToolButton2: TToolButton
+        Left = 396
+        Top = 2
+        Width = 3
+        Caption = 'ToolButton2'
+        ImageIndex = 0
+        Style = tbsSeparator
+      end
+      object SpeedButton5: TSpeedButton
+        Left = 399
+        Top = 2
+        Width = 112
+        Height = 22
+        Caption = #25253#34920#32534#36753#22120
+        OnClick = SpeedButton5Click
+      end
     end
   end
   object Panel2: TPanel
@@ -190,34 +211,37 @@ object frmMain: TfrmMain
     Align = alClient
     TabOrder = 2
     object Splitter1: TSplitter
-      Left = 290
+      Left = 301
       Top = 1
       Height = 440
     end
     object DBGrid1: TDBGrid
       Left = 1
       Top = 1
-      Width = 289
+      Width = 300
       Height = 440
       Align = alLeft
+      DataSource = DataSource1
+      ReadOnly = True
       TabOrder = 0
       TitleFont.Charset = ANSI_CHARSET
       TitleFont.Color = clWindowText
       TitleFont.Height = -13
       TitleFont.Name = #23435#20307
       TitleFont.Style = []
+      OnDrawColumnCell = DBGrid1DrawColumnCell
     end
     object Panel3: TPanel
-      Left = 293
+      Left = 304
       Top = 1
-      Width = 409
+      Width = 398
       Height = 440
       Align = alClient
       TabOrder = 1
       object Splitter2: TSplitter
         Left = 1
-        Top = 292
-        Width = 407
+        Top = 293
+        Width = 396
         Height = 3
         Cursor = crVSplit
         Align = alBottom
@@ -225,24 +249,26 @@ object frmMain: TfrmMain
       object DBGrid2: TDBGrid
         Left = 1
         Top = 1
-        Width = 407
-        Height = 291
+        Width = 396
+        Height = 292
         Align = alClient
+        DataSource = DataSource2
+        ReadOnly = True
         TabOrder = 0
         TitleFont.Charset = ANSI_CHARSET
         TitleFont.Color = clWindowText
         TitleFont.Height = -13
         TitleFont.Name = #23435#20307
         TitleFont.Style = []
+        OnDrawColumnCell = DBGrid2DrawColumnCell
       end
       object Memo1: TMemo
         Left = 1
-        Top = 295
-        Width = 407
-        Height = 144
+        Top = 296
+        Width = 396
+        Height = 143
         Align = alBottom
-        Lines.Strings = (
-          'Memo1')
+        ReadOnly = True
         TabOrder = 1
       end
     end
@@ -280,5 +306,30 @@ object frmMain: TfrmMain
       item
         Width = 50
       end>
+  end
+  object DataSource1: TDataSource
+    DataSet = ADOQuery1
+    Left = 265
+    Top = 125
+  end
+  object DataSource2: TDataSource
+    DataSet = ADOQuery2
+    Left = 537
+    Top = 102
+  end
+  object ADOQuery1: TADOQuery
+    Connection = DM.ADOConnection1
+    AfterOpen = ADOQuery1AfterOpen
+    AfterScroll = ADOQuery1AfterScroll
+    Parameters = <>
+    Left = 297
+    Top = 125
+  end
+  object ADOQuery2: TADOQuery
+    Connection = DM.ADOConnection1
+    AfterOpen = ADOQuery2AfterOpen
+    Parameters = <>
+    Left = 569
+    Top = 102
   end
 end
