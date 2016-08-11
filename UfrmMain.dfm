@@ -26,15 +26,30 @@ object frmMain: TfrmMain
     Align = alLeft
     TabOrder = 0
     object Label1: TLabel
-      Left = 24
-      Top = 416
-      Width = 104
+      Left = 9
+      Top = 360
+      Width = 72
       Height = 13
-      Caption = #20849#8212#8212#20154#27425#26410#25171#21360
+      Caption = #26410#25171#21360#20154#27425':'
+    end
+    object Label2: TLabel
+      Left = 83
+      Top = 360
+      Width = 42
+      Height = 13
+      Cursor = crHandPoint
+      Caption = 'Label2'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clRed
+      Font.Height = -13
+      Font.Name = #23435#20307
+      Font.Style = []
+      ParentFont = False
+      OnClick = Label2Click
     end
     object LabeledEdit1: TLabeledEdit
       Left = 78
-      Top = 160
+      Top = 144
       Width = 121
       Height = 21
       EditLabel.Width = 72
@@ -44,8 +59,8 @@ object frmMain: TfrmMain
       TabOrder = 0
     end
     object LabeledEdit2: TLabeledEdit
-      Left = 72
-      Top = 192
+      Left = 78
+      Top = 168
       Width = 121
       Height = 21
       EditLabel.Width = 26
@@ -55,8 +70,8 @@ object frmMain: TfrmMain
       TabOrder = 1
     end
     object LabeledEdit3: TLabeledEdit
-      Left = 72
-      Top = 224
+      Left = 78
+      Top = 192
       Width = 121
       Height = 21
       EditLabel.Width = 52
@@ -67,8 +82,8 @@ object frmMain: TfrmMain
       OnKeyDown = LabeledEdit3KeyDown
     end
     object LabeledEdit4: TLabeledEdit
-      Left = 72
-      Top = 256
+      Left = 78
+      Top = 216
       Width = 121
       Height = 21
       EditLabel.Width = 52
@@ -79,8 +94,8 @@ object frmMain: TfrmMain
       OnKeyDown = LabeledEdit4KeyDown
     end
     object BitBtn1: TBitBtn
-      Left = 88
-      Top = 296
+      Left = 123
+      Top = 240
       Width = 75
       Height = 25
       Caption = #26597#35810
@@ -89,7 +104,7 @@ object frmMain: TfrmMain
     end
     object RadioGroup1: TRadioGroup
       Left = 8
-      Top = 16
+      Top = 8
       Width = 193
       Height = 81
       Columns = 2
@@ -104,7 +119,7 @@ object frmMain: TfrmMain
     end
     object RadioGroup2: TRadioGroup
       Left = 8
-      Top = 328
+      Top = 272
       Width = 193
       Height = 81
       Columns = 2
@@ -119,7 +134,7 @@ object frmMain: TfrmMain
     end
     object RadioGroup3: TRadioGroup
       Left = 8
-      Top = 104
+      Top = 96
       Width = 193
       Height = 41
       Columns = 2
@@ -128,6 +143,22 @@ object frmMain: TfrmMain
         #19981#38480
         #26410#25171#21360)
       TabOrder = 7
+    end
+    object CheckBox1: TCheckBox
+      Left = 8
+      Top = 391
+      Width = 97
+      Height = 17
+      Caption = #25171#21360#39044#35272
+      TabOrder = 8
+    end
+    object CheckBox2: TCheckBox
+      Left = 8
+      Top = 415
+      Width = 97
+      Height = 17
+      Caption = #25353#32452#20998#39029
+      TabOrder = 9
     end
   end
   object CoolBar1: TCoolBar
@@ -155,30 +186,25 @@ object frmMain: TfrmMain
         Width = 81
         Height = 22
         Caption = #25171#21360
+        OnClick = SpeedButton1Click
       end
-      object SpeedButton2: TSpeedButton
+      object SpeedButton6: TSpeedButton
         Left = 81
         Top = 2
         Width = 112
         Height = 22
-        Caption = #20840#37096#25171#21360
-      end
-      object SpeedButton3: TSpeedButton
-        Left = 193
-        Top = 2
-        Width = 112
-        Height = 22
-        Caption = #25171#21360#35813#30149#20154
+        Caption = #20998#32452#25171#21360
+        OnClick = SpeedButton6Click
       end
       object ToolButton1: TToolButton
-        Left = 305
+        Left = 193
         Top = 2
         Width = 3
         Caption = 'ToolButton1'
         Style = tbsSeparator
       end
       object SpeedButton4: TSpeedButton
-        Left = 308
+        Left = 196
         Top = 2
         Width = 88
         Height = 22
@@ -186,7 +212,7 @@ object frmMain: TfrmMain
         OnClick = SpeedButton4Click
       end
       object ToolButton2: TToolButton
-        Left = 396
+        Left = 284
         Top = 2
         Width = 3
         Caption = 'ToolButton2'
@@ -194,7 +220,7 @@ object frmMain: TfrmMain
         Style = tbsSeparator
       end
       object SpeedButton5: TSpeedButton
-        Left = 399
+        Left = 287
         Top = 2
         Width = 112
         Height = 22
@@ -229,6 +255,7 @@ object frmMain: TfrmMain
       TitleFont.Height = -13
       TitleFont.Name = #23435#20307
       TitleFont.Style = []
+      OnCellClick = DBGrid1CellClick
       OnDrawColumnCell = DBGrid1DrawColumnCell
     end
     object Panel3: TPanel
@@ -302,13 +329,10 @@ object frmMain: TfrmMain
       end
       item
         Width = 300
-      end
-      item
-        Width = 50
       end>
   end
   object DataSource1: TDataSource
-    DataSet = ADOQuery1
+    DataSet = ADObasic
     Left = 265
     Top = 125
   end
@@ -317,10 +341,10 @@ object frmMain: TfrmMain
     Left = 537
     Top = 102
   end
-  object ADOQuery1: TADOQuery
+  object ADObasic: TADOQuery
     Connection = DM.ADOConnection1
-    AfterOpen = ADOQuery1AfterOpen
-    AfterScroll = ADOQuery1AfterScroll
+    AfterOpen = ADObasicAfterOpen
+    AfterScroll = ADObasicAfterScroll
     Parameters = <>
     Left = 297
     Top = 125
@@ -331,5 +355,34 @@ object frmMain: TfrmMain
     Parameters = <>
     Left = 569
     Top = 102
+  end
+  object Timer1: TTimer
+    Interval = 2000
+    OnTimer = Timer1Timer
+    Left = 273
+    Top = 253
+  end
+  object frReport1: TfrReport
+    Dataset = frDBDataSet1
+    InitialZoom = pzDefault
+    PreviewButtons = [pbZoom, pbLoad, pbSave, pbPrint, pbFind, pbHelp, pbExit]
+    RebuildPrinter = False
+    OnGetValue = frReport1GetValue
+    OnBeforePrint = frReport1BeforePrint
+    OnPrintReport = frReport1PrintReport
+    Left = 305
+    Top = 253
+    ReportForm = {19000000}
+  end
+  object ado_print: TADOQuery
+    Connection = DM.ADOConnection1
+    Parameters = <>
+    Left = 273
+    Top = 333
+  end
+  object frDBDataSet1: TfrDBDataSet
+    DataSet = ado_print
+    Left = 337
+    Top = 253
   end
 end

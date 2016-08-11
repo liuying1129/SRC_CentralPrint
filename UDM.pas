@@ -26,7 +26,7 @@ type
   end;
 
 const
-  SYSNAME='LIS';
+  SYSNAME='CentralPrint';
   sDBALIAS='ALIAS_SHHJ';
   CGYXJB='常规';//常规优先级别字符串
 	BASE_URL='http://211.97.0.5:8080/YkAPI/service';
@@ -58,18 +58,11 @@ var
   operator_DeptName:string;//操作员部门名称
   operator_ShowAllTj:string;//操作员是否可操作所有科室的组合项目
   
-  ifGetMemoFromCaseNo:boolean;//是否根据"门诊/住院号"提取备注
   ifSaveSuccess:boolean;//记录"保存检验单F3"事件是否成功,批量录入时要用到
-  ifAutoCheck:boolean;//记录是否打印时自动审核检验单
   ifEnterGetCode:boolean;//记录是否 填写病人基本信息时,直接回车弹出取码框
   deptname_match:string;//记录送检科室的取码匹配方式
   check_doctor_match:string;////记录送检医生的取码匹配方式
-  ifDoctorStation:boolean;//记录是否仅显示已审核的检验单
-  ShowSelfDJ:boolean;//仅显示登录者所开检验单
-  ifGetInfoFromHis:boolean;//记录是否提取HIS中的病人基本信息及检验项目
-  ifAutoCompletionJob:boolean;//是否关闭程序时自动结束检验工作
   CXZF:STRING;//检验结果超限字符
-  ifNoResultPrint:boolean;//是否允许无检验结果打印
   MergePrintWorkGroupRange:string;//"按姓名性别年龄合并"的工作组范围
   bRegister:boolean;
   SCSYDW:STRING;//授权使用单位
@@ -89,8 +82,18 @@ var
   TempFile_T2:string;
   WorkGroup_T3:string;
   TempFile_T3:string;
-
-  ifSearchHistValue:boolean;//是否查找历史结果
+  WorkGroup_T4:string;
+  TempFile_T4:string;
+  WorkGroup_T5:string;
+  TempFile_T5:string;
+  WorkGroup_T6:string;
+  TempFile_T6:string;
+  WorkGroup_T7:string;
+  TempFile_T7:string;
+  WorkGroup_T8:string;
+  TempFile_T8:string;
+  WorkGroup_T9:string;
+  TempFile_T9:string;
 
   ifHeightForItemNum:boolean;
   ItemRecNum:integer;
