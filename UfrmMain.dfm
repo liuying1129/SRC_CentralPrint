@@ -22,7 +22,7 @@ object frmMain: TfrmMain
     Left = 0
     Top = 37
     Width = 209
-    Height = 442
+    Height = 441
     Align = alLeft
     TabOrder = 0
     object Label1: TLabel
@@ -233,19 +233,19 @@ object frmMain: TfrmMain
     Left = 209
     Top = 37
     Width = 703
-    Height = 442
+    Height = 441
     Align = alClient
     TabOrder = 2
     object Splitter1: TSplitter
       Left = 301
       Top = 1
-      Height = 440
+      Height = 439
     end
     object DBGrid1: TDBGrid
       Left = 1
       Top = 1
       Width = 300
-      Height = 440
+      Height = 439
       Align = alLeft
       DataSource = DataSource1
       ReadOnly = True
@@ -262,12 +262,12 @@ object frmMain: TfrmMain
       Left = 304
       Top = 1
       Width = 398
-      Height = 440
+      Height = 439
       Align = alClient
       TabOrder = 1
       object Splitter2: TSplitter
         Left = 1
-        Top = 293
+        Top = 292
         Width = 396
         Height = 3
         Cursor = crVSplit
@@ -277,7 +277,7 @@ object frmMain: TfrmMain
         Left = 1
         Top = 1
         Width = 396
-        Height = 292
+        Height = 291
         Align = alClient
         DataSource = DataSource2
         ReadOnly = True
@@ -291,7 +291,7 @@ object frmMain: TfrmMain
       end
       object Memo1: TMemo
         Left = 1
-        Top = 296
+        Top = 295
         Width = 396
         Height = 143
         Align = alBottom
@@ -302,7 +302,7 @@ object frmMain: TfrmMain
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 479
+    Top = 478
     Width = 912
     Height = 19
     Panels = <

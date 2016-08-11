@@ -950,7 +950,7 @@ end;
 procedure TfrmMain.frReport1BeforePrint(Memo: TStringList; View: TfrView);
 var
   adotemp11:tadoquery;
-  unid,printtimes,iIfCompleted:integer;
+  unid,iIfCompleted:integer;
   
   strsqlPrint,strEnglishName,strHistogram,strXTitle:string;
   MS:tmemorystream;
@@ -969,7 +969,6 @@ begin
   if not ADObasic.RecordCount=0 then exit;
 
   unid:=ADObasic.fieldbyname('唯一编号').AsInteger;
-  printtimes:=ADObasic.fieldbyname('打印次数').AsInteger;
   iIfCompleted:=ADObasic.FieldByName('ifCompleted').AsInteger;
 
   //加载血流变曲线、直方图、散点图 start
@@ -1089,22 +1088,21 @@ begin
     adotemp11.Free;
   end;
   //加载血流变曲线、直方图、散点图 stop
-
-  if printtimes>0 then exit;
-
-  ExecSQLCmd(LisConn,'update chk_con set printtimes='+inttostr(printtimes+1)+' where unid='+inttostr(unid));
-
-  //adobasic.Refresh;//打印后要显示红色
 end;
 
 procedure TfrmMain.frReport1PrintReport;
 var
-  unid:integer;
+  unid,printtimes,iIfCompleted:integer;
 begin
   if not ADObasic.Active then exit;
   if not ADObasic.RecordCount=0 then exit;
 
   unid:=ADObasic.fieldbyname('唯一编号').AsInteger;
+  printtimes:=ADObasic.fieldbyname('打印次数').AsInteger;
+  iIfCompleted:=ADObasic.FieldByName('ifCompleted').AsInteger;
+
+  if printtimes=0 then//修改打印次数
+    ExecSQLCmd(LisConn,'update '+ifThen(iIfCompleted=1,'chk_con_bak','chk_con')+' set printtimes='+inttostr(printtimes+1)+' where unid='+inttostr(unid));
   
   ExecSQLCmd(LisConn,'insert into pix_tran (pkunid,Reserve1,Reserve2,OpType) values ('+inttostr(unid)+','''+operator_name+''',''Class_Print'',''Lab'')');
 end;
