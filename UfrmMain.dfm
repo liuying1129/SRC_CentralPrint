@@ -28,12 +28,12 @@ object frmMain: TfrmMain
     object Label1: TLabel
       Left = 9
       Top = 360
-      Width = 72
+      Width = 100
       Height = 13
-      Caption = #26410#25171#21360#20154#27425':'
+      Caption = #26410#25171#21360#20154#27425'(F5):'
     end
     object Label2: TLabel
-      Left = 83
+      Left = 113
       Top = 360
       Width = 42
       Height = 13
@@ -94,11 +94,11 @@ object frmMain: TfrmMain
       OnKeyDown = LabeledEdit4KeyDown
     end
     object BitBtn1: TBitBtn
-      Left = 123
+      Left = 78
       Top = 240
-      Width = 75
+      Width = 121
       Height = 25
-      Caption = #26597#35810
+      Caption = #26597#35810'F3'
       TabOrder = 4
       OnClick = BitBtn1Click
     end
@@ -146,16 +146,16 @@ object frmMain: TfrmMain
     end
     object CheckBox1: TCheckBox
       Left = 8
-      Top = 391
-      Width = 97
+      Top = 415
+      Width = 75
       Height = 17
       Caption = #25171#21360#39044#35272
       TabOrder = 8
     end
     object CheckBox2: TCheckBox
-      Left = 8
+      Left = 128
       Top = 415
-      Width = 97
+      Width = 75
       Height = 17
       Caption = #25353#32452#20998#39029
       TabOrder = 9
@@ -185,7 +185,7 @@ object frmMain: TfrmMain
         Top = 2
         Width = 81
         Height = 22
-        Caption = #25171#21360
+        Caption = #25171#21360'F7'
         OnClick = SpeedButton1Click
       end
       object SpeedButton6: TSpeedButton
@@ -193,7 +193,7 @@ object frmMain: TfrmMain
         Top = 2
         Width = 112
         Height = 22
-        Caption = #20998#32452#25171#21360
+        Caption = #20998#32452#25171#21360'F9'
         OnClick = SpeedButton6Click
       end
       object ToolButton1: TToolButton
@@ -226,6 +226,46 @@ object frmMain: TfrmMain
         Height = 22
         Caption = #25253#34920#32534#36753#22120
         OnClick = SpeedButton5Click
+      end
+      object ToolButton3: TToolButton
+        Left = 399
+        Top = 2
+        Width = 3
+        Caption = 'ToolButton3'
+        ImageIndex = 1
+        Style = tbsSeparator
+      end
+      object SpeedButton2: TSpeedButton
+        Left = 402
+        Top = 2
+        Width = 112
+        Height = 22
+        Caption = #37325#26032#30331#24405
+        OnClick = SpeedButton2Click
+      end
+      object ToolButton4: TToolButton
+        Left = 514
+        Top = 2
+        Width = 3
+        Caption = 'ToolButton4'
+        ImageIndex = 2
+        Style = tbsSeparator
+      end
+      object SpeedButton3: TSpeedButton
+        Left = 517
+        Top = 2
+        Width = 35
+        Height = 22
+        Caption = #20840#36873
+        OnClick = SpeedButton3Click
+      end
+      object SpeedButton7: TSpeedButton
+        Left = 552
+        Top = 2
+        Width = 45
+        Height = 22
+        Caption = #20840#19981#36873
+        OnClick = SpeedButton7Click
       end
     end
   end
@@ -296,6 +336,7 @@ object frmMain: TfrmMain
         Height = 143
         Align = alBottom
         ReadOnly = True
+        ScrollBars = ssBoth
         TabOrder = 1
       end
     end
@@ -384,5 +425,29 @@ object frmMain: TfrmMain
     DataSet = ado_print
     Left = 337
     Top = 253
+  end
+  object ActionList1: TActionList
+    Left = 377
+    Top = 253
+    object Action1: TAction
+      Caption = 'Action1'
+      ShortCut = 114
+      OnExecute = BitBtn1Click
+    end
+    object Action2: TAction
+      Caption = 'Action2'
+      ShortCut = 116
+      OnExecute = Label2Click
+    end
+    object Action3: TAction
+      Caption = 'Action3'
+      ShortCut = 118
+      OnExecute = SpeedButton1Click
+    end
+    object Action4: TAction
+      Caption = 'Action4'
+      ShortCut = 120
+      OnExecute = SpeedButton6Click
+    end
   end
 end

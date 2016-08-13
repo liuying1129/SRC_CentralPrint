@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ExtCtrls, StdCtrls, Buttons, ComCtrls, ToolWin, Grids, DBGrids,
   DB, ADODB,IniFiles,StrUtils, ADOLYGetcode,ShellAPI, FR_Class,Printers,
-  FR_DSet, FR_DBSet,Jpeg,Chart,FR_Chart,Series,Math;
+  FR_DSet, FR_DBSet,Jpeg,Chart,FR_Chart,Series,Math, ActnList;
 
 //==为了通过发送消息更新主窗体状态栏而增加==//
 const
@@ -56,6 +56,16 @@ type
     CheckBox1: TCheckBox;
     SpeedButton6: TSpeedButton;
     CheckBox2: TCheckBox;
+    SpeedButton2: TSpeedButton;
+    ToolButton3: TToolButton;
+    SpeedButton3: TSpeedButton;
+    SpeedButton7: TSpeedButton;
+    ToolButton4: TToolButton;
+    ActionList1: TActionList;
+    Action1: TAction;
+    Action2: TAction;
+    Action3: TAction;
+    Action4: TAction;
     procedure FormShow(Sender: TObject);
     procedure SpeedButton4Click(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -82,6 +92,9 @@ type
     procedure frReport1PrintReport;
     procedure SpeedButton6Click(Sender: TObject);
     procedure DBGrid1CellClick(Column: TColumn);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure SpeedButton3Click(Sender: TObject);
+    procedure SpeedButton7Click(Sender: TObject);
   private
     procedure WriteProfile;
     procedure ReadConfig;
@@ -189,7 +202,6 @@ begin
   ifEnterGetCode:=configini.ReadBool('选项','填写病人基本信息时,直接回车弹出取码框',false);
   deptname_match:=configini.ReadString('选项','送检科室取码的匹配方式','');
   check_doctor_match:=configini.ReadString('选项','送检医生取码的匹配方式','');
-  LoginTime:=configini.ReadInteger('选项','弹出登录窗口的时间',30);
 
   TempFile_Common:=configini.ReadString('打印模板','通用模板文件','');
   TempFile_Group:=configini.ReadString('打印模板','分组模板文件','');
@@ -212,10 +224,6 @@ begin
   WorkGroup_T9:=configini.ReadString('打印模板','特殊模板9工作组','');
   TempFile_T9:=configini.ReadString('打印模板','特殊模板9文件','');  
 
-  ifHeightForItemNum:=configini.ReadBool('打印模板','启用项目数控制纸张长度',false);
-  ItemRecNum:=configini.ReadInteger('打印模板','每页项目数最大值',0);
-  PageHeigth:=configini.ReadInteger('打印模板','报告长度',2794);  
-      
   configini.Free;
 end;
 
@@ -248,7 +256,6 @@ begin
       '送检科室取码的匹配方式'+#2+'Combobox'+#2+'模糊匹配'+#13+'左匹配'+#13+'右匹配'+#13+'全匹配'+#2+'1'+#2+#2+#3+
       '送检医生取码的匹配方式'+#2+'Combobox'+#2+'模糊匹配'+#13+'左匹配'+#13+'右匹配'+#13+'全匹配'+#2+'1'+#2+#2+#3+
       '病人基本信息排序方式'+#2+'Combobox'+#2+'流水号'+#13+'联机号'+#2+'1'+#2+#2+#3+
-      '弹出登录窗口的时间'+#2+'Edit'+#2+#2+'1'+#2+'注:表示多长时间内无操作,则自动弹出登录窗口(单位:秒)'+#2+#3+
       '通用模板文件'+#2+'File'+#2+#2+'2'+#2+#2+#3+
       '分组模板文件'+#2+'File'+#2+#2+'2'+#2+#2+#3+
       '特殊模板1工作组'+#2+'Combobox'+#2+sWorkGroup+#2+'2'+#2+#2+#3+
@@ -268,10 +275,7 @@ begin
       '特殊模板8工作组'+#2+'Combobox'+#2+sWorkGroup+#2+'2'+#2+#2+#3+
       '特殊模板8文件'+#2+'File'+#2+#2+'2'+#2+#2+#3+
       '特殊模板9工作组'+#2+'Combobox'+#2+sWorkGroup+#2+'2'+#2+#2+#3+
-      '特殊模板9文件'+#2+'File'+#2+#2+'2'+#2+#2+#3+
-      '启用项目数控制纸张长度'+#2+'CheckListBox'+#2+#2+'2'+#2+'注:对普通打印、分组打印生效'+#2+#3+
-      '每页项目数最大值'+#2+'Edit'+#2+#2+'2'+#2+'注:如项目数大于该值,则纸张长度为"报告长度"的值.默认值为0'+#2+#3+
-      '报告长度'+#2+'Edit'+#2+#2+'2'+#2+'默认值为2794,单位:mm'+#2+#3;
+      '特殊模板9文件'+#2+'File'+#2+#2+'2'+#2+#2+#3;
   if ShowOptionForm('选项','报表'+#2+'选项'+#2+'打印模板',Pchar(ss),Pchar(ChangeFileExt(Application.ExeName,'.ini'))) then
 	  ReadIni;
 end;
@@ -394,23 +398,8 @@ end;
 
 procedure TfrmMain.BitBtn1Click(Sender: TObject);
 var
-  strsql22,strsql,strsql44,STRSQL45,STRSQL46,STRSQL47,STRSQL48,STRSQL49,STRSQL50: string;
-  adotemp22:tadoquery;
-
-  i,j:integer;
+  strsql22,strsql44,STRSQL45,STRSQL46,STRSQL47,STRSQL48,STRSQL49,STRSQL50: string;
 begin
-  strsql:='select top 1000 patientname as 姓名,'+
-        ' sex as 性别,'+
-        ' age as 年龄,0 as 选择,caseno as 病历号,bedno as 床号,deptname as 送检科室,'+
-        ' check_doctor as 送检医生,check_date as 检查日期,'+
-        ' report_date as 申请日期,'+
-        ' operator as 操作者,diagnosetype as 优先级别,printtimes as 打印次数,'+
-        ' flagetype as 样本类型,diagnose as 临床诊断,typeflagcase as 样本情况,'+
-        ' issure as 备注,unid as 唯一编号,combin_id as 工作组, '+
-        ' His_Unid as His唯一编号,His_MzOrZy as His门诊或住院, '+
-        ' WorkDepartment as 所属部门,WorkCategory as 工种,WorkID as 工号,ifMarry as 婚否,OldAddress as 籍贯,Address as 住址,Telephone as 电话,WorkCompany as 所属公司, '+
-        ' Audit_Date as 审核时间,ifCompleted,checkid as 联机号,lsh as 流水号,report_doctor as 审核者 '+
-        ' from view_Chk_Con_All where ';
   if RadioGroup1.ItemIndex=1 then
     strsql44:=' CONVERT(CHAR(10),check_date,121)=CONVERT(CHAR(10),GETDATE(),121) and '
   else if RadioGroup1.ItemIndex=2 then
@@ -435,7 +424,8 @@ begin
   STRSQL49:=' order by patientname ';
   ADObasic.Close;
   ADObasic.SQL.Clear;
-  ADObasic.SQL.Add(strsql);
+  ADObasic.SQL.Add(SHOW_CHK_CON);
+  ADObasic.SQL.Add(' where ');
   ADObasic.SQL.Add(strsql44);
   ADObasic.SQL.Add(strsql46);
   ADObasic.SQL.Add(strsql48);
@@ -445,24 +435,6 @@ begin
   ADObasic.SQL.Add(strsql47);
   ADObasic.SQL.Add(strsql49);
   ADObasic.Open;
-
-  adotemp22:=tadoquery.Create(nil);
-  adotemp22.clone(ADObasic);
-  ArCheckBoxValue:=nil;
-  setlength(ArCheckBoxValue,adotemp22.RecordCount);
-  i:=0;
-  while not adotemp22.Eof do
-  begin
-    for j :=0  to 1 do
-    begin
-      //该二维数组中一定要有个字段标识唯一性的
-      if j=0 then ArCheckBoxValue[I,j]:=0//adotemp22.FieldByName('选择').AsInteger
-      else ArCheckBoxValue[I,j]:=adotemp22.FieldByName('唯一编号').AsInteger;
-    end;
-    adotemp22.Next;
-    inc(i);
-  end;
-  adotemp22.Free;  
 end;
 
 procedure TfrmMain.ADObasicAfterScroll(DataSet: TDataSet);
@@ -493,8 +465,12 @@ begin
 end;
 
 procedure TfrmMain.ADObasicAfterOpen(DataSet: TDataSet);
+var
+  adotemp22:tadoquery;
+  i:integer;
 begin
   if not DataSet.Active then exit;
+  
   dbgrid1.Columns[0].Width:=42;//姓名
   dbgrid1.Columns[1].Width:=30;//性别
   dbgrid1.Columns[2].Width:=30;//年龄
@@ -509,6 +485,21 @@ begin
   dbgrid1.Columns[11].Width:=40;//联机号
   dbgrid1.Columns[12].Width:=42;//审核者
 
+  adotemp22:=tadoquery.Create(nil);
+  adotemp22.clone(DataSet as TCustomADODataSet);
+  ArCheckBoxValue:=nil;
+  setlength(ArCheckBoxValue,adotemp22.RecordCount);
+  i:=0;
+  while not adotemp22.Eof do
+  begin
+    //该二维数组中一定要有个字段标识唯一性的
+    ArCheckBoxValue[I,0]:=0;
+    ArCheckBoxValue[I,1]:=adotemp22.FieldByName('唯一编号').AsInteger;
+
+    adotemp22.Next;
+    inc(i);
+  end;
+  adotemp22.Free;
 end;
 
 procedure TfrmMain.ADOQuery2AfterOpen(DataSet: TDataSet);
@@ -569,7 +560,7 @@ var
   iUNID,i:INTEGER;
 begin
    //======================打印过的流水号变化颜色======================//
-    if datacol=0 then //姓名列,因为流水号列有可能隐藏
+    if datacol=0 then //姓名列
     begin
       strPrintTimes:=ADObasic.fieldbyname('打印次数').AsString;
       PrintTimes:=strtointdef(strPrintTimes,0);
@@ -698,22 +689,8 @@ end;
 
 procedure TfrmMain.Label2Click(Sender: TObject);
 var
-  strsql,strsql44,STRSQL47,STRSQL49: string;
-  adotemp22:tadoquery;
-  i,j:integer;
+  strsql44,STRSQL47,STRSQL49: string;
 begin
-  strsql:='select top 1000 patientname as 姓名,'+
-        ' sex as 性别,'+
-        ' age as 年龄,0 as 选择,caseno as 病历号,bedno as 床号,deptname as 送检科室,'+
-        ' check_doctor as 送检医生,check_date as 检查日期,'+
-        ' report_date as 申请日期,'+
-        ' operator as 操作者,diagnosetype as 优先级别,printtimes as 打印次数,'+
-        ' flagetype as 样本类型,diagnose as 临床诊断,typeflagcase as 样本情况,'+
-        ' issure as 备注,unid as 唯一编号,combin_id as 工作组, '+
-        ' His_Unid as His唯一编号,His_MzOrZy as His门诊或住院, '+
-        ' WorkDepartment as 所属部门,WorkCategory as 工种,WorkID as 工号,ifMarry as 婚否,OldAddress as 籍贯,Address as 住址,Telephone as 电话,WorkCompany as 所属公司, '+
-        ' Audit_Date as 审核时间,ifCompleted,checkid as 联机号,lsh as 流水号,report_doctor as 审核者 '+
-        ' from view_Chk_Con_All where ';
   if RadioGroup2.ItemIndex=1 then
     strsql44:=' CONVERT(CHAR(10),check_date,121)=CONVERT(CHAR(10),GETDATE(),121) and '
   else if RadioGroup2.ItemIndex=2 then
@@ -727,29 +704,12 @@ begin
   STRSQL49:=' order by patientname ';
   ADObasic.Close;
   ADObasic.SQL.Clear;
-  ADObasic.SQL.Add(strsql);
+  ADObasic.SQL.Add(SHOW_CHK_CON);
+  ADObasic.SQL.Add(' where ');
   ADObasic.SQL.Add(strsql44);
   ADObasic.SQL.Add(strsql47);
   ADObasic.SQL.Add(strsql49);
   ADObasic.Open;
-
-  adotemp22:=tadoquery.Create(nil);
-  adotemp22.clone(ADObasic);
-  ArCheckBoxValue:=nil;
-  setlength(ArCheckBoxValue,adotemp22.RecordCount);
-  i:=0;
-  while not adotemp22.Eof do
-  begin
-    for j :=0  to 1 do
-    begin
-      //该二维数组中一定要有个字段标识唯一性的
-      if j=0 then ArCheckBoxValue[I,j]:=0//adotemp22.FieldByName('选择').AsInteger
-      else ArCheckBoxValue[I,j]:=adotemp22.FieldByName('唯一编号').AsInteger;
-    end;
-    adotemp22.Next;
-    inc(i);
-  end;
-  adotemp22.Free;
 end;
 
 procedure TfrmMain.SpeedButton1Click(Sender: TObject);
@@ -758,13 +718,11 @@ var
   sUnid,sCombin_Id:string;
   iIfCompleted:integer;
 
-  //对姓别性别年龄的合并项做打印标记 变量
-  sPatientname,sSex,sAge:string;
-  //===============================
-
   adotemp22:tadoquery;
   ifSelect:boolean;
   i:integer;
+
+  sPatientname,sSex,sAge:string;
 begin
   if not ifhaspower(sender,powerstr_js_main) then exit;
 
@@ -776,7 +734,7 @@ begin
   while not adotemp22.Eof do
   begin
     ifSelect:=false;
-    for i :=0  to adotemp22.RecordCount-1 do//循环ArCheckBoxValue
+    for i :=low(ArCheckBoxValue)  to high(ArCheckBoxValue) do//循环ArCheckBoxValue
     begin
       if (ArCheckBoxValue[i,1]=adotemp22.fieldbyname('唯一编号').AsInteger)and(ArCheckBoxValue[i,0]=1) then
       begin
@@ -793,6 +751,17 @@ begin
     sPatientname:=trim(adotemp22.fieldbyname('姓名').AsString);
     sSex:=adotemp22.fieldbyname('性别').AsString;
     sAge:=adotemp22.fieldbyname('年龄').AsString;
+
+    if not ADObasic.Locate('唯一编号',sUnid,[loCaseInsensitive]) then begin adotemp22.Next;continue;end;//报表需要用到ADObasic的值
+    
+    //判断该就诊人员是否存在未审核结果START
+    if strtoint(ScalarSQLCmd(LisConn,'select count(*) from chk_con where Patientname='''+sPatientname+''' and isnull(sex,'''')='''+sSex+''' and dbo.uf_GetAgeReal(age)=dbo.uf_GetAgeReal('''+sAge+''') and isnull(report_doctor,'''')='''' '))>0 then
+    begin
+      if length(memo1.Lines.Text)>=60000 then memo1.Lines.Clear;//memo只能接受64K个字符
+      memo1.Lines.Add(FormatDatetime('YYYY-MM-DD HH:NN:SS', Now) + ':就诊人员['+sPatientname+']存在未审核报告!');
+      WriteLog(pchar('就诊人员['+sPatientname+']存在未审核报告!'));
+    end;
+    //================================STOP
 
     if (sCombin_Id=WorkGroup_T1)
       and frReport1.LoadFromFile(TempFile_T1) then//加载模板文件是不区分大小写的.空字符串将加载失败
@@ -841,24 +810,6 @@ begin
       continue;
     end;
 
-    {//if (N64.Checked)and(sPatientname<>'') then//按姓别性别年龄合并打印//只有存在姓名时才合并
-      strsqlPrint:='select cv.itemid as 项目代码,cv.name as 名称,cv.english_name as 英文名,'+
-            ' cv.itemvalue as 检验结果,'+
-            ' cv.min_value as 最小值,cv.max_value as 最大值,dbo.uf_Reference_Ranges(cv.min_value,cv.max_value) as 参考范围,'+
-            ' cv.unit as 单位,'+
-            ' min(cv.printorder) as 打印编号,'+
-            ' min(cv.pkcombin_id) as 组合项目号, '+
-            ' cv.Reserve1,cv.Reserve2,cv.Dosage1,cv.Dosage2,cv.Reserve5,cv.Reserve6,cv.Reserve7,cv.Reserve8,cv.Reserve9,cv.Reserve10 '+
-            ' from chk_valu cv '+
-            ' inner join chk_con cc on cv.pkunid=cc.unid '+
-            ' left join clinicchkitem cci on cci.itemid=cv.itemid '+
-            ' where Patientname='''+sPatientname+''' and isnull(sex,'''')='''+sSex+''' and dbo.uf_GetAgeReal(age)=dbo.uf_GetAgeReal('''+sAge+
-            ''') and cv.issure=1 and ltrim(rtrim(isnull(itemvalue,'''')))<>'''' '+
-            ' and cci.sysname='''+SYSNAME+''' '+
-            ' group by cv.itemid,cv.name,cv.english_name,cv.itemvalue,cv.min_value,cv.max_value,cv.unit, '+
-            ' cv.Reserve1,cv.Reserve2,cv.Dosage1,cv.Dosage2,cv.Reserve5,cv.Reserve6,cv.Reserve7,cv.Reserve8,cv.Reserve9,cv.Reserve10 '+
-            ' order by 组合项目号,打印编号 '
-    else//}
       strsqlPrint:='select itemid as 项目代码,name as 名称,english_name as 英文名,'+
             ' itemvalue as 检验结果,'+
             ' min_value as 最小值,max_value as 最大值,dbo.uf_Reference_Ranges(min_value,max_value) as 参考范围,'+
@@ -878,11 +829,6 @@ begin
     ado_print.SQL.Text:=strsqlPrint;
     ado_print.Open;
     if ADO_print.RecordCount=0 then begin adotemp22.Next;continue;end;//exit;
-
-    if ifHeightForItemNum and (ADO_print.RecordCount>ItemRecNum) then
-      //frReport1.Pages.Pages[0].pgsize:=255;//.pgHeight:=70;
-      //frReport1.Pages.Pages[0].pgHeight:=70;
-      frReport1.Pages[0].ChangePaper($100,2100,PageHeigth,-1,poPortrait);  //1 inch=2.54 cm
 
       if CheckBox1.Checked then  //预览模式
         frReport1.ShowReport
@@ -1240,17 +1186,11 @@ var
 
   sUnid,sReport_Doctor:string;
 
-  {//对姓别性别年龄的合并项做打印标记 变量
-  adotemp22:tadoquery;
-  SelSql:string;
-  unid,printtimes,iIfCompleted:integer;
-  report_doctor,sql,ss,sPrinttimes,sReport_doctor2:string;
-  sPatientname,sSex,sAge,sMergePrintWorkGroupRange:string;
-  //===============================//}
-
   adotemp22:tadoquery;
   ifSelect:boolean;
   i,iIfCompleted:integer;  
+
+  sPatientname,sSex,sAge:string;
 begin
   if not ifhaspower(sender,powerstr_js_main) then exit;
 
@@ -1262,7 +1202,7 @@ begin
   while not adotemp22.Eof do
   begin
     ifSelect:=false;
-    for i :=0  to adotemp22.RecordCount-1 do//循环ArCheckBoxValue
+    for i :=low(ArCheckBoxValue)  to high(ArCheckBoxValue) do//循环ArCheckBoxValue
     begin
       if (ArCheckBoxValue[i,1]=adotemp22.fieldbyname('唯一编号').AsInteger)and(ArCheckBoxValue[i,0]=1) then
       begin
@@ -1276,9 +1216,20 @@ begin
     sReport_Doctor:=trim(adotemp22.FieldByName('审核者').AsString);
     iIfCompleted:=adotemp22.FieldByName('ifCompleted').AsInteger;
 
-    //sPatientname:=trim(adotemp22.fieldbyname('姓名').AsString);
-    //sSex:=adotemp22.fieldbyname('性别').AsString;
-    //sAge:=adotemp22.fieldbyname('年龄').AsString;
+    sPatientname:=trim(adotemp22.fieldbyname('姓名').AsString);
+    sSex:=adotemp22.fieldbyname('性别').AsString;
+    sAge:=adotemp22.fieldbyname('年龄').AsString;
+
+    if not ADObasic.Locate('唯一编号',sUnid,[loCaseInsensitive]) then begin adotemp22.Next;continue;end;//报表需要用到ADObasic的值
+    
+    //判断该就诊人员是否存在未审核结果START
+    if strtoint(ScalarSQLCmd(LisConn,'select count(*) from chk_con where Patientname='''+sPatientname+''' and isnull(sex,'''')='''+sSex+''' and dbo.uf_GetAgeReal(age)=dbo.uf_GetAgeReal('''+sAge+''') and isnull(report_doctor,'''')='''' '))>0 then
+    begin
+      if length(memo1.Lines.Text)>=60000 then memo1.Lines.Clear;//memo只能接受64K个字符
+      memo1.Lines.Add(FormatDatetime('YYYY-MM-DD HH:NN:SS', Now) + ':就诊人员['+sPatientname+']存在未审核报告!');
+      WriteLog(pchar('就诊人员['+sPatientname+']存在未审核报告!'));
+    end;
+    //================================STOP
 
     if frReport1.LoadFromFile(TempFile_Group) then
     begin
@@ -1305,23 +1256,6 @@ begin
     else
       frGH.Prop['formnewpage'] := false;
 
-    {if MergePrintWorkGroupRange<>'' then
-      sMergePrintWorkGroupRange:=' and cc.combin_id in ('+MergePrintWorkGroupRange+') ';
-    if (N64.Checked)and(sPatientname<>'') then//按姓别性别年龄合并打印//只有存在姓名时才合并
-      strsqlPrint:='select cv.combin_name as name,cv.name as 名称,cv.english_name as 英文名,cv.itemvalue as 检验结果,'+//combinitem.name
-      'cv.unit as 单位,cv.min_value as 最小值,'+
-      'cv.max_value as 最大值,dbo.uf_Reference_Ranges(cv.min_value,cv.max_value) as 参考范围, '+
-      ' cv.Reserve1,cv.Reserve2,cv.Dosage1,cv.Dosage2,cv.Reserve5,cv.Reserve6,cv.Reserve7,cv.Reserve8,cv.Reserve9,cv.Reserve10, '+
-      ' cv.itemid as 项目代码 '+//cci.Reserve3,
-      ' from chk_valu cv '+//combinitem,从组合项目表取组合项目名称，有可能代码变了，取不到名称了
-      ' inner join chk_con cc on cv.pkunid=cc.unid '+
-      ' left join clinicchkitem cci on cci.itemid=cv.itemid '+
-      ' where Patientname='''+sPatientname+''' and isnull(sex,'''')='''+sSex+''' and dbo.uf_GetAgeReal(age)=dbo.uf_GetAgeReal('''+sAge+
-      ''') and cv.issure=1 and ltrim(rtrim(isnull(itemvalue,'''')))<>'''' '+
-      ' and cci.sysname='''+SYSNAME+''' '+
-      sMergePrintWorkGroupRange+
-      ' order by cv.pkcombin_id,cv.printorder '//组合项目号,打印编号 '
-    else//}
       strsqlPrint:='select cv.combin_name as name,cv.name as 名称,cv.english_name as 英文名,cv.itemvalue as 检验结果,'+
       'cv.unit as 单位,cv.min_value as 最小值,'+
       'cv.max_value as 最大值,dbo.uf_Reference_Ranges(cv.min_value,cv.max_value) as 参考范围, '+
@@ -1338,44 +1272,7 @@ begin
     ADO_print.SQL.Clear;
     ADO_print.SQL.Text:=strsqlPrint;
     ADO_print.Open;
-    //if ADO_print.RecordCount=0 then exit;
     if ADO_print.RecordCount=0 then begin adotemp22.Next;continue;end;//exit;
-
-    {//对姓别性别年龄的合并项做打印标记
-    if (N64.Checked)and(sPatientname<>'') then
-    begin
-      SelSql:='select unid,printtimes,report_doctor from chk_con where Patientname='''+sPatientname+''' and sex='''+sSex+''' and age='''+sAge+''' and isnull(Patientname,'''')<>'''' and unid<>'+sUnid;
-      adotemp22:=tadoquery.Create(nil);
-      adotemp22.Connection:=DM.ADOConnection1;
-      adotemp22.Close;
-      adotemp22.SQL.Clear;
-      adotemp22.SQL.Text:=SelSql;
-      adotemp22.Open;
-      while not adotemp22.Eof do
-      begin
-        unid:=adotemp22.fieldbyname('unid').AsInteger;
-        printtimes:=adotemp22.fieldbyname('printtimes').AsInteger;
-        report_doctor:=trim(adotemp22.fieldbyname('report_doctor').AsString);
-
-        if printtimes=0 then sPrinttimes:=' printtimes='+inttostr(printtimes+1) else sPrinttimes:='';//修改打印次数
-        if(ifAutoCheck)and(report_doctor='') then sReport_doctor2:=' report_doctor='''+operator_name+''',Audit_Date=getdate() ' else sReport_doctor2:='';//修改审核者
-
-        if(sPrinttimes='')and(sReport_doctor2='')then begin adotemp22.Next;continue; end;
-        if(sPrinttimes<>'')and(sReport_doctor2<>'')then ss:=',' else ss:='';
-
-        sql:='update chk_con set '+sPrinttimes+ss+sReport_doctor2+' where unid='+inttostr(unid);
-        ExecSQLCmd(LisConn,sql);
-
-        adotemp22.Next;
-      end;
-      adotemp22.Free;
-    end;
-    //==========================}
-
-    if ifHeightForItemNum and (ADO_print.RecordCount>ItemRecNum) then
-      //frReport1.Pages.Pages[0].pgsize:=255;//.pgHeight:=70;
-      //frReport1.Pages.Pages[0].pgHeight:=70;
-      frReport1.Pages[0].ChangePaper($100,2100,PageHeigth,-1,poPortrait);  //1 inch=2.54 cm
 
     if CheckBox1.Checked then  //预览模式
       frReport1.ShowReport
@@ -1405,6 +1302,33 @@ begin
       break;
     end;
   end;//}
+end;
+
+procedure TfrmMain.SpeedButton2Click(Sender: TObject);
+begin
+  frmLogin.ShowModal;
+end;
+
+procedure TfrmMain.SpeedButton3Click(Sender: TObject);
+var
+  i:integer;
+begin
+  for i:=LOW(ArCheckBoxValue) to HIGH(ArCheckBoxValue) do
+  begin
+    ArCheckBoxValue[I,0]:=1;
+  end;
+  DBGrid1.Refresh;//调用DBGrid1DrawColumnCell事件
+end;
+
+procedure TfrmMain.SpeedButton7Click(Sender: TObject);
+var
+  i:integer;
+begin
+  for i:=LOW(ArCheckBoxValue) to HIGH(ArCheckBoxValue) do
+  begin
+    ArCheckBoxValue[I,0]:=0;
+  end;
+  DBGrid1.Refresh;//调用DBGrid1DrawColumnCell事件
 end;
 
 end.

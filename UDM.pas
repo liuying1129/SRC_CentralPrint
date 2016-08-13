@@ -32,22 +32,19 @@ const
 	BASE_URL='http://211.97.0.5:8080/YkAPI/service';
   CryptStr='lc';
 
-  //BUG:选取申请单功能，选取查询条件时，不能用“条码号”、“选择”做为查询条件
-                                              //1 as 选择,默认是选择的.1--选择,非1--未选
-  SHOW_CHK_CON_HIS='select cch.checkid as 联机号,dbo.uf_GetExtBarcode(cch.unid) as 条码号,1 as 选择,cch.lsh as 样本号,cch.patientname as 姓名,'+
-        ' cch.caseno as 病历号,cch.sex as 性别,'+
-        ' cch.age as 年龄,dbo.uf_GetHisStationCombName(cch.unid) as 组合项目,cch.deptname as 送检科室,'+
-        ' cch.check_date as 要求检查日期,cch.check_doctor as 送检医生,'+
-        ' cch.report_date as 申请日期,'+
-        ' cch.operator as 操作者,cch.printtimes as 打印次数,cch.diagnosetype as 优先级别,'+
-        ' cch.flagetype as 样本类型,cch.bedno as 床号,cch.diagnose as 临床诊断,cch.typeflagcase as 样本情况,'+
-        ' cch.issure as 备注,cch.combin_id as 申请单工作组,cch.germname as 细菌,cch.checkid as 联机号,cch.report_doctor as 审核者, '+
-        ' cch.His_Unid as His唯一编号,cch.His_MzOrZy as His门诊或住院, '+
-        ' cch.WorkDepartment as 所属部门,cch.WorkCategory as 工种,cch.WorkID as 工号,cch.ifMarry as 婚否,cch.OldAddress as 籍贯,cch.Address as 住址,cch.Telephone as 电话,cch.WorkCompany as 所属公司, '+
-        ' cch.PushPress as 舒张压,cch.PullPress as 收缩压,cch.LeftEyesight as 左眼视力,cch.RightEyesight as 右眼视力,cch.Stature as 身高,cch.Weight as 体重, '+
-        ' cch.TjJiWangShi as 既往史,cch.TjJiaZuShi as 家族史,cch.TjNeiKe as 内科,cch.TjWaiKe as 外科,cch.TjWuGuanKe as 五官科,cch.TjFuKe as 妇科,cch.TjLengQiangGuang as 冷强光,cch.TjXGuang as X光,cch.TjBChao as B超,'+
-        ' cch.TjXinDianTu as 心电图,cch.TjJianYan as 检验,cch.TjDescription as 结论,cch.TJAdvice as 建议,cch.unid as 唯一编号 '+
-        ' from view_Show_chk_Con_His cch ';
+  //0 as 选择,默认是未选择的.1--选择,非1--未选
+  SHOW_CHK_CON='select top 1000 patientname as 姓名,'+
+        ' sex as 性别,'+
+        ' age as 年龄,0 as 选择,caseno as 病历号,bedno as 床号,deptname as 送检科室,'+
+        ' check_doctor as 送检医生,check_date as 检查日期,'+
+        ' report_date as 申请日期,'+
+        ' operator as 操作者,diagnosetype as 优先级别,printtimes as 打印次数,'+
+        ' flagetype as 样本类型,diagnose as 临床诊断,typeflagcase as 样本情况,'+
+        ' issure as 备注,unid as 唯一编号,combin_id as 工作组, '+
+        ' His_Unid as His唯一编号,His_MzOrZy as His门诊或住院, '+
+        ' WorkDepartment as 所属部门,WorkCategory as 工种,WorkID as 工号,ifMarry as 婚否,OldAddress as 籍贯,Address as 住址,Telephone as 电话,WorkCompany as 所属公司, '+
+        ' Audit_Date as 审核时间,ifCompleted,checkid as 联机号,lsh as 流水号,report_doctor as 审核者 '+
+        ' from view_Chk_Con_All ';
 
 var
   DM: TDM;
@@ -72,7 +69,6 @@ var
   SmoothNum:integer;//直方图光滑次数
   LisConn:string;//Lis连接字符串,MakeDBConn过程中被赋值,然后传入QC.DLL、CalcItemPro.dll
   ifBatchOperater:boolean;//是否批量操作,批量操作时结果不跟随基本信息滚动.滚动太耗时,使批打慢
-  LoginTime:integer;//弹出登录窗口的时间
 
   TempFile_Common:string;
   TempFile_Group:string;
@@ -94,10 +90,6 @@ var
   TempFile_T8:string;
   WorkGroup_T9:string;
   TempFile_T9:string;
-
-  ifHeightForItemNum:boolean;
-  ItemRecNum:integer;
-  PageHeigth:integer;
 
 //**********************Dll接口函数部分***************************************//
 //该函数计算pSourStr中有多少个pSS
