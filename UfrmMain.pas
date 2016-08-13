@@ -136,25 +136,9 @@ var
 begin
   CONFIGINI:=TINIFILE.Create(ChangeFileExt(Application.ExeName,'.ini'));
 
-  {IF CONFIGINI.ReadBool('Interface','ifPreview',TRUE) THEN
-  begin
-    n9.Checked:=TRUE;   //打印预览
-    n8.Checked:=false;  //直接打印
-  end ELSE
-  begin
-    n9.Checked:=false;
-    n8.Checked:=TRUE;
-  end;//}
-
-  //n41.Checked:=configini.ReadBool('Interface','ifRTTransData',true);
   CheckBox1.Checked:=configini.ReadBool('Interface','ifPreview',false);{记录是否打印预览模式}
   CheckBox2.Checked:=configini.ReadBool('Interface','ifPagination',false);{记录是否按组分页}
-  //N64.Checked:=configini.ReadBool('Interface','ifCaseNoMerger',false);{记录是否按姓别性别年龄合并打印}
-  //n50.Checked:=configini.ReadBool('Interface','ifShowEnglish',true);
-  //n36.Checked:=configini.ReadBool('Interface','ifShowMinValue',true);{记录是否显示项目最小值}
-  //n47.Checked:=configini.ReadBool('Interface','ifShowMaxValue',true);{记录是否显示项目最大值}
-  //n49.Checked:=configini.ReadBool('Interface','ifShowUnit',true);{记录是否显示项目单位}
-  DBGrid1.Width:=configini.ReadInteger('Interface','gridBaseInfoWidth',460);{记录基本信息框宽度}
+  DBGrid1.Width:=configini.ReadInteger('Interface','gridBaseInfoWidth',525);{记录基本信息框宽度}
   Memo1.Height:=configini.ReadInteger('Interface','memoLogHeight',150);{记录组合项目选择框高度}
 
   RadioGroup1.ItemIndex:=configini.ReadInteger('Interface','normalTimeRadio',0);
@@ -183,22 +167,11 @@ begin
   for i :=1  to length(pDeStr) do SCSYDW[i]:=pDeStr[i-1];
   //==========
 
-  MergePrintDays:=strtointdef(ScalarSQLCmd(LisConn,'select Name from CommCode where TypeName=''系统代码'' and ReMark=''历史结果合并打印的偏差天数'' '),0);
-  MakeTjDescDays:=strtointdef(ScalarSQLCmd(LisConn,'select Name from CommCode where TypeName=''系统代码'' and ReMark=''生成体检结论的偏差天数'' '),0);
-  bAppendMakeTjDesc:=ScalarSQLCmd(LisConn,'select Name from CommCode where TypeName=''系统代码'' and ReMark=''允许追加生成体检结论'' ');
-
   CONFIGINI:=TINIFILE.Create(ChangeFileExt(Application.ExeName,'.ini'));
 
   SmoothNum:=configini.ReadInteger('报表','直方图光滑次数',0);
   CXZF:=configini.ReadString('报表','检验结果超限字符','↑↓');
   if trim(CXZF)='' then CXZF:='↑↓';
-  MergePrintWorkGroupRange:=trim(configini.ReadString('报表','"按姓名性别年龄合并"的工作组范围',''));
-  MergePrintWorkGroupRange:=StringReplace(MergePrintWorkGroupRange,'，',',',[rfReplaceAll]);
-  if MergePrintWorkGroupRange<>'' then
-  begin
-    MergePrintWorkGroupRange:=StringReplace(MergePrintWorkGroupRange,',',''',''',[rfReplaceAll]);
-    MergePrintWorkGroupRange:=''''+MergePrintWorkGroupRange+'''';
-  end;
   ifEnterGetCode:=configini.ReadBool('选项','填写病人基本信息时,直接回车弹出取码框',false);
   deptname_match:=configini.ReadString('选项','送检科室取码的匹配方式','');
   check_doctor_match:=configini.ReadString('选项','送检医生取码的匹配方式','');
@@ -251,11 +224,9 @@ begin
 
   ss:='直方图光滑次数'+#2+'Edit'+#2+#2+'0'+#2+'注:次数越多曲线越光滑,但曲线偏离越多'+#2+#3+
       '检验结果超限字符'+#2+'Combobox'+#2+'↑↓'+#13+'H L'+#2+'0'+#2+'注:第1、2位为超上限字符，第3、4位为超下限字符'+#2+#3+
-      '"按姓名性别年龄合并"的工作组范围'+#2+'Edit'+#2+#2+'0'+#2+'如仅希望临检组与生化组合并,则填"临检组,生化组".空表示无限制'+#2+#3+
       '填写病人基本信息时,直接回车弹出取码框'+#2+'CheckListBox'+#2+#2+'1'+#2+#2+#3+
       '送检科室取码的匹配方式'+#2+'Combobox'+#2+'模糊匹配'+#13+'左匹配'+#13+'右匹配'+#13+'全匹配'+#2+'1'+#2+#2+#3+
       '送检医生取码的匹配方式'+#2+'Combobox'+#2+'模糊匹配'+#13+'左匹配'+#13+'右匹配'+#13+'全匹配'+#2+'1'+#2+#2+#3+
-      '病人基本信息排序方式'+#2+'Combobox'+#2+'流水号'+#13+'联机号'+#2+'1'+#2+#2+#3+
       '通用模板文件'+#2+'File'+#2+#2+'2'+#2+#2+#3+
       '分组模板文件'+#2+'File'+#2+#2+'2'+#2+#2+#3+
       '特殊模板1工作组'+#2+'Combobox'+#2+sWorkGroup+#2+'2'+#2+#2+#3+
@@ -451,7 +422,7 @@ begin
             'pkcombin_id as 组合项目号,itemid as 项目编号,valueid as 唯一编号 '+
             ' from '+
             ifThen(ADObasic.FieldByName('ifCompleted').AsInteger=1,'chk_valu_bak','chk_valu')+
-            ' where pkunid=:pkunid and issure=1 '+
+            ' where pkunid=:pkunid and issure=1 and ltrim(rtrim(isnull(itemvalue,'''')))<>'''' '+
             ' order by pkcombin_id,printorder ';
 
   ADOQuery2.Close;
@@ -479,7 +450,7 @@ begin
   dbgrid1.Columns[5].Width:=30;//床号
   dbgrid1.Columns[6].Width:=60;//送检科室
   dbgrid1.Columns[7].Width:=55;//送检医生
-  dbgrid1.Columns[8].Width:=72;//检查日期
+  dbgrid1.Columns[8].Width:=135;//检查日期
   dbgrid1.Columns[9].Width:=72;//申请日期
   dbgrid1.Columns[10].Width:=40;//流水号
   dbgrid1.Columns[11].Width:=40;//联机号
@@ -541,10 +512,10 @@ begin
   dbgrid2.Columns[5].Width:=50;
   dbgrid2.Columns[6].Width:=50;
   dbgrid2.Columns[7].Width:=50;
-  dbgrid2.Columns[8].Width:=50;
-  dbgrid2.Columns[9].Width:=50;
-  dbgrid2.Columns[10].Width:=50;
 
+  VisibleColumn(dbgrid2,'项目编号',false);
+  VisibleColumn(dbgrid2,'组合项目号',false);
+  VisibleColumn(dbgrid2,'唯一编号',false);
 end;
 
 procedure TfrmMain.DBGrid1DrawColumnCell(Sender: TObject;
@@ -804,8 +775,10 @@ begin
     end else
     if not frReport1.LoadFromFile(ExtractFilePath(application.ExeName)+'report_cur.frf') then
     begin
-      showmessage('加载默认通用打印模板report_cur.frf失败，请设置:系统设置->选项->打印模板');
-      //exit;
+      if length(memo1.Lines.Text)>=60000 then memo1.Lines.Clear;//memo只能接受64K个字符
+      memo1.Lines.Add(FormatDatetime('YYYY-MM-DD HH:NN:SS', Now) + ':['+sPatientname+']加载默认通用打印模板report_cur.frf失败，请设置:选项->打印模板');
+      WriteLog(pchar('['+sPatientname+']加载默认通用打印模板report_cur.frf失败，请设置:选项->打印模板'));
+      
       adotemp22.Next;
       continue;
     end;
@@ -828,7 +801,15 @@ begin
     ado_print.SQL.Clear;
     ado_print.SQL.Text:=strsqlPrint;
     ado_print.Open;
-    if ADO_print.RecordCount=0 then begin adotemp22.Next;continue;end;//exit;
+    if ADO_print.RecordCount=0 then
+    begin
+      if length(memo1.Lines.Text)>=60000 then memo1.Lines.Clear;//memo只能接受64K个字符
+      memo1.Lines.Add(FormatDatetime('YYYY-MM-DD HH:NN:SS', Now) + ':['+sPatientname+']无效结果!');
+      WriteLog(pchar('['+sPatientname+']无效结果!'));
+      
+      adotemp22.Next;
+      continue;
+    end;
 
       if CheckBox1.Checked then  //预览模式
         frReport1.ShowReport
@@ -1236,10 +1217,12 @@ begin
     end else
     if not frReport1.LoadFromFile(ExtractFilePath(application.ExeName)+'report_Cur_group.frf') then
     begin
-      showmessage('加载默认分组打印模板report_Cur_group.frf失败，请设置:系统设置->选项->打印模板');
+      if length(memo1.Lines.Text)>=60000 then memo1.Lines.Clear;//memo只能接受64K个字符
+      memo1.Lines.Add(FormatDatetime('YYYY-MM-DD HH:NN:SS', Now) + ':['+sPatientname+']加载默认分组打印模板report_Cur_group.frf失败，请设置:选项->打印模板');
+      WriteLog(pchar('['+sPatientname+']加载默认分组打印模板report_Cur_group.frf失败，请设置:选项->打印模板'));
+      
       adotemp22.Next;
       continue;
-      //exit;
     end;
 
     frGH := TfrBandView(frReport1.FindObject('GroupHeader1'));
@@ -1248,7 +1231,6 @@ begin
       showmessage('报表模板中没有发现GroupHeader1');
       adotemp22.Next;
       continue;
-      //exit;
     end;
 
     if CheckBox2.Checked then//按组分页
@@ -1272,7 +1254,15 @@ begin
     ADO_print.SQL.Clear;
     ADO_print.SQL.Text:=strsqlPrint;
     ADO_print.Open;
-    if ADO_print.RecordCount=0 then begin adotemp22.Next;continue;end;//exit;
+    if ADO_print.RecordCount=0 then
+    begin
+      if length(memo1.Lines.Text)>=60000 then memo1.Lines.Clear;//memo只能接受64K个字符
+      memo1.Lines.Add(FormatDatetime('YYYY-MM-DD HH:NN:SS', Now) + ':['+sPatientname+']无效结果!');
+      WriteLog(pchar('['+sPatientname+']无效结果!'));
+      
+      adotemp22.Next;
+      continue;
+    end;
 
     if CheckBox1.Checked then  //预览模式
       frReport1.ShowReport

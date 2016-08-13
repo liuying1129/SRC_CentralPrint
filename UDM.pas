@@ -53,22 +53,14 @@ var
   operator_name:string;
   operator_id:string;
   operator_DeptName:string;//操作员部门名称
-  operator_ShowAllTj:string;//操作员是否可操作所有科室的组合项目
   
-  ifSaveSuccess:boolean;//记录"保存检验单F3"事件是否成功,批量录入时要用到
   ifEnterGetCode:boolean;//记录是否 填写病人基本信息时,直接回车弹出取码框
   deptname_match:string;//记录送检科室的取码匹配方式
   check_doctor_match:string;////记录送检医生的取码匹配方式
   CXZF:STRING;//检验结果超限字符
-  MergePrintWorkGroupRange:string;//"按姓名性别年龄合并"的工作组范围
-  bRegister:boolean;
   SCSYDW:STRING;//授权使用单位
-  MergePrintDays:integer;//历史结果合并打印的偏差天数
-  MakeTjDescDays:integer;//生成体检结论、建议的偏差天数
-  bAppendMakeTjDesc:string;//是否允许追加生成体检结论
   SmoothNum:integer;//直方图光滑次数
   LisConn:string;//Lis连接字符串,MakeDBConn过程中被赋值,然后传入QC.DLL、CalcItemPro.dll
-  ifBatchOperater:boolean;//是否批量操作,批量操作时结果不跟随基本信息滚动.滚动太耗时,使批打慢
 
   TempFile_Common:string;
   TempFile_Group:string;

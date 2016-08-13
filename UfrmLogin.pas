@@ -302,7 +302,6 @@ begin
     operator_name:=trim(labelededit5.Text);
     operator_id:=trim(labelededit4.Text);
     operator_DeptName:=ScalarSQLCmd(LisConn,'select c.name from CommCode c,worker w where c.unid=w.pkdeptid and w.id='''+trim(labelededit4.Text)+''' ');
-    operator_ShowAllTj:=ScalarSQLCmd(LisConn,'select ShowAllTj from worker where id='''+trim(labelededit4.Text)+''' ');
     SendNotifyMessage(application.mainform.handle,WM_UPDATETEXTSTATUS,0,integer(pchar(#$2+'2:'+operator_id+#$2+'4:'+operator_name)));
   end;
 end;

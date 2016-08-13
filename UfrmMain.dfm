@@ -24,17 +24,18 @@ object frmMain: TfrmMain
     Width = 209
     Height = 441
     Align = alLeft
+    Color = 16767438
     TabOrder = 0
     object Label1: TLabel
       Left = 9
-      Top = 360
+      Top = 373
       Width = 100
       Height = 13
       Caption = #26410#25171#21360#20154#27425'(F5):'
     end
     object Label2: TLabel
       Left = 113
-      Top = 360
+      Top = 373
       Width = 42
       Height = 13
       Cursor = crHandPoint
@@ -49,7 +50,7 @@ object frmMain: TfrmMain
     end
     object LabeledEdit1: TLabeledEdit
       Left = 78
-      Top = 144
+      Top = 137
       Width = 121
       Height = 21
       EditLabel.Width = 72
@@ -60,7 +61,7 @@ object frmMain: TfrmMain
     end
     object LabeledEdit2: TLabeledEdit
       Left = 78
-      Top = 168
+      Top = 161
       Width = 121
       Height = 21
       EditLabel.Width = 26
@@ -71,7 +72,7 @@ object frmMain: TfrmMain
     end
     object LabeledEdit3: TLabeledEdit
       Left = 78
-      Top = 192
+      Top = 185
       Width = 121
       Height = 21
       EditLabel.Width = 52
@@ -83,7 +84,7 @@ object frmMain: TfrmMain
     end
     object LabeledEdit4: TLabeledEdit
       Left = 78
-      Top = 216
+      Top = 209
       Width = 121
       Height = 21
       EditLabel.Width = 52
@@ -95,7 +96,7 @@ object frmMain: TfrmMain
     end
     object BitBtn1: TBitBtn
       Left = 78
-      Top = 240
+      Top = 233
       Width = 121
       Height = 25
       Caption = #26597#35810'F3'
@@ -119,7 +120,7 @@ object frmMain: TfrmMain
     end
     object RadioGroup2: TRadioGroup
       Left = 8
-      Top = 272
+      Top = 285
       Width = 193
       Height = 81
       Columns = 2
@@ -134,7 +135,7 @@ object frmMain: TfrmMain
     end
     object RadioGroup3: TRadioGroup
       Left = 8
-      Top = 96
+      Top = 91
       Width = 193
       Height = 41
       Columns = 2
@@ -173,12 +174,16 @@ object frmMain: TfrmMain
         MinHeight = 33
         Width = 908
       end>
+    Color = 16767438
+    ParentColor = False
     object ToolBar1: TToolBar
       Left = 9
       Top = 0
       Width = 895
       Height = 33
       Caption = 'ToolBar1'
+      Color = 16767438
+      ParentColor = False
       TabOrder = 0
       object SpeedButton1: TSpeedButton
         Left = 0
@@ -277,16 +282,17 @@ object frmMain: TfrmMain
     Align = alClient
     TabOrder = 2
     object Splitter1: TSplitter
-      Left = 301
+      Left = 305
       Top = 1
       Height = 439
     end
     object DBGrid1: TDBGrid
       Left = 1
       Top = 1
-      Width = 300
+      Width = 304
       Height = 439
       Align = alLeft
+      Color = 16767438
       DataSource = DataSource1
       ReadOnly = True
       TabOrder = 0
@@ -299,16 +305,16 @@ object frmMain: TfrmMain
       OnDrawColumnCell = DBGrid1DrawColumnCell
     end
     object Panel3: TPanel
-      Left = 304
+      Left = 308
       Top = 1
-      Width = 398
+      Width = 394
       Height = 439
       Align = alClient
       TabOrder = 1
       object Splitter2: TSplitter
         Left = 1
         Top = 292
-        Width = 396
+        Width = 392
         Height = 3
         Cursor = crVSplit
         Align = alBottom
@@ -316,9 +322,10 @@ object frmMain: TfrmMain
       object DBGrid2: TDBGrid
         Left = 1
         Top = 1
-        Width = 396
+        Width = 392
         Height = 291
         Align = alClient
+        Color = 16767438
         DataSource = DataSource2
         ReadOnly = True
         TabOrder = 0
@@ -332,9 +339,10 @@ object frmMain: TfrmMain
       object Memo1: TMemo
         Left = 1
         Top = 295
-        Width = 396
+        Width = 392
         Height = 143
         Align = alBottom
+        Color = 16767438
         ReadOnly = True
         ScrollBars = ssBoth
         TabOrder = 1
