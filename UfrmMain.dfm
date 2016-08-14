@@ -396,6 +396,9 @@ object frmMain: TfrmMain
       end
       item
         Width = 300
+      end
+      item
+        Width = 50
       end>
   end
   object DataSource1: TDataSource

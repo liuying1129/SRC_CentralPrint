@@ -471,6 +471,8 @@ begin
     inc(i);
   end;
   adotemp22.Free;
+  
+  UpdateStatusBar(#$2+'7:0');
 end;
 
 procedure TfrmMain.ADOQuery2AfterOpen(DataSet: TDataSet);
@@ -1314,20 +1316,27 @@ end;
 
 procedure TfrmMain.DBGrid1CellClick(Column: TColumn);
 var
-  iUNID,i:INTEGER;
+  iUNID,i,k:INTEGER;
 begin
+  if not Column.Grid.DataSource.DataSet.Active then exit;  
   if Column.Field.FieldName <>'选择' then exit;
 
-  iUNID:=DBGrid1.DataSource.DataSet.FieldByName('唯一编号').AsInteger;
-  for i :=0  to DBGrid1.DataSource.DataSet.RecordCount-1 do
+  k:=strtointdef(StatusBar1.Panels[7].Text,0);
+  
+  iUNID:=Column.Grid.DataSource.DataSet.FieldByName('唯一编号').AsInteger;
+  for i :=low(ArCheckBoxValue)  to high(ArCheckBoxValue) do//循环ArCheckBoxValue
   begin
     if ArCheckBoxValue[i,1]=iUNID then
     begin
+      k:=ifThen(ArCheckBoxValue[i,0]=1,k-1,k+1);
+
       ArCheckBoxValue[i,0]:=ifThen(ArCheckBoxValue[i,0]=1,0,1);
       DBGrid1.Refresh;//调用DBGrid1DrawColumnCell事件
       break;
     end;
-  end;//}
+  end;
+
+  UpdateStatusBar(#$2+'7:'+inttostr(k));
 end;
 
 procedure TfrmMain.SpeedButton2Click(Sender: TObject);
@@ -1349,6 +1358,8 @@ begin
     ArCheckBoxValue[I,0]:=1;
   end;
   DBGrid1.Refresh;//调用DBGrid1DrawColumnCell事件
+  
+  UpdateStatusBar(#$2+'7:'+inttostr(length(ArCheckBoxValue)));
 end;
 
 procedure TfrmMain.SpeedButton7Click(Sender: TObject);
@@ -1360,6 +1371,8 @@ begin
     ArCheckBoxValue[I,0]:=0;
   end;
   DBGrid1.Refresh;//调用DBGrid1DrawColumnCell事件
+  
+  UpdateStatusBar(#$2+'7:0');
 end;
 
 end.
