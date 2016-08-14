@@ -1331,7 +1331,7 @@ begin
       k:=ifThen(ArCheckBoxValue[i,0]=1,k-1,k+1);
 
       ArCheckBoxValue[i,0]:=ifThen(ArCheckBoxValue[i,0]=1,0,1);
-      DBGrid1.Refresh;//调用DBGrid1DrawColumnCell事件
+      Column.Grid.Refresh;//调用DBGrid1DrawColumnCell事件
       break;
     end;
   end;
