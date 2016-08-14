@@ -694,11 +694,16 @@ var
   i:integer;
 
   sPatientname,sSex,sAge:string;
+  
+  Save_Cursor:TCursor;
 begin
   if not ifhaspower(sender,powerstr_js_main) then exit;
 
   if not ADObasic.Active then exit;
   if ADObasic.RecordCount=0 then exit;
+
+  Save_Cursor := Screen.Cursor;
+  Screen.Cursor := crHourGlass;
 
   adotemp22:=tadoquery.Create(nil);
   adotemp22.clone(ADObasic);
@@ -715,16 +720,13 @@ begin
     end;
     if not ifSelect then begin adotemp22.Next;continue;end;//如果未选择，则跳过
 
-    sUnid:=adotemp22.fieldbyname('唯一编号').AsString;//防止点击打印后，马上将光标移到另一条病人信息上。故写在最前面
+    sUnid:=adotemp22.fieldbyname('唯一编号').AsString;
     sCombin_Id:=adotemp22.FieldByName('工作组').AsString;
     iIfCompleted:=adotemp22.FieldByName('ifCompleted').AsInteger;
-
     sPatientname:=trim(adotemp22.fieldbyname('姓名').AsString);
     sSex:=adotemp22.fieldbyname('性别').AsString;
     sAge:=adotemp22.fieldbyname('年龄').AsString;
 
-    if not ADObasic.Locate('唯一编号',sUnid,[loCaseInsensitive]) then begin adotemp22.Next;continue;end;//报表需要用到ADObasic的值
-    
     //判断该就诊人员是否存在未审核结果START
     if strtoint(ScalarSQLCmd(LisConn,'select count(*) from chk_con where Patientname='''+sPatientname+''' and isnull(sex,'''')='''+sSex+''' and dbo.uf_GetAgeReal(age)=dbo.uf_GetAgeReal('''+sAge+''') and isnull(report_doctor,'''')='''' '))>0 then
     begin
@@ -783,7 +785,7 @@ begin
       continue;
     end;
 
-      strsqlPrint:='select itemid as 项目代码,name as 名称,english_name as 英文名,'+
+    strsqlPrint:='select itemid as 项目代码,name as 名称,english_name as 英文名,'+
             ' itemvalue as 检验结果,'+
             ' min_value as 最小值,max_value as 最大值,dbo.uf_Reference_Ranges(min_value,max_value) as 参考范围,'+
             ' unit as 单位,'+
@@ -811,16 +813,32 @@ begin
       continue;
     end;
 
-      if CheckBox1.Checked then  //预览模式
-        frReport1.ShowReport
-      else  //直接打印模式
-      begin
-        if frReport1.PrepareReport then frReport1.PrintPreparedReport('', 1, True, frAll);
-      end;
+    //报表需要用到ADObasic的值START
+    if not ADObasic.Locate('唯一编号',sUnid,[loCaseInsensitive]) then
+    begin
+      if length(memo1.Lines.Text)>=60000 then memo1.Lines.Clear;//memo只能接受64K个字符
+      memo1.Lines.Add(FormatDatetime('YYYY-MM-DD HH:NN:SS', Now) + ':无法定位唯一编号为['+sUnid+']的就诊人员['+sPatientname+']!');
+      WriteLog(pchar('无法定位唯一编号为['+sUnid+']的就诊人员['+sPatientname+']!'));
+
+      adotemp22.Next;
+      continue;
+    end;
+    //=========================STOP
+
+    if CheckBox1.Checked then  //预览模式
+      frReport1.ShowReport
+    else  //直接打印模式
+    begin
+      if frReport1.PrepareReport then frReport1.PrintPreparedReport('', 1, True, frAll);
+    end;
 
     adotemp22.Next;
   end;
   adotemp22.Free;
+
+  Screen.Cursor := Save_Cursor;  { Always restore to normal }
+  
+  MessageDlg('打印操作完成！',mtInformation,[mbOK],0);
 end;
 
 procedure TfrmMain.frReport1GetValue(const ParName: String;
@@ -1172,11 +1190,16 @@ var
   i,iIfCompleted:integer;  
 
   sPatientname,sSex,sAge:string;
+  
+  Save_Cursor:TCursor;
 begin
   if not ifhaspower(sender,powerstr_js_main) then exit;
 
   if not ADObasic.Active then exit;
   if ADObasic.RecordCount=0 then exit;
+
+  Save_Cursor := Screen.Cursor;
+  Screen.Cursor := crHourGlass;
 
   adotemp22:=tadoquery.Create(nil);
   adotemp22.clone(ADObasic);
@@ -1193,16 +1216,13 @@ begin
     end;
     if not ifSelect then begin adotemp22.Next;continue;end;//如果未选择，则跳过
     
-    sUnid:=adotemp22.fieldbyname('唯一编号').AsString;//防止点击打印后，马上将光标移到另一条病人信息上。故写在最前面
+    sUnid:=adotemp22.fieldbyname('唯一编号').AsString;
     sReport_Doctor:=trim(adotemp22.FieldByName('审核者').AsString);
     iIfCompleted:=adotemp22.FieldByName('ifCompleted').AsInteger;
-
     sPatientname:=trim(adotemp22.fieldbyname('姓名').AsString);
     sSex:=adotemp22.fieldbyname('性别').AsString;
     sAge:=adotemp22.fieldbyname('年龄').AsString;
 
-    if not ADObasic.Locate('唯一编号',sUnid,[loCaseInsensitive]) then begin adotemp22.Next;continue;end;//报表需要用到ADObasic的值
-    
     //判断该就诊人员是否存在未审核结果START
     if strtoint(ScalarSQLCmd(LisConn,'select count(*) from chk_con where Patientname='''+sPatientname+''' and isnull(sex,'''')='''+sSex+''' and dbo.uf_GetAgeReal(age)=dbo.uf_GetAgeReal('''+sAge+''') and isnull(report_doctor,'''')='''' '))>0 then
     begin
@@ -1238,7 +1258,7 @@ begin
     else
       frGH.Prop['formnewpage'] := false;
 
-      strsqlPrint:='select cv.combin_name as name,cv.name as 名称,cv.english_name as 英文名,cv.itemvalue as 检验结果,'+
+    strsqlPrint:='select cv.combin_name as name,cv.name as 名称,cv.english_name as 英文名,cv.itemvalue as 检验结果,'+
       'cv.unit as 单位,cv.min_value as 最小值,'+
       'cv.max_value as 最大值,dbo.uf_Reference_Ranges(cv.min_value,cv.max_value) as 参考范围, '+
       ' cv.Reserve1,cv.Reserve2,cv.Dosage1,cv.Dosage2,cv.Reserve5,cv.Reserve6,cv.Reserve7,cv.Reserve8,cv.Reserve9,cv.Reserve10, '+
@@ -1264,6 +1284,18 @@ begin
       continue;
     end;
 
+    //报表需要用到ADObasic的值START
+    if not ADObasic.Locate('唯一编号',sUnid,[loCaseInsensitive]) then
+    begin
+      if length(memo1.Lines.Text)>=60000 then memo1.Lines.Clear;//memo只能接受64K个字符
+      memo1.Lines.Add(FormatDatetime('YYYY-MM-DD HH:NN:SS', Now) + ':无法定位唯一编号为['+sUnid+']的就诊人员['+sPatientname+']!');
+      WriteLog(pchar('无法定位唯一编号为['+sUnid+']的就诊人员['+sPatientname+']!'));
+
+      adotemp22.Next;
+      continue;
+    end;
+    //=========================STOP
+
     if CheckBox1.Checked then  //预览模式
       frReport1.ShowReport
     else  //直接打印模式
@@ -1274,6 +1306,10 @@ begin
     adotemp22.Next;
   end;
   adotemp22.Free;
+
+  Screen.Cursor := Save_Cursor;  { Always restore to normal }
+  
+  MessageDlg('打印操作完成！',mtInformation,[mbOK],0);
 end;
 
 procedure TfrmMain.DBGrid1CellClick(Column: TColumn);
@@ -1303,6 +1339,11 @@ procedure TfrmMain.SpeedButton3Click(Sender: TObject);
 var
   i:integer;
 begin
+  if length(ArCheckBoxValue)>50 then
+  begin
+    if (MessageDlg('报告单数量大于50，确定要全选？', mtConfirmation, [mbYes, mbNo], 0) <> mrYes) then exit;
+  end;
+
   for i:=LOW(ArCheckBoxValue) to HIGH(ArCheckBoxValue) do
   begin
     ArCheckBoxValue[I,0]:=1;

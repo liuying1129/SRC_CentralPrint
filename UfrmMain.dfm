@@ -52,33 +52,39 @@ object frmMain: TfrmMain
       Left = 78
       Top = 137
       Width = 121
-      Height = 21
+      Height = 19
+      Ctl3D = False
       EditLabel.Width = 72
       EditLabel.Height = 13
       EditLabel.Caption = #38376#35786'/'#20303#38498#21495
       LabelPosition = lpLeft
+      ParentCtl3D = False
       TabOrder = 0
     end
     object LabeledEdit2: TLabeledEdit
       Left = 78
       Top = 161
       Width = 121
-      Height = 21
+      Height = 19
+      Ctl3D = False
       EditLabel.Width = 26
       EditLabel.Height = 13
       EditLabel.Caption = #22995#21517
       LabelPosition = lpLeft
+      ParentCtl3D = False
       TabOrder = 1
     end
     object LabeledEdit3: TLabeledEdit
       Left = 78
       Top = 185
       Width = 121
-      Height = 21
+      Height = 19
+      Ctl3D = False
       EditLabel.Width = 52
       EditLabel.Height = 13
       EditLabel.Caption = #36865#26816#31185#23460
       LabelPosition = lpLeft
+      ParentCtl3D = False
       TabOrder = 2
       OnKeyDown = LabeledEdit3KeyDown
     end
@@ -86,11 +92,13 @@ object frmMain: TfrmMain
       Left = 78
       Top = 209
       Width = 121
-      Height = 21
+      Height = 19
+      Ctl3D = False
       EditLabel.Width = 52
       EditLabel.Height = 13
       EditLabel.Caption = #36865#26816#21307#29983
       LabelPosition = lpLeft
+      ParentCtl3D = False
       TabOrder = 3
       OnKeyDown = LabeledEdit4KeyDown
     end
@@ -109,6 +117,7 @@ object frmMain: TfrmMain
       Width = 193
       Height = 81
       Columns = 2
+      Ctl3D = True
       ItemIndex = 0
       Items.Strings = (
         #19981#38480
@@ -116,6 +125,7 @@ object frmMain: TfrmMain
         #26368#36817'3'#22825
         #26368#36817'1'#21608
         #26368#36817'1'#26376)
+      ParentCtl3D = False
       TabOrder = 5
     end
     object RadioGroup2: TRadioGroup
@@ -151,6 +161,8 @@ object frmMain: TfrmMain
       Width = 75
       Height = 17
       Caption = #25171#21360#39044#35272
+      Ctl3D = True
+      ParentCtl3D = False
       TabOrder = 8
     end
     object CheckBox2: TCheckBox
@@ -293,7 +305,9 @@ object frmMain: TfrmMain
       Height = 439
       Align = alLeft
       Color = 16767438
+      Ctl3D = False
       DataSource = DataSource1
+      ParentCtl3D = False
       ReadOnly = True
       TabOrder = 0
       TitleFont.Charset = ANSI_CHARSET
@@ -326,7 +340,9 @@ object frmMain: TfrmMain
         Height = 291
         Align = alClient
         Color = 16767438
+        Ctl3D = False
         DataSource = DataSource2
+        ParentCtl3D = False
         ReadOnly = True
         TabOrder = 0
         TitleFont.Charset = ANSI_CHARSET
@@ -343,6 +359,8 @@ object frmMain: TfrmMain
         Height = 143
         Align = alBottom
         Color = 16767438
+        Ctl3D = False
+        ParentCtl3D = False
         ReadOnly = True
         ScrollBars = ssBoth
         TabOrder = 1
