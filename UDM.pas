@@ -38,7 +38,8 @@ const
         ' age as 年龄,0 as 选择,caseno as 病历号,bedno as 床号,deptname as 送检科室,'+
         ' check_doctor as 送检医生,check_date as 检查日期,'+
         ' report_date as 申请日期,'+
-        ' operator as 操作者,diagnosetype as 优先级别,printtimes as 打印次数,'+
+        ' operator as 操作者,diagnosetype as 优先级别,'+
+        ' (case when len(caseno)=8 and LEFT(caseno,1)=''8'' then 1 else printtimes end) as 打印次数,'+//PEIS的单:caseno长度为8且以8开头
         ' flagetype as 样本类型,diagnose as 临床诊断,typeflagcase as 样本情况,'+
         ' issure as 备注,unid as 唯一编号,combin_id as 工作组, '+
         ' His_Unid as His唯一编号,His_MzOrZy as His门诊或住院, '+

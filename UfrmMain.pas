@@ -381,7 +381,7 @@ begin
     strsql44:=' check_date>GETDATE()-30 and '
   else strsql44:=' ';
   if RadioGroup3.ItemIndex=1 then
-    STRSQL46:=' isnull(printtimes,0)<=0 and '
+    STRSQL46:=' isnull((case when len(caseno)=8 and LEFT(caseno,1)=''8'' then 1 else printtimes end),0)<=0 and '
   else STRSQL46:='';
   if trim(LabeledEdit1.Text)<>'' then STRSQL48:=' Caseno='''+trim(LabeledEdit1.Text)+''' and '
   else STRSQL48:='';
@@ -391,7 +391,7 @@ begin
   else STRSQL45:='';
   if trim(LabeledEdit4.Text)<>'' then STRSQL50:=' check_doctor='''+trim(LabeledEdit4.Text)+''' and '
   else STRSQL50:='';
-  STRSQL47:=' isnull(report_doctor,'''')<>'''' ';//PEIS的报告不在此处打印，应排除
+  STRSQL47:=' isnull(report_doctor,'''')<>'''' ';
   STRSQL49:=' order by patientname ';
   ADObasic.Close;
   ADObasic.SQL.Clear;
@@ -647,7 +647,7 @@ begin
   else if RadioGroup2.ItemIndex=4 then
     strsql44:=' check_date>GETDATE()-30 and '
   else strsql44:=' ';
-  STRSQL47:=' isnull(printtimes,0)<=0 and isnull(report_doctor,'''')<>'''' ';
+  STRSQL47:=' isnull((case when len(caseno)=8 and LEFT(caseno,1)=''8'' then 1 else printtimes end),0)<=0 and isnull(report_doctor,'''')<>'''' ';
   adotemp11:=TAdoquery.Create(nil);
   adotemp11.Connection:=dm.ADOConnection1;
   adotemp11.Close;
@@ -673,7 +673,7 @@ begin
   else if RadioGroup2.ItemIndex=4 then
     strsql44:=' check_date>GETDATE()-30 and '
   else strsql44:=' ';
-  STRSQL47:=' isnull(printtimes,0)<=0 and isnull(report_doctor,'''')<>'''' ';
+  STRSQL47:=' isnull((case when len(caseno)=8 and LEFT(caseno,1)=''8'' then 1 else printtimes end),0)<=0 and isnull(report_doctor,'''')<>'''' ';
   STRSQL49:=' order by patientname ';
   ADObasic.Close;
   ADObasic.SQL.Clear;
