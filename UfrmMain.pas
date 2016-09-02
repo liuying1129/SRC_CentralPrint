@@ -441,7 +441,7 @@ var
   i:integer;
 begin
   if not DataSet.Active then exit;
-  
+
   dbgrid1.Columns[0].Width:=42;//姓名
   dbgrid1.Columns[1].Width:=30;//性别
   dbgrid1.Columns[2].Width:=30;//年龄
@@ -452,9 +452,9 @@ begin
   dbgrid1.Columns[7].Width:=55;//送检医生
   dbgrid1.Columns[8].Width:=135;//检查日期
   dbgrid1.Columns[9].Width:=72;//申请日期
-  dbgrid1.Columns[10].Width:=40;//流水号
-  dbgrid1.Columns[11].Width:=40;//联机号
-  dbgrid1.Columns[12].Width:=42;//审核者
+  dbgrid1.Columns[10].Width:=42;//审核者
+  dbgrid1.Columns[11].Width:=42;//工作组
+  dbgrid1.Columns[12].Width:=42;//操作者
 
   adotemp22:=tadoquery.Create(nil);
   adotemp22.clone(DataSet as TCustomADODataSet);

@@ -37,14 +37,14 @@ const
         ' sex as 性别,'+
         ' age as 年龄,0 as 选择,caseno as 病历号,bedno as 床号,deptname as 送检科室,'+
         ' check_doctor as 送检医生,check_date as 检查日期,'+
-        ' report_date as 申请日期,'+
+        ' report_date as 申请日期,report_doctor as 审核者,combin_id as 工作组,'+
         ' operator as 操作者,diagnosetype as 优先级别,'+
         ' (case when len(caseno)=8 and LEFT(caseno,1)=''8'' then 1 else printtimes end) as 打印次数,'+//PEIS的单:caseno长度为8且以8开头
         ' flagetype as 样本类型,diagnose as 临床诊断,typeflagcase as 样本情况,'+
-        ' issure as 备注,unid as 唯一编号,combin_id as 工作组, '+
+        ' issure as 备注,unid as 唯一编号, '+
         ' His_Unid as His唯一编号,His_MzOrZy as His门诊或住院, '+
         ' WorkDepartment as 所属部门,WorkCategory as 工种,WorkID as 工号,ifMarry as 婚否,OldAddress as 籍贯,Address as 住址,Telephone as 电话,WorkCompany as 所属公司, '+
-        ' Audit_Date as 审核时间,ifCompleted,checkid as 联机号,lsh as 流水号,report_doctor as 审核者 '+
+        ' Audit_Date as 审核时间,ifCompleted,checkid as 联机号,lsh as 流水号 '+
         ' from view_Chk_Con_All ';
 
 var
