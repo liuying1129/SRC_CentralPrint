@@ -374,10 +374,8 @@ begin
   if RadioGroup1.ItemIndex=1 then
     strsql44:=' CONVERT(CHAR(10),check_date,121)=CONVERT(CHAR(10),GETDATE(),121) and '
   else if RadioGroup1.ItemIndex=2 then
-    strsql44:=' check_date>GETDATE()-3 and '
-  else if RadioGroup1.ItemIndex=3 then
     strsql44:=' check_date>GETDATE()-7 and '
-  else if RadioGroup1.ItemIndex=4 then
+  else if RadioGroup1.ItemIndex=3 then
     strsql44:=' check_date>GETDATE()-30 and '
   else strsql44:=' ';
   if RadioGroup3.ItemIndex=1 then
@@ -642,10 +640,8 @@ begin
   if RadioGroup2.ItemIndex=1 then
     strsql44:=' CONVERT(CHAR(10),check_date,121)=CONVERT(CHAR(10),GETDATE(),121) and '
   else if RadioGroup2.ItemIndex=2 then
-    strsql44:=' check_date>GETDATE()-3 and '
-  else if RadioGroup2.ItemIndex=3 then
     strsql44:=' check_date>GETDATE()-7 and '
-  else if RadioGroup2.ItemIndex=4 then
+  else if RadioGroup2.ItemIndex=3 then
     strsql44:=' check_date>GETDATE()-30 and '
   else strsql44:=' ';
   STRSQL47:=' isnull((case when len(caseno)=8 and LEFT(caseno,1)=''8'' then 1 else printtimes end),0)<=0 and isnull(report_doctor,'''')<>'''' ';
@@ -668,10 +664,8 @@ begin
   if RadioGroup2.ItemIndex=1 then
     strsql44:=' CONVERT(CHAR(10),check_date,121)=CONVERT(CHAR(10),GETDATE(),121) and '
   else if RadioGroup2.ItemIndex=2 then
-    strsql44:=' check_date>GETDATE()-3 and '
-  else if RadioGroup2.ItemIndex=3 then
     strsql44:=' check_date>GETDATE()-7 and '
-  else if RadioGroup2.ItemIndex=4 then
+  else if RadioGroup2.ItemIndex=3 then
     strsql44:=' check_date>GETDATE()-30 and '
   else strsql44:=' ';
   STRSQL47:=' isnull((case when len(caseno)=8 and LEFT(caseno,1)=''8'' then 1 else printtimes end),0)<=0 and isnull(report_doctor,'''')<>'''' ';
