@@ -1046,7 +1046,7 @@ begin
   if printtimes=0 then//修改打印次数
     ExecSQLCmd(LisConn,'update '+ifThen(iIfCompleted=1,'chk_con_bak','chk_con')+' set printtimes='+inttostr(printtimes+1)+' where unid='+inttostr(unid));
   
-  ExecSQLCmd(LisConn,'insert into pix_tran (pkunid,Reserve1,Reserve2,OpType) values ('+inttostr(unid)+','''+operator_name+''',''Class_Print'',''Lab'')');
+  ExecSQLCmd(LisConn,'insert into pix_tran (pkunid,Reserve1,Reserve2,OpType) values ('+inttostr(unid)+','''+operator_name+''',''Class_Print'',''Nurse'')');
 end;
 
 procedure TfrmMain.Draw_MVIS2035_Curve(Chart_XLB: TChart; const X1, Y1, X2,
