@@ -6,7 +6,8 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ExtCtrls, StdCtrls, Buttons, ComCtrls, ToolWin, Grids, DBGrids,
   DB, ADODB,IniFiles,StrUtils, ADOLYGetcode,ShellAPI, FR_Class,Printers,
-  FR_DSet, FR_DBSet,Jpeg,Chart,FR_Chart,Series,Math, ActnList;
+  FR_DSet, FR_DBSet,Jpeg,Chart,FR_Chart,Series,Math, ActnList,HTTPApp,
+  IdHashMessageDigest,IdHash,IdHTTP;
 
 //==为了通过发送消息更新主窗体状态栏而增加==//
 const
@@ -123,11 +124,44 @@ var
 {$R *.dfm}
 
 procedure TfrmMain.FormShow(Sender: TObject);
+var
+  s1,s3,sort_params,sign:string;
+  MyMD5: TIdHashMessageDigest5;
+  Digest: T4x4LongWordRecord;
+  IdHTTP_Tmp1:TIdHTTP;
+  RespData:TStringStream;
 begin
   frmLogin.ShowModal;
 
   ReadConfig;
   UpdateStatusBar(#$2+'6:'+SCSYDW);
+
+  //调用用户信息接口start
+  s1:='insert into AppVisit (SysName,PageName,IP,Customer,UserName,ActionName,ActionTime) values ('''+SYSNAME+''','''+Name+''','''+'10.1.2.3'+''','''+SCSYDW+''','''+operator_name+''','''+'Show'+''',getdate())';
+  s3:='methodNum='+HTTPEncode(UTF8Encode('AIF012'));
+  s3:=s3+'&sql='+HTTPEncode(UTF8Encode(s1));
+
+  MyMD5 := TIdHashMessageDigest5.Create;
+  sort_params:=HTTPEncode(UTF8Encode('methodNumAIF012sql'+s1));
+  sort_params:=StringReplace(sort_params,'!','%21',[rfReplaceAll, rfIgnoreCase]);
+  sort_params:=StringReplace(sort_params,'''','%27',[rfReplaceAll, rfIgnoreCase]);
+  sort_params:=StringReplace(sort_params,'(','%28',[rfReplaceAll, rfIgnoreCase]);
+  sort_params:=StringReplace(sort_params,')','%29',[rfReplaceAll, rfIgnoreCase]);
+  Digest := MyMD5.HashValue(sort_params);
+  sign:=MyMD5.AsHex(Digest);
+
+  s3:=s3+'&sign='+sign;
+
+  IdHTTP_Tmp1:=TIdHTTP.Create(nil);
+  RespData:=TStringStream.Create('');
+  try
+    IdHTTP_Tmp1.Get(BASE_URL+'?'+s3,RespData);
+    //showmessage(UTF8Decode(RespData.DataString));//返回信息//IdHTTP是同步的
+  except
+  end;
+  RespData.Free;
+  IdHTTP_Tmp1.Free;
+  //调用用户信息接口stop
 end;
 
 procedure TfrmMain.ReadConfig;
