@@ -189,7 +189,7 @@ begin
 
   CheckBox1.Checked:=configini.ReadBool('Interface','ifPreview',false);{记录是否打印预览模式}
   CheckBox2.Checked:=configini.ReadBool('Interface','ifPagination',false);{记录是否按组分页}
-  DBGrid1.Width:=configini.ReadInteger('Interface','gridBaseInfoWidth',525);{记录基本信息框宽度}
+  DBGrid1.Width:=configini.ReadInteger('Interface','gridBaseInfoWidth',680);{记录基本信息框宽度}
   Memo1.Height:=configini.ReadInteger('Interface','memoLogHeight',150);{记录组合项目选择框高度}
 
   RadioGroup1.ItemIndex:=configini.ReadInteger('Interface','normalTimeRadio',0);
@@ -502,9 +502,9 @@ begin
   dbgrid1.Columns[8].Width:=135;//检查日期
   dbgrid1.Columns[9].Width:=72;//申请日期
   dbgrid1.Columns[10].Width:=42;//审核者
-  dbgrid1.Columns[11].Width:=150;//组合项目串
-  dbgrid1.Columns[12].Width:=42;//工作组
-  dbgrid1.Columns[13].Width:=42;//操作者
+  //dbgrid1.Columns[11].Width:=150;//组合项目串
+  dbgrid1.Columns[11].Width:=42;//工作组
+  dbgrid1.Columns[12].Width:=42;//操作者
 
   adotemp22:=tadoquery.Create(nil);
   adotemp22.clone(DataSet as TCustomADODataSet);
