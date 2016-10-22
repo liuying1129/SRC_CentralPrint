@@ -331,25 +331,6 @@ object frmMain: TfrmMain
         Cursor = crVSplit
         Align = alBottom
       end
-      object DBGrid2: TDBGrid
-        Left = 1
-        Top = 1
-        Width = 392
-        Height = 291
-        Align = alClient
-        Color = 16767438
-        Ctl3D = False
-        DataSource = DataSource2
-        ParentCtl3D = False
-        ReadOnly = True
-        TabOrder = 0
-        TitleFont.Charset = ANSI_CHARSET
-        TitleFont.Color = clWindowText
-        TitleFont.Height = -13
-        TitleFont.Name = #23435#20307
-        TitleFont.Style = []
-        OnDrawColumnCell = DBGrid2DrawColumnCell
-      end
       object Memo1: TMemo
         Left = 1
         Top = 295
@@ -361,7 +342,50 @@ object frmMain: TfrmMain
         ParentCtl3D = False
         ReadOnly = True
         ScrollBars = ssBoth
+        TabOrder = 0
+      end
+      object PageControl1: TPageControl
+        Left = 1
+        Top = 1
+        Width = 392
+        Height = 291
+        ActivePage = TabSheet2
+        Align = alClient
         TabOrder = 1
+        object TabSheet1: TTabSheet
+          Caption = #26816#39564#32467#26524
+          object DBGrid2: TDBGrid
+            Left = 0
+            Top = 0
+            Width = 384
+            Height = 263
+            Align = alClient
+            Color = 16767438
+            Ctl3D = False
+            DataSource = DataSource2
+            ParentCtl3D = False
+            ReadOnly = True
+            TabOrder = 0
+            TitleFont.Charset = ANSI_CHARSET
+            TitleFont.Color = clWindowText
+            TitleFont.Height = -13
+            TitleFont.Name = #23435#20307
+            TitleFont.Style = []
+            OnDrawColumnCell = DBGrid2DrawColumnCell
+          end
+        end
+        object TabSheet2: TTabSheet
+          Caption = #22270#20687
+          ImageIndex = 1
+          object ScrollBoxPicture: TScrollBox
+            Left = 0
+            Top = 0
+            Width = 384
+            Height = 263
+            Align = alClient
+            TabOrder = 0
+          end
+        end
       end
     end
   end
