@@ -1456,11 +1456,11 @@ begin
   adotemp3.SQL.Clear;
   adotemp3.SQL.Text:=
     'select * from ( '+
-      'select ''绘点''   as PictureType,chk_valu.* from '+ifThen(AifCompleted=1,'chk_valu_bak','chk_valu')+' where pkunid='+inttostr(ACheckUnid)+' and isnull(histogram,'''')<>'''' and issure=''1'' '+
+      'select ''绘点''   as PictureType,* from '+ifThen(AifCompleted=1,'chk_valu_bak','chk_valu')+' where pkunid='+inttostr(ACheckUnid)+' and isnull(histogram,'''')<>'''' and issure=''1'' '+
       'union all '+
-      'select ''图片''   as PictureType,chk_valu.* from '+ifThen(AifCompleted=1,'chk_valu_bak','chk_valu')+' where pkunid='+inttostr(ACheckUnid)+' and Photo is not null and issure=''1'' '+
+      'select ''图片''   as PictureType,* from '+ifThen(AifCompleted=1,'chk_valu_bak','chk_valu')+' where pkunid='+inttostr(ACheckUnid)+' and Photo is not null and issure=''1'' '+
       'union all '+
-      'select ''血流变'' as PictureType,chk_valu.* from '+ifThen(AifCompleted=1,'chk_valu_bak','chk_valu')+' where pkunid='+inttostr(ACheckUnid)+' and Reserve8 is not null and issure=''1'' '+
+      'select ''血流变'' as PictureType,* from '+ifThen(AifCompleted=1,'chk_valu_bak','chk_valu')+' where pkunid='+inttostr(ACheckUnid)+' and Reserve8 is not null and issure=''1'' '+
     ' ) TempTable order by pkcombin_id,printorder ';
   adotemp3.Open;
   setlength(GroupBox,adotemp3.RecordCount);
