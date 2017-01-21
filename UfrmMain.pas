@@ -157,6 +157,10 @@ begin
   sign:=MyMD5.AsHex(Digest);
   
   IdHTTP_Tmp1:=TIdHTTP.Create(nil);
+  //经测试
+  //本机有网络，但连接HTTP服务很慢时，如不加超时，会一直挂起
+  //本机无网络，就算不加超时也没问题
+  IdHTTP_Tmp1.ReadTimeout:=2*1000;//毫秒
   RespData:=TStringStream.Create('');
   
   {//get调用用户信息接口start
