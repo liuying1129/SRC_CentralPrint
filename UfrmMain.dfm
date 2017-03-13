@@ -400,24 +400,35 @@ object frmMain: TfrmMain
       end
       item
         Text = #25805#20316#20154#21592#24037#21495':'
-        Width = 90
+        Width = 82
       end
       item
         Width = 100
       end
       item
         Text = #25805#20316#20154#21592#22995#21517':'
-        Width = 100
+        Width = 82
       end
       item
         Width = 70
       end
       item
         Text = #25480#26435#20351#29992#21333#20301':'
-        Width = 100
+        Width = 82
       end
       item
         Width = 300
+      end
+      item
+        Text = #26381#21153#21517':'
+        Width = 47
+      end
+      item
+        Width = 200
+      end
+      item
+        Text = #25968#25454#24211':'
+        Width = 47
       end
       item
         Width = 50

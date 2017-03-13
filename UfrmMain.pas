@@ -144,6 +144,8 @@ begin
   
   ReadConfig;
   UpdateStatusBar(#$2+'6:'+SCSYDW);
+  UpdateStatusBar(#$2+'8:'+gServerName);
+  UpdateStatusBar(#$2+'10:'+gDbName);
 
   s1:='insert into AppVisit (SysName,PageName,IP,Customer,UserName,ActionName,ActionTime) values ('''+SYSNAME+''','''+Name+''','''+'10.1.2.3'+''','''+SCSYDW+''','''+operator_name+''','''+'Show'+''',getdate())';
   

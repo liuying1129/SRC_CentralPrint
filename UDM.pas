@@ -62,6 +62,8 @@ var
   SCSYDW:STRING;//授权使用单位
   SmoothNum:integer;//直方图光滑次数
   LisConn:string;//Lis连接字符串,MakeDBConn过程中被赋值,然后传入QC.DLL、CalcItemPro.dll
+  gServerName:string;//服务名,用于显示在状态栏
+  gDbName:string;//数据库名,用于显示在状态栏
 
   TempFile_Common:string;
   TempFile_Group:string;
@@ -727,6 +729,8 @@ begin
     dm.ADOConnection1.Connected := true;
     result:=true;
     LisConn:=newconnstr;
+    gServerName:=datasource;
+    gDbName:=initialcatalog;
   except
   end;
   if not result then
