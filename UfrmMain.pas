@@ -209,6 +209,8 @@ begin
   RadioGroup2.ItemIndex:=configini.ReadInteger('Interface','noprintTimeRadio',0);
   RadioGroup3.ItemIndex:=configini.ReadInteger('Interface','ifPrintRadio',0);
 
+  LabeledEdit4.Text:=configini.ReadString('Interface','check_doctor','');{记录送检医生,实现“仅看自己送检的样本”功能}
+  
   ReadIni();
 
   configini.Free;
@@ -361,6 +363,8 @@ begin
   configini.WriteBool('Interface','ifPreview',CheckBox1.Checked);{记录是否打印预览模式}
   configini.WriteBool('Interface','ifPagination',CheckBox2.Checked);{记录是否按组分页}
 
+  configini.WriteString('Interface','check_doctor',LabeledEdit4.Text);{记录送检医生,实现“仅看自己送检的样本”功能}
+  
   configini.Free;
 end;
 
