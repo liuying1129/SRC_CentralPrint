@@ -7,7 +7,7 @@ uses
   Dialogs, ExtCtrls, StdCtrls, Buttons, ComCtrls, ToolWin, Grids, DBGrids,
   DB, ADODB,IniFiles,StrUtils, ADOLYGetcode,ShellAPI, FR_Class,Printers,
   FR_DSet, FR_DBSet,Jpeg,Chart,FR_Chart,Series,Math, ActnList,HTTPApp,
-  IdHashMessageDigest,IdHash,IdHTTP;
+  IdHashMessageDigest,IdHash,IdHTTP,IdIPWatch;
 
 //==为了通过发送消息更新主窗体状态栏而增加==//
 const
@@ -137,6 +137,8 @@ var
   RespData:TStringStream;
 
   Param:TStringList;
+  IdIPWatch:TIdIPWatch;
+  sLocalIP,sLocalName:string;
 begin
   frmLogin.ShowModal;
 
@@ -147,7 +149,13 @@ begin
   UpdateStatusBar(#$2+'8:'+gServerName);
   UpdateStatusBar(#$2+'10:'+gDbName);
 
-  s1:='insert into AppVisit (SysName,PageName,IP,Customer,UserName,ActionName,ActionTime) values ('''+SYSNAME+''','''+Name+''','''+'10.1.2.3'+''','''+SCSYDW+''','''+operator_name+''','''+'Show'+''',getdate())';
+  IdIPWatch:=TIdIPWatch.Create(nil);
+  IdIPWatch.HistoryEnabled:=false;
+  sLocalIP:=IdIPWatch.LocalIP;
+  sLocalName:='';//IdIPWatch.LocalName;//indy10无该属性
+  IdIPWatch.Free;
+  
+  s1:='insert into AppVisit (SysName,PageName,IP,Customer,UserName,ActionName,ActionTime) values ('''+SYSNAME+''','''+Name+''','''+sLocalIP+''','''+SCSYDW+''','''+operator_name+''','''+'Show'+''',getdate())';
   
   MyMD5 := TIdHashMessageDigest5.Create;
   sort_params:=HTTPEncode(UTF8Encode('methodNumAIF012sql'+s1));
@@ -163,6 +171,7 @@ begin
   //本机有网络，但连接HTTP服务很慢时，如不加超时，会一直挂起
   //本机无网络，就算不加超时也没问题
   IdHTTP_Tmp1.ReadTimeout:=2*1000;//毫秒
+  IdHTTP_Tmp1.ConnectTimeout:=2*1000;//Connect超时设置//indy9无该属性.故要安装indy10
   RespData:=TStringStream.Create('');
   
   {//get调用用户信息接口start
