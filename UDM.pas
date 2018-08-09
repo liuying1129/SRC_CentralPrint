@@ -29,7 +29,6 @@ const
   SYSNAME='CentralPrint';
   sDBALIAS='ALIAS_SHHJ';
   CGYXJB='常规';//常规优先级别字符串
-	BASE_URL='http://211.97.0.5:8080/YkAPI/service';
   CryptStr='lc';
 
   //0 as 选择,默认是未选择的.1--选择,非1--未选
@@ -64,6 +63,7 @@ var
   LisConn:string;//Lis连接字符串,MakeDBConn过程中被赋值,然后传入QC.DLL、CalcItemPro.dll
   gServerName:string;//服务名,用于显示在状态栏
   gDbName:string;//数据库名,用于显示在状态栏
+  BASE_URL:STRING;//http://211.97.0.5:8080/YkAPI/service
 
   TempFile_Common:string;
   TempFile_Group:string;

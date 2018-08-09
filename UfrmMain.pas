@@ -191,11 +191,14 @@ begin
   Param.Add('methodNum='+UTF8Encode('AIF012'));
   Param.Add('sql='+UTF8Encode(s1));
   Param.Add('sign='+sign);
-  try
-    IdHTTP_Tmp1.Post(BASE_URL,Param,RespData);
-    //showmessage(UTF8Decode(RespData.DataString));//返回信息//IdHTTP是同步的
-  except
-  end;
+
+  if trim(BASE_URL)<>'' then
+    try
+      IdHTTP_Tmp1.Post(BASE_URL,Param,RespData);
+      //showmessage(UTF8Decode(RespData.DataString));//返回信息//IdHTTP是同步的
+    except
+    end;
+  
   Param.Free;
   //post调用用户信息接口stop}
   
@@ -241,6 +244,8 @@ begin
   setlength(SCSYDW,length(pDeStr));
   for i :=1  to length(pDeStr) do SCSYDW[i]:=pDeStr[i-1];
   //==========
+  BASE_URL:=ScalarSQLCmd(LisConn,'select Name from CommCode where TypeName=''系统代码'' and ReMark=''远程请求地址'' ');
+  //if trim(BASE_URL)='' then BASE_URL:='http://211.97.0.5:8080/YkAPI/service';
 
   CONFIGINI:=TINIFILE.Create(ChangeFileExt(Application.ExeName,'.ini'));
 
