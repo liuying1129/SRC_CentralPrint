@@ -502,7 +502,7 @@ begin
             'pkcombin_id as 组合项目号,itemid as 项目编号,valueid as 唯一编号 '+
             ' from '+
             ifThen(ADObasic.FieldByName('ifCompleted').AsInteger=1,'chk_valu_bak','chk_valu')+
-            ' where pkunid=:pkunid and issure=1 and ltrim(rtrim(isnull(itemvalue,'''')))<>'''' '+
+            ' WITH(NOLOCK) where pkunid=:pkunid and issure=1 and ltrim(rtrim(isnull(itemvalue,'''')))<>'''' '+
             ' order by pkcombin_id,printorder ';
 
   ADOQuery2.Close;
