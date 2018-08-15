@@ -26,7 +26,6 @@ type
     LabeledEdit3: TLabeledEdit;
     LabeledEdit4: TLabeledEdit;
     BitBtn1: TBitBtn;
-    Label1: TLabel;
     CoolBar1: TCoolBar;
     ToolBar1: TToolBar;
     SpeedButton1: TSpeedButton;
@@ -49,7 +48,6 @@ type
     ADObasic: TADOQuery;
     ADOQuery2: TADOQuery;
     Timer1: TTimer;
-    Label2: TLabel;
     frReport1: TfrReport;
     ado_print: TADOQuery;
     frDBDataSet1: TfrDBDataSet;
@@ -71,6 +69,7 @@ type
     TabSheet2: TTabSheet;
     DBGrid2: TDBGrid;
     ScrollBoxPicture: TScrollBox;
+    BitBtn2: TBitBtn;
     procedure FormShow(Sender: TObject);
     procedure SpeedButton4Click(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -89,7 +88,6 @@ type
       DataCol: Integer; Column: TColumn; State: TGridDrawState);
     procedure FormCreate(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
-    procedure Label2Click(Sender: TObject);
     procedure SpeedButton1Click(Sender: TObject);
     procedure frReport1GetValue(const ParName: String;
       var ParValue: Variant);
@@ -100,6 +98,7 @@ type
     procedure SpeedButton2Click(Sender: TObject);
     procedure SpeedButton3Click(Sender: TObject);
     procedure SpeedButton7Click(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
   private
     procedure WriteProfile;
     procedure ReadConfig;
@@ -568,7 +567,7 @@ begin
             'DISTINCT pkcombin_id '+
             'from '+
             ifThen(ADObasic.FieldByName('ifCompleted').AsInteger=1,'chk_valu_bak','chk_valu')+
-            ' where pkunid=:pkunid and issure=1 order by pkcombin_id ';
+            ' WITH(NOLOCK) where pkunid=:pkunid and issure=1 order by pkcombin_id ';
 
   adotemp11:=tadoquery.Create(nil);
   adotemp11.Connection:=dm.ADOConnection1;
@@ -715,11 +714,11 @@ begin
 end;
 
 procedure TfrmMain.Timer1Timer(Sender: TObject);
-var
+{var
   strsql,strsql44,STRSQL47: string;
-  adotemp11:TAdoquery;
+  adotemp11:TAdoquery;//}
 begin
-  strsql:='select count(*) as RecNum '+
+  {strsql:='select count(*) as RecNum '+
         ' from view_Chk_Con_All where ';
   if RadioGroup2.ItemIndex=1 then
     strsql44:=' CONVERT(CHAR(10),check_date,121)=CONVERT(CHAR(10),GETDATE(),121) and '
@@ -738,30 +737,7 @@ begin
   adotemp11.SQL.Add(strsql47);
   adotemp11.Open;
   Label2.Caption:=adotemp11.fieldbyname('RecNum').AsString;
-  adotemp11.Free;
-end;
-
-procedure TfrmMain.Label2Click(Sender: TObject);
-var
-  strsql44,STRSQL47,STRSQL49: string;
-begin
-  if RadioGroup2.ItemIndex=1 then
-    strsql44:=' CONVERT(CHAR(10),check_date,121)=CONVERT(CHAR(10),GETDATE(),121) and '
-  else if RadioGroup2.ItemIndex=2 then
-    strsql44:=' check_date>GETDATE()-7 and '
-  else if RadioGroup2.ItemIndex=3 then
-    strsql44:=' check_date>GETDATE()-30 and '
-  else strsql44:=' ';
-  STRSQL47:=' isnull((case when len(caseno)=8 and LEFT(caseno,1)=''8'' then 1 else printtimes end),0)<=0 and isnull(report_doctor,'''')<>'''' ';
-  STRSQL49:=' order by patientname ';
-  ADObasic.Close;
-  ADObasic.SQL.Clear;
-  ADObasic.SQL.Add(SHOW_CHK_CON);
-  ADObasic.SQL.Add(' where ');
-  ADObasic.SQL.Add(strsql44);
-  ADObasic.SQL.Add(strsql47);
-  ADObasic.SQL.Add(strsql49);
-  ADObasic.Open;
+  adotemp11.Free;//}
 end;
 
 procedure TfrmMain.SpeedButton1Click(Sender: TObject);
@@ -876,7 +852,7 @@ begin
             ' Reserve1,Reserve2,Dosage1,Dosage2,Reserve5,Reserve6,Reserve7,Reserve8,Reserve9,Reserve10 '+
             ' from '+
             ifThen(iIfCompleted=1,'chk_valu_bak','chk_valu')+
-            ' where pkunid='+sUnid+
+            ' WITH(NOLOCK) where pkunid='+sUnid+
             ' and issure=1 and ltrim(rtrim(isnull(itemvalue,'''')))<>'''' '+
             ' group by itemid,name,english_name,itemvalue,min_value,max_value,unit, '+
             ' Reserve1,Reserve2,Dosage1,Dosage2,Reserve5,Reserve6,Reserve7,Reserve8,Reserve9,Reserve10 '+
@@ -1005,7 +981,7 @@ begin
     strsqlPrint:='select Reserve8,itemValue,Min_Value,Max_Value '+
        ' from '+
        ifThen(iIfCompleted=1,'chk_valu_bak','chk_valu') +
-       ' where pkunid=:pkunid '+
+       ' WITH(NOLOCK) where pkunid=:pkunid '+
        ' and Reserve8 is not null '+
        ' and issure=1 ';
     adotemp11:=tadoquery.Create(nil);
@@ -1049,7 +1025,7 @@ begin
     strsqlPrint:='select top 1 histogram,Dosage1 '+
        ' from '+
        ifThen(iIfCompleted=1,'chk_valu_bak','chk_valu') +
-       ' where pkunid=:pkunid '+
+       ' WITH(NOLOCK) where pkunid=:pkunid '+
        ' and english_name=:english_name '+
        ' and isnull(histogram,'''')<>'''' '+
        ' and issure=1 ';
@@ -1086,7 +1062,7 @@ begin
     strsqlPrint:='select top 1 Photo '+
        ' from '+
        ifThen(iIfCompleted=1,'chk_valu_bak','chk_valu') +
-       ' where pkunid=:pkunid '+
+       ' WITH(NOLOCK) where pkunid=:pkunid '+
        //' and english_name=:english_name '+
        ' and itemid=:itemid '+//edit by liuying 20110414
        ' and Photo is not null '+
@@ -1347,7 +1323,7 @@ begin
       ' cv.itemid as 项目代码 '+//cci.Reserve3,
       ' from '+
       ifThen(iIfCompleted=1,'chk_valu_bak','chk_valu')+
-      ' cv '+
+      ' cv WITH(NOLOCK) '+
       ' left join clinicchkitem cci on cci.itemid=cv.itemid '+
       ' where cv.pkunid='+sUnid+
       ' and cv.issure=1 and ltrim(rtrim(isnull(itemvalue,'''')))<>'''' '+
@@ -1480,11 +1456,11 @@ begin
   adotemp3.SQL.Clear;
   adotemp3.SQL.Text:=
     'select * from ( '+
-      'select ''绘点''   as PictureType,* from '+ifThen(AifCompleted=1,'chk_valu_bak','chk_valu')+' where pkunid='+inttostr(ACheckUnid)+' and isnull(histogram,'''')<>'''' and issure=''1'' '+
+      'select ''绘点''   as PictureType,* from '+ifThen(AifCompleted=1,'chk_valu_bak','chk_valu')+' WITH(NOLOCK) where pkunid='+inttostr(ACheckUnid)+' and isnull(histogram,'''')<>'''' and issure=''1'' '+
       'union all '+
-      'select ''图片''   as PictureType,* from '+ifThen(AifCompleted=1,'chk_valu_bak','chk_valu')+' where pkunid='+inttostr(ACheckUnid)+' and Photo is not null and issure=''1'' '+
+      'select ''图片''   as PictureType,* from '+ifThen(AifCompleted=1,'chk_valu_bak','chk_valu')+' WITH(NOLOCK) where pkunid='+inttostr(ACheckUnid)+' and Photo is not null and issure=''1'' '+
       'union all '+
-      'select ''血流变'' as PictureType,* from '+ifThen(AifCompleted=1,'chk_valu_bak','chk_valu')+' where pkunid='+inttostr(ACheckUnid)+' and Reserve8 is not null and issure=''1'' '+
+      'select ''血流变'' as PictureType,* from '+ifThen(AifCompleted=1,'chk_valu_bak','chk_valu')+' WITH(NOLOCK) where pkunid='+inttostr(ACheckUnid)+' and Reserve8 is not null and issure=''1'' '+
     ' ) TempTable order by pkcombin_id,printorder ';
   adotemp3.Open;
   setlength(GroupBox,adotemp3.RecordCount);
@@ -1563,6 +1539,29 @@ begin
                         Reserve8_1,strtofloatdef(mPa_min_1,-1),Reserve8_2,strtofloatdef(mPa_min_2,-1),
                         Reserve8_1,strtofloatdef(mPa_max_1,-1),Reserve8_2,strtofloatdef(mPa_max_2,-1));
   end;
+end;
+
+procedure TfrmMain.BitBtn2Click(Sender: TObject);
+var
+  strsql44,STRSQL47,STRSQL49: string;
+begin
+  if RadioGroup2.ItemIndex=1 then
+    strsql44:=' CONVERT(CHAR(10),check_date,121)=CONVERT(CHAR(10),GETDATE(),121) and '
+  else if RadioGroup2.ItemIndex=2 then
+    strsql44:=' check_date>GETDATE()-7 and '
+  else if RadioGroup2.ItemIndex=3 then
+    strsql44:=' check_date>GETDATE()-30 and '
+  else strsql44:=' ';
+  STRSQL47:=' isnull((case when len(caseno)=8 and LEFT(caseno,1)=''8'' then 1 else printtimes end),0)<=0 and isnull(report_doctor,'''')<>'''' ';
+  STRSQL49:=' order by patientname ';
+  ADObasic.Close;
+  ADObasic.SQL.Clear;
+  ADObasic.SQL.Add(SHOW_CHK_CON);
+  ADObasic.SQL.Add(' where ');
+  ADObasic.SQL.Add(strsql44);
+  ADObasic.SQL.Add(strsql47);
+  ADObasic.SQL.Add(strsql49);
+  ADObasic.Open;
 end;
 
 end.

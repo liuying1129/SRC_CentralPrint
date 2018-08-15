@@ -26,28 +26,6 @@ object frmMain: TfrmMain
     Align = alLeft
     Color = 16767438
     TabOrder = 0
-    object Label1: TLabel
-      Left = 9
-      Top = 373
-      Width = 100
-      Height = 13
-      Caption = #26410#25171#21360#20154#27425'(F5):'
-    end
-    object Label2: TLabel
-      Left = 113
-      Top = 373
-      Width = 42
-      Height = 13
-      Cursor = crHandPoint
-      Caption = 'Label2'
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clRed
-      Font.Height = -13
-      Font.Name = #23435#20307
-      Font.Style = []
-      ParentFont = False
-      OnClick = Label2Click
-    end
     object LabeledEdit1: TLabeledEdit
       Left = 78
       Top = 137
@@ -170,6 +148,15 @@ object frmMain: TfrmMain
       Height = 17
       Caption = #25353#32452#20998#39029
       TabOrder = 9
+    end
+    object BitBtn2: TBitBtn
+      Left = 8
+      Top = 369
+      Width = 192
+      Height = 25
+      Caption = #26410#25171#21360#26816#39564#21333'(F5)'
+      TabOrder = 10
+      OnClick = BitBtn2Click
     end
   end
   object CoolBar1: TCoolBar
@@ -499,7 +486,7 @@ object frmMain: TfrmMain
     object Action2: TAction
       Caption = 'Action2'
       ShortCut = 116
-      OnExecute = Label2Click
+      OnExecute = BitBtn2Click
     end
     object Action3: TAction
       Caption = 'Action3'
