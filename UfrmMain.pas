@@ -948,6 +948,8 @@ begin
     if parname='籍贯' then ParValue:=trim(ADObasic.fieldbyname('籍贯').AsString);
     if parname='住址' then ParValue:=trim(ADObasic.fieldbyname('住址').AsString);
     if parname='电话' then ParValue:=trim(ADObasic.fieldbyname('电话').AsString);
+
+    if parname='检验设备' then ParValue:=ScalarSQLCmd(LisConn,'select dbo.uf_GetEquipFromChkUnid('+ADObasic.fieldbyname('ifCompleted').AsString+','+ADObasic.fieldbyname('唯一编号').AsString+')');
 end;
 
 procedure TfrmMain.frReport1BeforePrint(Memo: TStringList; View: TfrView);
