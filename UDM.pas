@@ -99,8 +99,8 @@ function GetHDSn(const RootPath:pchar):pchar;stdcall;external 'LYFunction.dll';
 function GetSysCurImeName: pchar;stdcall;external 'LYFunction.dll';//取得系统当前的中文输入法名称
 function GetVersionLY(const AFileName:pchar):pchar;stdcall;external 'LYFunction.dll';
 function CassonEquation(const X1,Y1,X2,Y2:Real;var A,B:Real):boolean;stdcall;external 'LYFunction.dll';//卡松方程式
-function DeCryptStr(aStr: Pchar; aKey: Pchar): Pchar;stdcall;external 'DESCrypt.dll';//解密
-function EnCryptStr(aStr: Pchar; aKey: Pchar): Pchar;stdcall;external 'DESCrypt.dll';//加密
+function DeCryptStr(aStr: Pchar; aKey: Pchar): Pchar;stdcall;external 'LYFunction.dll';//解密
+function EnCryptStr(aStr: Pchar; aKey: Pchar): Pchar;stdcall;external 'LYFunction.dll';//加密
 function CalParserValue(const CalExpress:Pchar;var ReturnValue:single):boolean;stdcall;external 'CalParser.dll';
 function ShowOptionForm(const pCaption,pTabSheetCaption,pItemInfo,pInifile:Pchar):boolean;stdcall;external 'OptionSetForm.dll';
 Function IdleTrackerInit:boolean;stdcall;external 'IdleTrac.dll';//start the monitoring process

@@ -128,16 +128,6 @@ var
 {$R *.dfm}
 
 procedure TfrmMain.FormShow(Sender: TObject);
-var
-  s1,sort_params,sign{,s3}:string;
-  MyMD5: TIdHashMessageDigest5;
-  Digest: T4x4LongWordRecord;
-  IdHTTP_Tmp1:TIdHTTP;
-  RespData:TStringStream;
-
-  Param:TStringList;
-  IdIPWatch:TIdIPWatch;
-  sLocalIP,sLocalName:string;
 begin
   frmLogin.ShowModal;
 
@@ -147,62 +137,6 @@ begin
   UpdateStatusBar(#$2+'6:'+SCSYDW);
   UpdateStatusBar(#$2+'8:'+gServerName);
   UpdateStatusBar(#$2+'10:'+gDbName);
-
-  IdIPWatch:=TIdIPWatch.Create(nil);
-  IdIPWatch.HistoryEnabled:=false;
-  sLocalIP:=IdIPWatch.LocalIP;
-  sLocalName:='';//IdIPWatch.LocalName;//indy10无该属性
-  IdIPWatch.Free;
-  
-  s1:='insert into AppVisit (SysName,PageName,IP,Customer,UserName,ActionName,ActionTime) values ('''+SYSNAME+''','''+Name+''','''+sLocalIP+''','''+SCSYDW+''','''+operator_name+''','''+'Show'+''',getdate())';
-  
-  MyMD5 := TIdHashMessageDigest5.Create;
-  sort_params:=HTTPEncode(UTF8Encode('methodNumAIF012sql'+s1));
-  sort_params:=StringReplace(sort_params,'!','%21',[rfReplaceAll, rfIgnoreCase]);
-  sort_params:=StringReplace(sort_params,'''','%27',[rfReplaceAll, rfIgnoreCase]);
-  sort_params:=StringReplace(sort_params,'(','%28',[rfReplaceAll, rfIgnoreCase]);
-  sort_params:=StringReplace(sort_params,')','%29',[rfReplaceAll, rfIgnoreCase]);
-  Digest := MyMD5.HashValue(sort_params);
-  sign:=MyMD5.AsHex(Digest);
-  
-  IdHTTP_Tmp1:=TIdHTTP.Create(nil);
-  //经测试
-  //本机有网络，但连接HTTP服务很慢时，如不加超时，会一直挂起
-  //本机无网络，就算不加超时也没问题
-  IdHTTP_Tmp1.ReadTimeout:=2*1000;//毫秒
-  IdHTTP_Tmp1.ConnectTimeout:=2*1000;//Connect超时设置//indy9无该属性.故要安装indy10
-  RespData:=TStringStream.Create('');
-  
-  {//get调用用户信息接口start
-  s3:='methodNum='+HTTPEncode(UTF8Encode('AIF012'));
-  s3:=s3+'&sql='+HTTPEncode(UTF8Encode(s1));
-  s3:=s3+'&sign='+sign;
-
-  try
-    IdHTTP_Tmp1.Get(BASE_URL+'?'+s3,RespData);
-    //showmessage(UTF8Decode(RespData.DataString));//返回信息//IdHTTP是同步的
-  except
-  end;
-  //get调用用户信息接口stop}
-
-  //post调用用户信息接口start
-  Param:=TStringList.Create;
-  Param.Add('methodNum='+UTF8Encode('AIF012'));
-  Param.Add('sql='+UTF8Encode(s1));
-  Param.Add('sign='+sign);
-
-  if trim(BASE_URL)<>'' then
-    try
-      IdHTTP_Tmp1.Post(BASE_URL,Param,RespData);
-      //showmessage(UTF8Decode(RespData.DataString));//返回信息//IdHTTP是同步的
-    except
-    end;
-  
-  Param.Free;
-  //post调用用户信息接口stop}
-  
-  RespData.Free;
-  IdHTTP_Tmp1.Free;
 end;
 
 procedure TfrmMain.ReadConfig;
