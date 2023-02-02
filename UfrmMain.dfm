@@ -26,9 +26,23 @@ object frmMain: TfrmMain
     Align = alLeft
     Color = 16767438
     TabOrder = 0
+    object Label1: TLabel
+      Left = 8
+      Top = 17
+      Width = 52
+      Height = 13
+      Caption = #24320#22987#26085#26399
+    end
+    object Label2: TLabel
+      Left = 8
+      Top = 79
+      Width = 52
+      Height = 13
+      Caption = #32467#26463#26085#26399
+    end
     object LabeledEdit1: TLabeledEdit
       Left = 78
-      Top = 137
+      Top = 188
       Width = 121
       Height = 19
       Ctl3D = False
@@ -41,7 +55,7 @@ object frmMain: TfrmMain
     end
     object LabeledEdit2: TLabeledEdit
       Left = 78
-      Top = 161
+      Top = 212
       Width = 121
       Height = 19
       Ctl3D = False
@@ -54,7 +68,7 @@ object frmMain: TfrmMain
     end
     object LabeledEdit3: TLabeledEdit
       Left = 78
-      Top = 185
+      Top = 236
       Width = 121
       Height = 19
       Ctl3D = False
@@ -68,7 +82,7 @@ object frmMain: TfrmMain
     end
     object LabeledEdit4: TLabeledEdit
       Left = 78
-      Top = 209
+      Top = 260
       Width = 121
       Height = 19
       Ctl3D = False
@@ -82,46 +96,16 @@ object frmMain: TfrmMain
     end
     object BitBtn1: TBitBtn
       Left = 78
-      Top = 233
+      Top = 284
       Width = 121
       Height = 25
       Caption = #26597#35810'F3'
       TabOrder = 4
       OnClick = BitBtn1Click
     end
-    object RadioGroup1: TRadioGroup
-      Left = 8
-      Top = 8
-      Width = 193
-      Height = 81
-      Columns = 2
-      Ctl3D = True
-      ItemIndex = 0
-      Items.Strings = (
-        #19981#38480
-        #20170#22825
-        #26368#36817'1'#21608
-        #26368#36817'1'#26376)
-      ParentCtl3D = False
-      TabOrder = 5
-    end
-    object RadioGroup2: TRadioGroup
-      Left = 8
-      Top = 285
-      Width = 193
-      Height = 81
-      Columns = 2
-      ItemIndex = 0
-      Items.Strings = (
-        #19981#38480
-        #20170#22825
-        #26368#36817'1'#21608
-        #26368#36817'1'#26376)
-      TabOrder = 6
-    end
     object RadioGroup3: TRadioGroup
       Left = 8
-      Top = 91
+      Top = 130
       Width = 193
       Height = 41
       Columns = 2
@@ -129,7 +113,7 @@ object frmMain: TfrmMain
       Items.Strings = (
         #19981#38480
         #26410#25171#21360)
-      TabOrder = 7
+      TabOrder = 5
     end
     object CheckBox1: TCheckBox
       Left = 8
@@ -139,7 +123,7 @@ object frmMain: TfrmMain
       Caption = #25171#21360#39044#35272
       Ctl3D = True
       ParentCtl3D = False
-      TabOrder = 8
+      TabOrder = 6
     end
     object CheckBox2: TCheckBox
       Left = 128
@@ -147,16 +131,41 @@ object frmMain: TfrmMain
       Width = 75
       Height = 17
       Caption = #25353#32452#20998#39029
+      TabOrder = 7
+    end
+    object DateTimePicker1: TDateTimePicker
+      Left = 8
+      Top = 33
+      Width = 95
+      Height = 21
+      Date = 45272.000000000000000000
+      Time = 45272.000000000000000000
+      TabOrder = 8
+    end
+    object DateTimePicker2: TDateTimePicker
+      Left = 8
+      Top = 95
+      Width = 95
+      Height = 21
+      Date = 45272.999988425920000000
+      Time = 45272.999988425920000000
       TabOrder = 9
     end
-    object BitBtn2: TBitBtn
-      Left = 8
-      Top = 369
-      Width = 192
-      Height = 25
-      Caption = #26410#25171#21360#26816#39564#21333'(F5)'
+    object RadioGroup1: TRadioGroup
+      Left = 108
+      Top = 17
+      Width = 93
+      Height = 100
+      Caption = #24555#36895#36873#25321#26085#26399
+      Ctl3D = True
+      ItemIndex = 0
+      Items.Strings = (
+        #20170#22825
+        #26368#36817'1'#21608
+        #26368#36817'1'#26376)
+      ParentCtl3D = False
       TabOrder = 10
-      OnClick = BitBtn2Click
+      OnClick = RadioGroup1Click
     end
   end
   object CoolBar1: TCoolBar
@@ -242,7 +251,7 @@ object frmMain: TfrmMain
         Top = 2
         Width = 112
         Height = 22
-        Caption = #37325#26032#30331#24405
+        Caption = #20999#25442#24080#21495
         OnClick = SpeedButton2Click
       end
       object ToolButton4: TToolButton
@@ -446,12 +455,6 @@ object frmMain: TfrmMain
     Left = 569
     Top = 102
   end
-  object Timer1: TTimer
-    Interval = 2000
-    OnTimer = Timer1Timer
-    Left = 273
-    Top = 253
-  end
   object frReport1: TfrReport
     Dataset = frDBDataSet1
     InitialZoom = pzDefault
@@ -486,7 +489,6 @@ object frmMain: TfrmMain
     object Action2: TAction
       Caption = 'Action2'
       ShortCut = 116
-      OnExecute = BitBtn2Click
     end
     object Action3: TAction
       Caption = 'Action3'

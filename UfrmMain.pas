@@ -29,8 +29,6 @@ type
     CoolBar1: TCoolBar;
     ToolBar1: TToolBar;
     SpeedButton1: TSpeedButton;
-    RadioGroup1: TRadioGroup;
-    RadioGroup2: TRadioGroup;
     RadioGroup3: TRadioGroup;
     ToolButton1: TToolButton;
     SpeedButton4: TSpeedButton;
@@ -47,7 +45,6 @@ type
     DataSource2: TDataSource;
     ADObasic: TADOQuery;
     ADOQuery2: TADOQuery;
-    Timer1: TTimer;
     frReport1: TfrReport;
     ado_print: TADOQuery;
     frDBDataSet1: TfrDBDataSet;
@@ -69,7 +66,11 @@ type
     TabSheet2: TTabSheet;
     DBGrid2: TDBGrid;
     ScrollBoxPicture: TScrollBox;
-    BitBtn2: TBitBtn;
+    DateTimePicker1: TDateTimePicker;
+    DateTimePicker2: TDateTimePicker;
+    Label1: TLabel;
+    Label2: TLabel;
+    RadioGroup1: TRadioGroup;
     procedure FormShow(Sender: TObject);
     procedure SpeedButton4Click(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -87,7 +88,6 @@ type
     procedure DBGrid2DrawColumnCell(Sender: TObject; const Rect: TRect;
       DataCol: Integer; Column: TColumn; State: TGridDrawState);
     procedure FormCreate(Sender: TObject);
-    procedure Timer1Timer(Sender: TObject);
     procedure SpeedButton1Click(Sender: TObject);
     procedure frReport1GetValue(const ParName: String;
       var ParValue: Variant);
@@ -98,7 +98,7 @@ type
     procedure SpeedButton2Click(Sender: TObject);
     procedure SpeedButton3Click(Sender: TObject);
     procedure SpeedButton7Click(Sender: TObject);
-    procedure BitBtn2Click(Sender: TObject);
+    procedure RadioGroup1Click(Sender: TObject);
   private
     procedure WriteProfile;
     procedure ReadConfig;
@@ -150,8 +150,6 @@ begin
   DBGrid1.Width:=configini.ReadInteger('Interface','gridBaseInfoWidth',680);{记录基本信息框宽度}
   Memo1.Height:=configini.ReadInteger('Interface','memoLogHeight',150);{记录组合项目选择框高度}
 
-  RadioGroup1.ItemIndex:=configini.ReadInteger('Interface','normalTimeRadio',0);
-  RadioGroup2.ItemIndex:=configini.ReadInteger('Interface','noprintTimeRadio',0);
   RadioGroup3.ItemIndex:=configini.ReadInteger('Interface','ifPrintRadio',0);
 
   LabeledEdit4.Text:=configini.ReadString('Interface','check_doctor','');{记录送检医生,实现“仅看自己送检的样本”功能}
@@ -303,15 +301,13 @@ begin
   if Memo1.Height<60 then Memo1.Height:=60;
   configini.WriteInteger('Interface','memoLogHeight',Memo1.Height);{记录结果框高度}
   
-  configini.WriteInteger('Interface','normalTimeRadio',RadioGroup1.ItemIndex);
-  configini.WriteInteger('Interface','noprintTimeRadio',RadioGroup2.ItemIndex);
   configini.WriteInteger('Interface','ifPrintRadio',RadioGroup3.ItemIndex);
 
   configini.WriteBool('Interface','ifPreview',CheckBox1.Checked);{记录是否打印预览模式}
   configini.WriteBool('Interface','ifPagination',CheckBox2.Checked);{记录是否按组分页}
 
   configini.WriteString('Interface','check_doctor',LabeledEdit4.Text);{记录送检医生,实现“仅看自己送检的样本”功能}
-  
+
   configini.Free;
 end;
 
@@ -386,13 +382,7 @@ procedure TfrmMain.BitBtn1Click(Sender: TObject);
 var
   strsql22,strsql44,STRSQL45,STRSQL46,STRSQL47,STRSQL48,STRSQL49,STRSQL50: string;
 begin
-  if RadioGroup1.ItemIndex=1 then
-    strsql44:=' CONVERT(CHAR(10),check_date,121)=CONVERT(CHAR(10),GETDATE(),121) and '
-  else if RadioGroup1.ItemIndex=2 then
-    strsql44:=' check_date>GETDATE()-7 and '
-  else if RadioGroup1.ItemIndex=3 then
-    strsql44:=' check_date>GETDATE()-30 and '
-  else strsql44:=' ';
+  strsql44:=' check_date between :P_DateTimePicker1 and :P_DateTimePicker2 and ';  
   if RadioGroup3.ItemIndex=1 then
     STRSQL46:=' isnull((case when len(caseno)=8 and LEFT(caseno,1)=''8'' then 1 else printtimes end),0)<=0 and '
   else STRSQL46:='';
@@ -418,6 +408,8 @@ begin
   ADObasic.SQL.Add(strsql50);
   ADObasic.SQL.Add(strsql47);
   ADObasic.SQL.Add(strsql49);
+  ADObasic.Parameters.ParamByName('P_DateTimePicker1').Value :=DateTimePicker1.DateTime;//设计期Time设置为00:00:00.放心,下拉选择日期时不会改变Time值
+  ADObasic.Parameters.ParamByName('P_DateTimePicker2').Value :=DateTimePicker2.DateTime;//设计期Time设置为23:59:59.放心,下拉选择日期时不会改变Time值
   ADObasic.Open;
 end;
 
@@ -645,33 +637,9 @@ end;
 procedure TfrmMain.FormCreate(Sender: TObject);
 begin
   lsGroupShow:=tstringlist.Create;
-end;
-
-procedure TfrmMain.Timer1Timer(Sender: TObject);
-{var
-  strsql,strsql44,STRSQL47: string;
-  adotemp11:TAdoquery;//}
-begin
-  {strsql:='select count(*) as RecNum '+
-        ' from view_Chk_Con_All where ';
-  if RadioGroup2.ItemIndex=1 then
-    strsql44:=' CONVERT(CHAR(10),check_date,121)=CONVERT(CHAR(10),GETDATE(),121) and '
-  else if RadioGroup2.ItemIndex=2 then
-    strsql44:=' check_date>GETDATE()-7 and '
-  else if RadioGroup2.ItemIndex=3 then
-    strsql44:=' check_date>GETDATE()-30 and '
-  else strsql44:=' ';
-  STRSQL47:=' isnull((case when len(caseno)=8 and LEFT(caseno,1)=''8'' then 1 else printtimes end),0)<=0 and isnull(report_doctor,'''')<>'''' ';
-  adotemp11:=TAdoquery.Create(nil);
-  adotemp11.Connection:=dm.ADOConnection1;
-  adotemp11.Close;
-  adotemp11.SQL.Clear;
-  adotemp11.SQL.Add(strsql);
-  adotemp11.SQL.Add(strsql44);
-  adotemp11.SQL.Add(strsql47);
-  adotemp11.Open;
-  Label2.Caption:=adotemp11.fieldbyname('RecNum').AsString;
-  adotemp11.Free;//}
+  
+  DateTimePicker1.Date:=Date;
+  DateTimePicker2.Date:=Date;
 end;
 
 procedure TfrmMain.SpeedButton1Click(Sender: TObject);
@@ -1477,27 +1445,22 @@ begin
   end;
 end;
 
-procedure TfrmMain.BitBtn2Click(Sender: TObject);
-var
-  strsql44,STRSQL47,STRSQL49: string;
+procedure TfrmMain.RadioGroup1Click(Sender: TObject);
 begin
-  if RadioGroup2.ItemIndex=1 then
-    strsql44:=' CONVERT(CHAR(10),check_date,121)=CONVERT(CHAR(10),GETDATE(),121) and '
-  else if RadioGroup2.ItemIndex=2 then
-    strsql44:=' check_date>GETDATE()-7 and '
-  else if RadioGroup2.ItemIndex=3 then
-    strsql44:=' check_date>GETDATE()-30 and '
-  else strsql44:=' ';
-  STRSQL47:=' isnull((case when len(caseno)=8 and LEFT(caseno,1)=''8'' then 1 else printtimes end),0)<=0 and isnull(report_doctor,'''')<>'''' ';
-  STRSQL49:=' order by patientname ';
-  ADObasic.Close;
-  ADObasic.SQL.Clear;
-  ADObasic.SQL.Add(SHOW_CHK_CON);
-  ADObasic.SQL.Add(' where ');
-  ADObasic.SQL.Add(strsql44);
-  ADObasic.SQL.Add(strsql47);
-  ADObasic.SQL.Add(strsql49);
-  ADObasic.Open;
+  if (Sender as TRadioGroup).ItemIndex=1 then
+  begin
+    DateTimePicker1.Date:=Date-7;
+    DateTimePicker2.Date:=Date;
+  end
+  else if (Sender as TRadioGroup).ItemIndex=2 then
+  begin
+    DateTimePicker1.Date:=Date-30;
+    DateTimePicker2.Date:=Date;
+  end
+  else begin
+    DateTimePicker1.Date:=Date;
+    DateTimePicker2.Date:=Date;
+  end;  
 end;
 
 end.
