@@ -187,6 +187,7 @@ object frmMain: TfrmMain
       Top = 0
       Width = 895
       Height = 33
+      ButtonWidth = 100
       Caption = 'ToolBar1'
       Color = 16767438
       ParentColor = False
@@ -262,8 +263,24 @@ object frmMain: TfrmMain
         ImageIndex = 2
         Style = tbsSeparator
       end
-      object SpeedButton3: TSpeedButton
+      object SpeedButton8: TSpeedButton
         Left = 517
+        Top = 2
+        Width = 112
+        Height = 22
+        Caption = #20462#25913#23494#30721
+        OnClick = SpeedButton8Click
+      end
+      object ToolButton5: TToolButton
+        Left = 629
+        Top = 2
+        Width = 3
+        Caption = 'ToolButton5'
+        ImageIndex = 3
+        Style = tbsSeparator
+      end
+      object SpeedButton3: TSpeedButton
+        Left = 632
         Top = 2
         Width = 35
         Height = 22
@@ -271,7 +288,7 @@ object frmMain: TfrmMain
         OnClick = SpeedButton3Click
       end
       object SpeedButton7: TSpeedButton
-        Left = 552
+        Left = 667
         Top = 2
         Width = 45
         Height = 22

@@ -113,52 +113,8 @@ object frmLogin: TfrmLogin
       PasswordChar = '*'
       TabOrder = 2
     end
-    object LabeledEdit1: TLabeledEdit
-      Left = 29
-      Top = 128
-      Width = 121
-      Height = 19
-      Ctl3D = False
-      EditLabel.Width = 52
-      EditLabel.Height = 13
-      EditLabel.Caption = #26032#21475#20196#65306
-      ParentCtl3D = False
-      PasswordChar = '*'
-      TabOrder = 8
-    end
-    object LabeledEdit3: TLabeledEdit
-      Left = 213
-      Top = 128
-      Width = 121
-      Height = 19
-      Ctl3D = False
-      EditLabel.Width = 78
-      EditLabel.Height = 13
-      EditLabel.Caption = #30830#35748#26032#21475#20196#65306
-      ParentCtl3D = False
-      PasswordChar = '*'
-      TabOrder = 7
-    end
-    object suiButton1: TBitBtn
-      Left = 190
-      Top = 157
-      Width = 80
-      Height = 27
-      Caption = #20462#25913#23494#30721
-      TabOrder = 5
-      OnClick = suiButton1Click
-    end
-    object suiButton2: TBitBtn
-      Left = 270
-      Top = 157
-      Width = 80
-      Height = 27
-      Caption = #30830#23450
-      TabOrder = 6
-      OnClick = suiButton2Click
-    end
     object suiButton3: TBitBtn
-      Left = 14
+      Left = 73
       Top = 157
       Width = 80
       Height = 27
@@ -168,7 +124,7 @@ object frmLogin: TfrmLogin
       OnKeyDown = suiButton3KeyDown
     end
     object suiButton4: TBitBtn
-      Left = 94
+      Left = 205
       Top = 157
       Width = 80
       Height = 27

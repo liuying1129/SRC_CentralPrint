@@ -17,24 +17,15 @@ type
     LabeledEdit4: TLabeledEdit;
     LabeledEdit5: TLabeledEdit;
     LabeledEdit2: TLabeledEdit;
-    LabeledEdit1: TLabeledEdit;
-    LabeledEdit3: TLabeledEdit;
-    suiButton1: TBitBtn;
-    suiButton2: TBitBtn;
     suiButton3: TBitBtn;
     suiButton4: TBitBtn;
     Image1: TImage;
     Label1: TLabel;
     Label2: TLabel;
-    procedure BitBtn2Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure BitBtn3Click(Sender: TObject);
-    procedure BitBtn4Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure LabeledEdit4Exit(Sender: TObject);
-    procedure suiButton1Click(Sender: TObject);
-    procedure suiButton2Click(Sender: TObject);
     procedure suiButton3Click(Sender: TObject);
     procedure suiButton3KeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
@@ -42,9 +33,6 @@ type
     
   private
     { Private declarations }
-    maySavePass:boolean;
-    PROCEDURE MODIFY_PASS_COMP_VISIBLE_FALSE;
-    PROCEDURE MODIFY_PASS_COMP_VISIBLE_TRUE;
   public
     { Public declarations }
   end;
@@ -75,11 +63,6 @@ begin
 end;
 ////////////////////////////////////////////////////////////////////////////////
 
-procedure TfrmLogin.BitBtn2Click(Sender: TObject);
-begin
-  application.Terminate;
-end;
-
 procedure TfrmLogin.FormCreate(Sender: TObject);
 begin
   ADOQuery1.Connection:=DM.ADOConnection1;
@@ -100,87 +83,6 @@ begin
       else Image1.Picture:=nil;
 
   LabeledEdit2.Clear;
-  MODIFY_PASS_COMP_VISIBLE_FALSE;
-end;
-
-procedure TfrmLogin.MODIFY_PASS_COMP_VISIBLE_FALSE;
-begin
-  LabeledEdit1.Visible:=false;
-  LabeledEdit3.Visible:=false;
-  maySavePass:=false;
-end;
-
-procedure TfrmLogin.MODIFY_PASS_COMP_VISIBLE_TRUE;
-begin
-  LabeledEdit1.Visible:=true;
-  LabeledEdit3.Visible:=true;
-  maySavePass:=true;
-end;
-
-procedure TfrmLogin.BitBtn3Click(Sender: TObject);
-var
-  pwd_old,PWD_OLDfromDB:STRING;
-begin
-  ADOQuery1.Close;
-  ADOQuery1.SQL.Clear;
-  ADOQuery1.SQL.Text:='select * from worker';
-  ADOQuery1.Open;
-
-  if not ADOQuery1.Locate('id',LabeledEdit4.Text,[loCaseInsensitive]) then
-  begin
-    messagedlg('无此用户',mtError,[mbok],0);
-    exit;
-  end;
-
-  //===========判断原密码是否正确=====================================
-  PWD_old:=trim(uppercase(LabeledEdit2.Text));
-
-  PWD_OLDfromDB:=ADOQuery1.fieldbyname('passwd').AsString;
-
-  if uppercase(trim(PWD_old))<>uppercase(TRIM(PWD_OLDfromDB)) then
-  begin
-      messagedlg('密码不正确！',mtInformation,[mbok],0);
-      LabeledEdit2.SetFocus;
-     exit;
-  end ;
-  //====================================================================
-
-  MODIFY_PASS_COMP_VISIBLE_TRUE ;
-end;
-
-procedure TfrmLogin.BitBtn4Click(Sender: TObject);
-var
-  PWD:STRING;
-begin
-  if not maySavePass then exit;
-
-  ADOQuery1.Close;
-  ADOQuery1.SQL.Clear;
-  ADOQuery1.SQL.Text:='select * from worker';
-  ADOQuery1.Open;
-
-  if trim(LabeledEdit1.Text)='' then
-  begin
-     messagedlg('修改后的密码不能为空！',mtInformation,[mbok],0);
-     exit;
-  end;
-
-  if(trim(LabeledEdit1.Text)<>trim(LabeledEdit3.Text)) then
-  begin
-     messagedlg('密码确认错误！',mtInformation,[mbok],0);
-     exit;
-  end;
-
-  PWD:=trim(uppercase(LabeledEdit1.Text));  
-
-  ADOQuery1.Locate('id',trim(LabeledEdit4.Text),[loCaseInsensitive]);
-  ADOQuery1.Edit;
-  ADOQuery1.FieldByName('passwd').AsString:=pwd;
-  ADOQuery1.Post;
-  MODIFY_PASS_COMP_VISIBLE_FALSE;
-
-  messagedlg('密码修改成功！',mtInformation,[mbok],0);
-  LabeledEdit2.SetFocus;
 end;
 
 procedure TfrmLogin.LabeledEdit4Exit(Sender: TObject);
@@ -193,81 +95,9 @@ begin
     if not ADOQuery1.Locate('id',LabeledEdit4.Text,[loCaseInsensitive]) then
     begin
       LABELEDEDIT5.Text:='';
-      //messagedlg('无此用户',mtError,[mbok],0);
       exit;
     end;
     LABELEDEDIT5.Text:=TRIM(ADOQuery1.FIELDBYNAME('NAME').AsString);
-
-end;
-
-procedure TfrmLogin.suiButton1Click(Sender: TObject);
-var
-  pwd_old,PWD_OLDfromDB:STRING;
-begin
-  ADOQuery1.Close;
-  ADOQuery1.SQL.Clear;
-  ADOQuery1.SQL.Text:='select * from worker ';
-  ADOQuery1.Open;
-
-  if not ADOQuery1.Locate('id',LabeledEdit4.Text,[loCaseInsensitive]) then
-  begin
-    messagedlg('无此用户',mtError,[mbok],0);
-    exit;
-  end;
-
-
-  //===========判断原密码是否正确=====================================
-  PWD_old:=trim(uppercase(LabeledEdit2.Text));
-
-  PWD_OLDfromDB:=ADOQuery1.fieldbyname('passwd').AsString;
-
-  if uppercase(trim(PWD_old))<>uppercase(TRIM(PWD_OLDfromDB)) then
-  begin
-      messagedlg('密码不正确！',mtInformation,[mbok],0);
-      LabeledEdit2.SetFocus;
-     exit;
-  end ;
-  //====================================================================
-  MODIFY_PASS_COMP_VISIBLE_TRUE ;
-end;
-
-procedure TfrmLogin.suiButton2Click(Sender: TObject);
-var
-  PWD:STRING;
-begin
-  if not maySavePass then exit;
-
-  if trim(LabeledEdit1.Text)='' then
-  begin
-     messagedlg('修改后的密码不能为空！',mtInformation,[mbok],0);
-     exit;
-  end;
-
-  if(trim(LabeledEdit1.Text)<>trim(LabeledEdit3.Text)) then
-  begin
-     messagedlg('密码确认错误！',mtInformation,[mbok],0);
-     exit;
-  end;
-
-  PWD:=trim(uppercase(LabeledEdit1.Text));
-
-  ADOQuery1.Close;
-  ADOQuery1.SQL.Clear;
-  ADOQuery1.SQL.Text:='select * from worker';
-  ADOQuery1.Open;
-
-  if ADOQuery1.Locate('id',trim(LabeledEdit4.Text),[loCaseInsensitive]) then
-  begin
-  ADOQuery1.Edit;
-  ADOQuery1.FieldByName('passwd').AsString:=pwd;
-  ADOQuery1.Post;
-  end;
-
-  LabeledEdit1.Clear;
-  LabeledEdit3.Clear;
-  MODIFY_PASS_COMP_VISIBLE_FALSE;
-  messagedlg('密码修改成功！',mtInformation,[mbok],0);
-  LabeledEdit2.SetFocus;
 end;
 
 procedure TfrmLogin.suiButton3Click(Sender: TObject);

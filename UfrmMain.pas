@@ -71,6 +71,8 @@ type
     Label1: TLabel;
     Label2: TLabel;
     RadioGroup1: TRadioGroup;
+    ToolButton5: TToolButton;
+    SpeedButton8: TSpeedButton;
     procedure FormShow(Sender: TObject);
     procedure SpeedButton4Click(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -99,6 +101,7 @@ type
     procedure SpeedButton3Click(Sender: TObject);
     procedure SpeedButton7Click(Sender: TObject);
     procedure RadioGroup1Click(Sender: TObject);
+    procedure SpeedButton8Click(Sender: TObject);
   private
     procedure WriteProfile;
     procedure ReadConfig;
@@ -120,7 +123,7 @@ var
 
 implementation
 
-uses UfrmLogin, UDM;
+uses UfrmLogin, UDM, UfrmModifyPwd;
 var
   lsGroupShow:TStrings;
   ArCheckBoxValue:TArCheckBoxValue;
@@ -1461,6 +1464,11 @@ begin
     DateTimePicker1.Date:=Date;
     DateTimePicker2.Date:=Date;
   end;  
+end;
+
+procedure TfrmMain.SpeedButton8Click(Sender: TObject);
+begin
+  frmModifyPwd.ShowModal;
 end;
 
 end.
