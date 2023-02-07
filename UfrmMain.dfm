@@ -40,9 +40,16 @@ object frmMain: TfrmMain
       Height = 13
       Caption = #32467#26463#26085#26399
     end
+    object Label3: TLabel
+      Left = 35
+      Top = 191
+      Width = 39
+      Height = 13
+      Caption = #24037#20316#32452
+    end
     object LabeledEdit1: TLabeledEdit
       Left = 78
-      Top = 188
+      Top = 212
       Width = 121
       Height = 19
       Ctl3D = False
@@ -55,7 +62,7 @@ object frmMain: TfrmMain
     end
     object LabeledEdit2: TLabeledEdit
       Left = 78
-      Top = 212
+      Top = 236
       Width = 121
       Height = 19
       Ctl3D = False
@@ -68,7 +75,7 @@ object frmMain: TfrmMain
     end
     object LabeledEdit3: TLabeledEdit
       Left = 78
-      Top = 236
+      Top = 260
       Width = 121
       Height = 19
       Ctl3D = False
@@ -82,7 +89,7 @@ object frmMain: TfrmMain
     end
     object LabeledEdit4: TLabeledEdit
       Left = 78
-      Top = 260
+      Top = 284
       Width = 121
       Height = 19
       Ctl3D = False
@@ -96,7 +103,7 @@ object frmMain: TfrmMain
     end
     object BitBtn1: TBitBtn
       Left = 78
-      Top = 284
+      Top = 371
       Width = 121
       Height = 25
       Caption = #26597#35810'F3'
@@ -166,6 +173,27 @@ object frmMain: TfrmMain
       ParentCtl3D = False
       TabOrder = 10
       OnClick = RadioGroup1Click
+    end
+    object RadioGroup2: TRadioGroup
+      Left = 8
+      Top = 315
+      Width = 193
+      Height = 49
+      Caption = #25490#24207
+      Columns = 2
+      ItemIndex = 0
+      Items.Strings = (
+        #24739#32773#22995#21517
+        #30149#21382#21495)
+      TabOrder = 11
+    end
+    object ComboBox1: TComboBox
+      Left = 78
+      Top = 187
+      Width = 121
+      Height = 21
+      ItemHeight = 13
+      TabOrder = 12
     end
   end
   object CoolBar1: TCoolBar

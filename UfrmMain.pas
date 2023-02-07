@@ -73,6 +73,9 @@ type
     RadioGroup1: TRadioGroup;
     ToolButton5: TToolButton;
     SpeedButton8: TSpeedButton;
+    RadioGroup2: TRadioGroup;
+    ComboBox1: TComboBox;
+    Label3: TLabel;
     procedure FormShow(Sender: TObject);
     procedure SpeedButton4Click(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -140,6 +143,8 @@ begin
   UpdateStatusBar(#$2+'6:'+SCSYDW);
   UpdateStatusBar(#$2+'8:'+gServerName);
   UpdateStatusBar(#$2+'10:'+gDbName);
+  
+  LoadGroupName(ComboBox1,'select name from CommCode where TypeName=''检验组别'' group by name');
 end;
 
 procedure TfrmMain.ReadConfig;
@@ -383,12 +388,14 @@ end;
 
 procedure TfrmMain.BitBtn1Click(Sender: TObject);
 var
-  strsql22,strsql44,STRSQL45,STRSQL46,STRSQL47,STRSQL48,STRSQL49,STRSQL50: string;
+  strsql22,strsql44,STRSQL45,STRSQL46,STRSQL47,STRSQL48,STRSQL49,STRSQL50,STRSQL51: string;
 begin
   strsql44:=' check_date between :P_DateTimePicker1 and :P_DateTimePicker2 and ';  
   if RadioGroup3.ItemIndex=1 then
     STRSQL46:=' isnull((case when len(caseno)=8 and LEFT(caseno,1)=''8'' then 1 else printtimes end),0)<=0 and '
   else STRSQL46:='';
+  if trim(ComboBox1.Text)<>'' then STRSQL51:=' combin_id='''+trim(ComboBox1.Text)+''' and '
+  else STRSQL51:='';
   if trim(LabeledEdit1.Text)<>'' then STRSQL48:=' Caseno='''+trim(LabeledEdit1.Text)+''' and '
   else STRSQL48:='';
   if trim(LabeledEdit2.Text)<>'' then STRSQL22:=' patientname like ''%'+trim(LabeledEdit2.Text)+'%'' and '
@@ -397,14 +404,17 @@ begin
   else STRSQL45:='';
   if trim(LabeledEdit4.Text)<>'' then STRSQL50:=' check_doctor='''+trim(LabeledEdit4.Text)+''' and '
   else STRSQL50:='';
-  STRSQL47:=' isnull(report_doctor,'''')<>'''' ';
-  STRSQL49:=' order by patientname ';
+  STRSQL47:=' isnull(report_doctor,'''')<>'''' ';  
+  if RadioGroup2.ItemIndex=1 then
+    STRSQL49:=' order by caseno '//南沙慢病关医生要求按病历号排序
+  else STRSQL49:=' order by patientname ';
   ADObasic.Close;
   ADObasic.SQL.Clear;
   ADObasic.SQL.Add(SHOW_CHK_CON);
   ADObasic.SQL.Add(' where ');
   ADObasic.SQL.Add(strsql44);
   ADObasic.SQL.Add(strsql46);
+  ADObasic.SQL.Add(strsql51);
   ADObasic.SQL.Add(strsql48);
   ADObasic.SQL.Add(strsql22);
   ADObasic.SQL.Add(strsql45);
