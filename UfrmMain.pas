@@ -215,6 +215,13 @@ begin
   WorkGroup_T9:=configini.ReadString('打印模板','特殊模板9工作组','');
   TempFile_T9:=configini.ReadString('打印模板','特殊模板9文件','');  
 
+  GP_WorkGroup_T1:=configini.ReadString('打印模板','分组模板1工作组','');
+  GP_TempFile_T1:=configini.ReadString('打印模板','分组模板1文件','');
+  GP_WorkGroup_T2:=configini.ReadString('打印模板','分组模板2工作组','');
+  GP_TempFile_T2:=configini.ReadString('打印模板','分组模板2文件','');
+  GP_WorkGroup_T3:=configini.ReadString('打印模板','分组模板3工作组','');
+  GP_TempFile_T3:=configini.ReadString('打印模板','分组模板3文件','');  
+
   configini.Free;
 end;
 
@@ -262,7 +269,13 @@ begin
       '特殊模板8工作组'+#2+'Combobox'+#2+sWorkGroup+#2+'2'+#2+#2+#3+
       '特殊模板8文件'+#2+'File'+#2+#2+'2'+#2+#2+#3+
       '特殊模板9工作组'+#2+'Combobox'+#2+sWorkGroup+#2+'2'+#2+#2+#3+
-      '特殊模板9文件'+#2+'File'+#2+#2+'2'+#2+#2+#3;
+      '特殊模板9文件'+#2+'File'+#2+#2+'2'+#2+#2+#3+
+      '分组模板1工作组'+#2+'Combobox'+#2+sWorkGroup+#2+'2'+#2+#2+#3+
+      '分组模板1文件'+#2+'File'+#2+#2+'2'+#2+#2+#3+
+      '分组模板2工作组'+#2+'Combobox'+#2+sWorkGroup+#2+'2'+#2+#2+#3+
+      '分组模板2文件'+#2+'File'+#2+#2+'2'+#2+#2+#3+
+      '分组模板3工作组'+#2+'Combobox'+#2+sWorkGroup+#2+'2'+#2+#2+#3+
+      '分组模板3文件'+#2+'File'+#2+#2+'2'+#2+#2+#3;
   if ShowOptionForm('选项','报表'+#2+'选项'+#2+'打印模板',Pchar(ss),Pchar(ChangeFileExt(Application.ExeName,'.ini'))) then
 	  ReadIni;
 end;
@@ -1155,7 +1168,7 @@ var
   strsqlPrint:string;
   frGH: TfrBandView;//分组头
 
-  sUnid,sReport_Doctor:string;
+  sUnid,sCombin_Id,sReport_Doctor:string;
 
   adotemp22:tadoquery;
   ifSelect:boolean;
@@ -1189,6 +1202,7 @@ begin
     if not ifSelect then begin adotemp22.Next;continue;end;//如果未选择，则跳过
     
     sUnid:=adotemp22.fieldbyname('唯一编号').AsString;
+    sCombin_Id:=adotemp22.FieldByName('工作组').AsString;
     sReport_Doctor:=trim(adotemp22.FieldByName('审核者').AsString);
     iIfCompleted:=adotemp22.FieldByName('ifCompleted').AsInteger;
     sPatientname:=trim(adotemp22.fieldbyname('姓名').AsString);
@@ -1204,6 +1218,18 @@ begin
     end;
     //================================STOP
 
+    if (sCombin_Id=GP_WorkGroup_T1)
+      and frReport1.LoadFromFile(GP_TempFile_T1) then//加载模板文件是不区分大小写的.空字符串将加载失败
+    begin
+    end else
+    if (sCombin_Id=GP_WorkGroup_T2)
+      and frReport1.LoadFromFile(GP_TempFile_T2) then
+    begin
+    end else
+    if (sCombin_Id=GP_WorkGroup_T3)
+      and frReport1.LoadFromFile(GP_TempFile_T3) then
+    begin
+    end else
     if not frReport1.LoadFromFile(ExtractFilePath(application.ExeName)+'report_Cur_group.frf') then
     begin
       if length(memo1.Lines.Text)>=60000 then memo1.Lines.Clear;//memo只能接受64K个字符

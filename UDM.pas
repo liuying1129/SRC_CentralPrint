@@ -83,6 +83,12 @@ var
   TempFile_T8:string;
   WorkGroup_T9:string;
   TempFile_T9:string;
+  GP_WorkGroup_T1:string;//分组模板1工作组
+  GP_TempFile_T1:string;//分组模板1文件
+  GP_WorkGroup_T2:string;//分组模板2工作组
+  GP_TempFile_T2:string;//分组模板2文件
+  GP_WorkGroup_T3:string;//分组模板3工作组
+  GP_TempFile_T3:string;//分组模板3文件
 
 //**********************Dll接口函数部分***************************************//
 //该函数计算pSourStr中有多少个pSS
