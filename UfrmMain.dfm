@@ -103,7 +103,7 @@ object frmMain: TfrmMain
     end
     object BitBtn1: TBitBtn
       Left = 78
-      Top = 371
+      Top = 385
       Width = 121
       Height = 25
       Caption = #26597#35810'F3'
@@ -176,7 +176,7 @@ object frmMain: TfrmMain
     end
     object RadioGroup2: TRadioGroup
       Left = 8
-      Top = 315
+      Top = 329
       Width = 193
       Height = 49
       Caption = #25490#24207
@@ -194,6 +194,19 @@ object frmMain: TfrmMain
       Height = 21
       ItemHeight = 13
       TabOrder = 12
+    end
+    object LabeledEdit5: TLabeledEdit
+      Left = 78
+      Top = 308
+      Width = 121
+      Height = 19
+      Ctl3D = False
+      EditLabel.Width = 52
+      EditLabel.Height = 13
+      EditLabel.Caption = #25152#23646#20844#21496
+      LabelPosition = lpLeft
+      ParentCtl3D = False
+      TabOrder = 13
     end
   end
   object CoolBar1: TCoolBar

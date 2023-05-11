@@ -65,8 +65,6 @@ var
   gDbName:string;//数据库名,用于显示在状态栏
   BASE_URL:STRING;//http://211.97.0.5:8080/YkAPI/service
 
-  TempFile_Common:string;
-  TempFile_Group:string;
   WorkGroup_T1:string;
   TempFile_T1:string;
   WorkGroup_T2:string;

@@ -76,6 +76,7 @@ type
     RadioGroup2: TRadioGroup;
     ComboBox1: TComboBox;
     Label3: TLabel;
+    LabeledEdit5: TLabeledEdit;
     procedure FormShow(Sender: TObject);
     procedure SpeedButton4Click(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -195,8 +196,6 @@ begin
   deptname_match:=configini.ReadString('选项','送检科室取码的匹配方式','');
   check_doctor_match:=configini.ReadString('选项','送检医生取码的匹配方式','');
 
-  TempFile_Common:=configini.ReadString('打印模板','通用模板文件','');
-  TempFile_Group:=configini.ReadString('打印模板','分组模板文件','');
   WorkGroup_T1:=configini.ReadString('打印模板','特殊模板1工作组','');
   TempFile_T1:=configini.ReadString('打印模板','特殊模板1文件','');
   WorkGroup_T2:=configini.ReadString('打印模板','特殊模板2工作组','');
@@ -246,8 +245,6 @@ begin
       '填写病人基本信息时,直接回车弹出取码框'+#2+'CheckListBox'+#2+#2+'1'+#2+#2+#3+
       '送检科室取码的匹配方式'+#2+'Combobox'+#2+'模糊匹配'+#13+'左匹配'+#13+'右匹配'+#13+'全匹配'+#2+'1'+#2+#2+#3+
       '送检医生取码的匹配方式'+#2+'Combobox'+#2+'模糊匹配'+#13+'左匹配'+#13+'右匹配'+#13+'全匹配'+#2+'1'+#2+#2+#3+
-      '通用模板文件'+#2+'File'+#2+#2+'2'+#2+#2+#3+
-      '分组模板文件'+#2+'File'+#2+#2+'2'+#2+#2+#3+
       '特殊模板1工作组'+#2+'Combobox'+#2+sWorkGroup+#2+'2'+#2+#2+#3+
       '特殊模板1文件'+#2+'File'+#2+#2+'2'+#2+#2+#3+
       '特殊模板2工作组'+#2+'Combobox'+#2+sWorkGroup+#2+'2'+#2+#2+#3+
@@ -388,7 +385,7 @@ end;
 
 procedure TfrmMain.BitBtn1Click(Sender: TObject);
 var
-  strsql22,strsql44,STRSQL45,STRSQL46,STRSQL47,STRSQL48,STRSQL49,STRSQL50,STRSQL51: string;
+  strsql22,strsql44,STRSQL45,STRSQL46,STRSQL47,STRSQL48,STRSQL49,STRSQL50,STRSQL51,STRSQL55: string;
 begin
   strsql44:=' check_date between :P_DateTimePicker1 and :P_DateTimePicker2 and ';  
   if RadioGroup3.ItemIndex=1 then
@@ -404,6 +401,8 @@ begin
   else STRSQL45:='';
   if trim(LabeledEdit4.Text)<>'' then STRSQL50:=' check_doctor='''+trim(LabeledEdit4.Text)+''' and '
   else STRSQL50:='';
+  if trim(LabeledEdit5.Text)<>'' then STRSQL55:=' WorkCompany like ''%'+trim(LabeledEdit5.Text)+'%'' and '
+  else STRSQL55:='';
   STRSQL47:=' isnull(report_doctor,'''')<>'''' ';  
   if RadioGroup2.ItemIndex=1 then
     STRSQL49:=' order by caseno '//南沙慢病关医生要求按病历号排序
@@ -419,6 +418,7 @@ begin
   ADObasic.SQL.Add(strsql22);
   ADObasic.SQL.Add(strsql45);
   ADObasic.SQL.Add(strsql50);
+  ADObasic.SQL.Add(strsql55);
   ADObasic.SQL.Add(strsql47);
   ADObasic.SQL.Add(strsql49);
   ADObasic.Parameters.ParamByName('P_DateTimePicker1').Value :=DateTimePicker1.DateTime;//设计期Time设置为00:00:00.放心,下拉选择日期时不会改变Time值
@@ -742,9 +742,6 @@ begin
     end else
     if (sCombin_Id=WorkGroup_T9)
       and frReport1.LoadFromFile(TempFile_T9) then
-    begin
-    end else
-    if frReport1.LoadFromFile(TempFile_Common) then
     begin
     end else
     if not frReport1.LoadFromFile(ExtractFilePath(application.ExeName)+'report_cur.frf') then
@@ -1207,9 +1204,6 @@ begin
     end;
     //================================STOP
 
-    if frReport1.LoadFromFile(TempFile_Group) then
-    begin
-    end else
     if not frReport1.LoadFromFile(ExtractFilePath(application.ExeName)+'report_Cur_group.frf') then
     begin
       if length(memo1.Lines.Text)>=60000 then memo1.Lines.Clear;//memo只能接受64K个字符
