@@ -43,7 +43,10 @@ const
         ' issure as 备注,unid as 唯一编号, '+
         ' His_Unid as His唯一编号,His_MzOrZy as His门诊或住院, '+
         ' WorkDepartment as 所属部门,WorkCategory as 工种,WorkID as 工号,ifMarry as 婚否,OldAddress as 籍贯,Address as 住址,Telephone as 电话,WorkCompany as 所属公司, '+
-        ' Audit_Date as 审核时间,ifCompleted,checkid as 联机号,lsh as 流水号 '+
+        ' Audit_Date as 审核时间,ifCompleted,checkid as 联机号,lsh as 流水号, '+
+        ' PushPress as 样本送交人,PullPress as 样本接收人,LeftEyesight as 左眼视力,RightEyesight as 右眼视力,Stature as 样本接收时间,Weight as 单据状态, '+
+        ' TjJiWangShi as 既往史,TjJiaZuShi as 家族史,TjNeiKe as 内科,TjWaiKe as 外科,TjWuGuanKe as 五官科,TjFuKe as 妇科,TjLengQiangGuang as 冷强光,TjXGuang as X光,TjBChao as 危急值报告时间,TjXinDianTu as 危急值报告人,TjJianYan as 条码号,'+
+        ' TjDescription as 结论,TJAdvice as 建议 '+
         ' from view_Chk_Con_All ';
 
 var
