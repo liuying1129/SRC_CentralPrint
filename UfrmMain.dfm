@@ -184,7 +184,8 @@ object frmMain: TfrmMain
       ItemIndex = 0
       Items.Strings = (
         #24739#32773#22995#21517
-        #30149#21382#21495)
+        #30149#21382#21495
+        #25152#23646#20844#21496)
       TabOrder = 11
     end
     object ComboBox1: TComboBox

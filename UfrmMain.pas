@@ -417,9 +417,9 @@ begin
   if trim(LabeledEdit5.Text)<>'' then STRSQL55:=' WorkCompany like ''%'+trim(LabeledEdit5.Text)+'%'' and '
   else STRSQL55:='';
   STRSQL47:=' isnull(report_doctor,'''')<>'''' ';  
-  if RadioGroup2.ItemIndex=1 then
-    STRSQL49:=' order by caseno '//南沙慢病关医生要求按病历号排序
-  else STRSQL49:=' order by patientname ';
+  if RadioGroup2.ItemIndex=1 then STRSQL49:=' order by caseno '//南沙慢病关医生要求按病历号排序
+    else if RadioGroup2.ItemIndex=2 then STRSQL49:=' order by WorkCompany '//北京景像要求按所属公司排序
+      else STRSQL49:=' order by patientname ';
   ADObasic.Close;
   ADObasic.SQL.Clear;
   ADObasic.SQL.Add(SHOW_CHK_CON);
