@@ -34,15 +34,14 @@ const
   //0 as 选择,默认是未选择的.1--选择,非1--未选
   SHOW_CHK_CON='select top 1000 patientname as 姓名,'+
         ' sex as 性别,'+
-        ' age as 年龄,0 as 选择,caseno as 病历号,bedno as 床号,deptname as 送检科室,'+
+        ' age as 年龄,printtimes as 打印次数,caseno as 病历号,bedno as 床号,deptname as 送检科室,'+
         ' check_doctor as 送检医生,check_date as 检查日期,'+
         ' report_date as 申请日期,report_doctor as 审核者,'+//dbo.uf_GetPatientCombName(ifCompleted,unid) as 组合项目,'+
         ' combin_id as 工作组,operator as 操作者,diagnosetype as 优先级别,'+
-        ' (case when len(caseno)=8 and LEFT(caseno,1)=''8'' then 1 else printtimes end) as 打印次数,'+//PEIS的单:caseno长度为8且以8开头
         ' flagetype as 样本类型,diagnose as 临床诊断,typeflagcase as 样本情况,'+
         ' issure as 备注,unid as 唯一编号, '+
         ' His_Unid as His唯一编号,His_MzOrZy as His门诊或住院, '+
-        ' WorkDepartment as 所属部门,WorkCategory as 工种,WorkID as 工号,ifMarry as 婚否,OldAddress as 籍贯,Address as 住址,Telephone as 电话,WorkCompany as 所属公司, '+
+        ' WorkCompany as 所属公司,WorkDepartment as 所属部门,WorkCategory as 工种,WorkID as 工号,ifMarry as 婚否,OldAddress as 籍贯,Address as 住址,Telephone as 电话, '+
         ' Audit_Date as 审核时间,ifCompleted,checkid as 联机号,lsh as 流水号, '+
         ' PushPress as 样本送交人,PullPress as 样本接收人,LeftEyesight as 左眼视力,RightEyesight as 右眼视力,Stature as 样本接收时间,Weight as 单据状态, '+
         ' TjJiWangShi as 既往史,TjJiaZuShi as 家族史,TjNeiKe as 内科,TjWaiKe as 外科,TjWuGuanKe as 五官科,TjFuKe as 妇科,TjLengQiangGuang as 冷强光,TjXGuang as X光,TjBChao as 危急值报告时间,TjXinDianTu as 危急值报告人,TjJianYan as 条码号,'+

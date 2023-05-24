@@ -6,8 +6,8 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ExtCtrls, StdCtrls, Buttons, ComCtrls, ToolWin, Grids, DBGrids,
   DB, ADODB,IniFiles,StrUtils, ADOLYGetcode,ShellAPI, FR_Class,Printers,
-  FR_DSet, FR_DBSet,Jpeg,Chart,FR_Chart,Series,Math, ActnList,HTTPApp,
-  IdHashMessageDigest,IdHash,IdHTTP,IdIPWatch;
+  FR_DSet, FR_DBSet,Jpeg,Chart,FR_Chart,Series,Math, ActnList,
+  DBGridEhGrouping, ToolCtrlsEh, DBGridEhToolCtrls, DynVarsEh, GridsEh, DBAxisGridsEh, DBGridEh, EhLibADO;
 
 //==为了通过发送消息更新主窗体状态栏而增加==//
 const
@@ -15,9 +15,7 @@ const
 TYPE
   TWMUpdateTextStatus=TWMSetText;
 //=========================================//
-  
-type TArCheckBoxValue = array of array [0..1] of integer;
- 
+
 type
   TfrmMain = class(TForm)
     Panel1: TPanel;
@@ -33,7 +31,6 @@ type
     ToolButton1: TToolButton;
     SpeedButton4: TSpeedButton;
     Panel2: TPanel;
-    DBGrid1: TDBGrid;
     Splitter1: TSplitter;
     Panel3: TPanel;
     Memo1: TMemo;
@@ -53,8 +50,6 @@ type
     CheckBox2: TCheckBox;
     SpeedButton2: TSpeedButton;
     ToolButton3: TToolButton;
-    SpeedButton3: TSpeedButton;
-    SpeedButton7: TSpeedButton;
     ToolButton4: TToolButton;
     ActionList1: TActionList;
     Action1: TAction;
@@ -73,10 +68,10 @@ type
     RadioGroup1: TRadioGroup;
     ToolButton5: TToolButton;
     SpeedButton8: TSpeedButton;
-    RadioGroup2: TRadioGroup;
     ComboBox1: TComboBox;
     Label3: TLabel;
     LabeledEdit5: TLabeledEdit;
+    DBGrid1: TDBGridEh;
     procedure FormShow(Sender: TObject);
     procedure SpeedButton4Click(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -89,8 +84,6 @@ type
     procedure ADObasicAfterScroll(DataSet: TDataSet);
     procedure ADObasicAfterOpen(DataSet: TDataSet);
     procedure ADOQuery2AfterOpen(DataSet: TDataSet);
-    procedure DBGrid1DrawColumnCell(Sender: TObject; const Rect: TRect;
-      DataCol: Integer; Column: TColumn; State: TGridDrawState);
     procedure DBGrid2DrawColumnCell(Sender: TObject; const Rect: TRect;
       DataCol: Integer; Column: TColumn; State: TGridDrawState);
     procedure FormCreate(Sender: TObject);
@@ -100,12 +93,12 @@ type
     procedure frReport1BeforePrint(Memo: TStringList; View: TfrView);
     procedure frReport1PrintReport;
     procedure SpeedButton6Click(Sender: TObject);
-    procedure DBGrid1CellClick(Column: TColumn);
     procedure SpeedButton2Click(Sender: TObject);
-    procedure SpeedButton3Click(Sender: TObject);
-    procedure SpeedButton7Click(Sender: TObject);
     procedure RadioGroup1Click(Sender: TObject);
     procedure SpeedButton8Click(Sender: TObject);
+    procedure DBGrid1TitleBtnClick(Sender: TObject; ACol: Integer;
+      Column: TColumnEh);
+    procedure DBGrid1SelectionChanged(Sender: TObject);
   private
     procedure WriteProfile;
     procedure ReadConfig;
@@ -130,7 +123,6 @@ implementation
 uses UfrmLogin, UDM, UfrmModifyPwd;
 var
   lsGroupShow:TStrings;
-  ArCheckBoxValue:TArCheckBoxValue;
 
 {$R *.dfm}
 
@@ -398,7 +390,7 @@ end;
 
 procedure TfrmMain.BitBtn1Click(Sender: TObject);
 var
-  strsql22,strsql44,STRSQL45,STRSQL46,STRSQL47,STRSQL48,STRSQL49,STRSQL50,STRSQL51,STRSQL55: string;
+  strsql22,strsql44,STRSQL45,STRSQL46,STRSQL47,STRSQL48,{STRSQL49,}STRSQL50,STRSQL51,STRSQL55: string;
 begin
   strsql44:=' check_date between :P_DateTimePicker1 and :P_DateTimePicker2 and ';  
   if RadioGroup3.ItemIndex=1 then
@@ -417,9 +409,9 @@ begin
   if trim(LabeledEdit5.Text)<>'' then STRSQL55:=' WorkCompany like ''%'+trim(LabeledEdit5.Text)+'%'' and '
   else STRSQL55:='';
   STRSQL47:=' isnull(report_doctor,'''')<>'''' ';  
-  if RadioGroup2.ItemIndex=1 then STRSQL49:=' order by caseno '//南沙慢病关医生要求按病历号排序
-    else if RadioGroup2.ItemIndex=2 then STRSQL49:=' order by WorkCompany '//北京景像要求按所属公司排序
-      else STRSQL49:=' order by patientname ';
+  //if RadioGroup2.ItemIndex=1 then STRSQL49:=' order by caseno '//南沙慢病关医生要求按病历号排序
+  //  else if RadioGroup2.ItemIndex=2 then STRSQL49:=' order by WorkCompany '//北京景像要求按所属公司排序
+  //    else STRSQL49:=' order by patientname ';
   ADObasic.Close;
   ADObasic.SQL.Clear;
   ADObasic.SQL.Add(SHOW_CHK_CON);
@@ -433,7 +425,7 @@ begin
   ADObasic.SQL.Add(strsql50);
   ADObasic.SQL.Add(strsql55);
   ADObasic.SQL.Add(strsql47);
-  ADObasic.SQL.Add(strsql49);
+  //ADObasic.SQL.Add(strsql49);
   ADObasic.Parameters.ParamByName('P_DateTimePicker1').Value :=DateTimePicker1.DateTime;//设计期Time设置为00:00:00.放心,下拉选择日期时不会改变Time值
   ADObasic.Parameters.ParamByName('P_DateTimePicker2').Value :=DateTimePicker2.DateTime;//设计期Time设置为23:59:59.放心,下拉选择日期时不会改变Time值
   ADObasic.Open;
@@ -469,16 +461,13 @@ begin
 end;
 
 procedure TfrmMain.ADObasicAfterOpen(DataSet: TDataSet);
-var
-  adotemp22:tadoquery;
-  i:integer;
 begin
   if not DataSet.Active then exit;
 
   dbgrid1.Columns[0].Width:=42;//姓名
   dbgrid1.Columns[1].Width:=30;//性别
   dbgrid1.Columns[2].Width:=30;//年龄
-  dbgrid1.Columns[3].Width:=30;//选择
+  dbgrid1.Columns[3].Width:=30;//打印次数
   dbgrid1.Columns[4].Width:=65;//病历号
   dbgrid1.Columns[5].Width:=30;//床号
   dbgrid1.Columns[6].Width:=60;//送检科室
@@ -489,24 +478,19 @@ begin
   //dbgrid1.Columns[11].Width:=150;//组合项目串
   dbgrid1.Columns[11].Width:=42;//工作组
   dbgrid1.Columns[12].Width:=42;//操作者
+  dbgrid1.Columns[13].Width:=60;
+  dbgrid1.Columns[14].Width:=60;
+  dbgrid1.Columns[15].Width:=60;
+  dbgrid1.Columns[16].Width:=60;
+  dbgrid1.Columns[17].Width:=60;
+  dbgrid1.Columns[18].Width:=60;
+  dbgrid1.Columns[19].Width:=60;
+  dbgrid1.Columns[20].Width:=60;
+  dbgrid1.Columns[21].Width:=60;
 
-  adotemp22:=tadoquery.Create(nil);
-  adotemp22.clone(DataSet as TCustomADODataSet);
-  ArCheckBoxValue:=nil;
-  setlength(ArCheckBoxValue,adotemp22.RecordCount);
-  i:=0;
-  while not adotemp22.Eof do
-  begin
-    //该二维数组中一定要有个字段标识唯一性的
-    ArCheckBoxValue[I,0]:=0;
-    ArCheckBoxValue[I,1]:=adotemp22.FieldByName('唯一编号').AsInteger;
-
-    adotemp22.Next;
-    inc(i);
-  end;
-  adotemp22.Free;
-  
-  UpdateStatusBar(#$2+'0:0');
+  dbgrid1.Columns[0].Title.TitleButton:=true;//排序,姓名
+  dbgrid1.Columns[4].Title.TitleButton:=true;//排序,病历号
+  dbgrid1.Columns[21].Title.TitleButton:=true;//排序,所属公司
 end;
 
 procedure TfrmMain.ADOQuery2AfterOpen(DataSet: TDataSet);
@@ -554,49 +538,6 @@ begin
   VisibleColumn(dbgrid2,'唯一编号',false);
 end;
 
-procedure TfrmMain.DBGrid1DrawColumnCell(Sender: TObject;
-  const Rect: TRect; DataCol: Integer; Column: TColumn;
-  State: TGridDrawState);
-const
-  CtrlState: array[Boolean] of Integer = (DFCS_BUTTONCHECK, DFCS_BUTTONCHECK or DFCS_CHECKED);
-var
-  PrintTimes:integer;
-  strPrintTimes:string;
-
-  checkBox_check:boolean;
-  iUNID,i:INTEGER;
-begin
-   //======================打印过的流水号变化颜色======================//
-    if datacol=0 then //姓名列
-    begin
-      strPrintTimes:=ADObasic.fieldbyname('打印次数').AsString;
-      PrintTimes:=strtointdef(strPrintTimes,0);
-      IF PrintTimes<>0 then
-      begin
-        tdbgrid(sender).Canvas.Font.Color:=clred;
-        tdbgrid(sender).DefaultDrawColumnCell(rect,datacol,column,state);
-      end;
-    end;
-   //==========================================================================//
-
-  if Column.Field.FieldName='选择' then
-  begin
-    (sender as TDBGrid).Canvas.FillRect(Rect);
-    checkBox_check:=false;
-    iUNID:=(Sender AS TDBGRID).DataSource.DataSet.FieldByName('唯一编号').AsInteger;
-    for i :=0  to (Sender AS TDBGRID).DataSource.DataSet.RecordCount-1 do
-    begin
-      if ArCheckBoxValue[i,1]=iUNID then
-      begin
-        checkBox_check:=ArCheckBoxValue[i,0]=1;
-        break;
-      end;
-    end;//}
-    DrawFrameControl((sender as TDBGrid).Canvas.Handle,Rect, DFC_BUTTON, CtrlState[checkBox_check]);
-  end else (sender as TDBGrid).DefaultDrawColumnCell(Rect,DataCol,Column,State);
-
-end;
-
 procedure TfrmMain.DBGrid2DrawColumnCell(Sender: TObject;
   const Rect: TRect; DataCol: Integer; Column: TColumn;
   State: TGridDrawState);
@@ -631,7 +572,7 @@ begin
       tdbgrid(sender).Canvas.Font.Color:=clblue
     else if i=2 then
           tdbgrid(sender).Canvas.Font.Color:=clred;
-    tdbgrid(sender).DefaultDrawColumnCell(rect,datacol,column,state);
+    tdbgrid(sender).DefaultDrawColumnCell(rect,datacol,column,Grids.TGridDrawState(State));
   end;
   //==========================================================================//
 
@@ -652,7 +593,7 @@ begin
             tdbgrid(sender).Canvas.Brush.color:=clhighlight;
             tdbgrid(sender).Canvas.Font.Color:=clwindow;
         end;
-        tdbgrid(sender).DefaultDrawColumnCell(Rect,DataCol,Column,State);
+        tdbgrid(sender).DefaultDrawColumnCell(Rect,DataCol,Column,Grids.TGridDrawState(State));
         break;
       end;
     end;
@@ -674,43 +615,37 @@ var
   sUnid,sCombin_Id:string;
   iIfCompleted:integer;
 
-  adotemp22:tadoquery;
-  ifSelect:boolean;
   i:integer;
 
   sPatientname,sSex,sAge:string;
   
   Save_Cursor:TCursor;
+  OldCurrent:TBookmark;
 begin
   if not ifhaspower(sender,powerstr_js_main) then exit;
 
   if not ADObasic.Active then exit;
   if ADObasic.RecordCount=0 then exit;
 
+  if DBGrid1.SelectedRows.Count<=0 then exit;
+
   Save_Cursor := Screen.Cursor;
   Screen.Cursor := crHourGlass;
 
-  adotemp22:=tadoquery.Create(nil);
-  adotemp22.clone(ADObasic);
-  while not adotemp22.Eof do
+  //Grid勾选记录判断方式二 begin
+  //该方式无需循环全部数据集,只需循环所选记录
+  OldCurrent:=DBGrid1.DataSource.DataSet.GetBookmark;
+  DBGrid1.DataSource.DataSet.DisableControls;
+  for i:=0 to DBGrid1.SelectedRows.Count-1 do
   begin
-    ifSelect:=false;
-    for i :=low(ArCheckBoxValue)  to high(ArCheckBoxValue) do//循环ArCheckBoxValue
-    begin
-      if (ArCheckBoxValue[i,1]=adotemp22.fieldbyname('唯一编号').AsInteger)and(ArCheckBoxValue[i,0]=1) then
-      begin
-        ifSelect:=true;
-        break;
-      end;
-    end;
-    if not ifSelect then begin adotemp22.Next;continue;end;//如果未选择，则跳过
+    DBGrid1.DataSource.DataSet.Bookmark:=DBGrid1.SelectedRows[i];
 
-    sUnid:=adotemp22.fieldbyname('唯一编号').AsString;
-    sCombin_Id:=adotemp22.FieldByName('工作组').AsString;
-    iIfCompleted:=adotemp22.FieldByName('ifCompleted').AsInteger;
-    sPatientname:=trim(adotemp22.fieldbyname('姓名').AsString);
-    sSex:=adotemp22.fieldbyname('性别').AsString;
-    sAge:=adotemp22.fieldbyname('年龄').AsString;
+    sUnid:=DBGrid1.DataSource.DataSet.fieldbyname('唯一编号').AsString;
+    sCombin_Id:=DBGrid1.DataSource.DataSet.FieldByName('工作组').AsString;
+    iIfCompleted:=DBGrid1.DataSource.DataSet.FieldByName('ifCompleted').AsInteger;
+    sPatientname:=trim(DBGrid1.DataSource.DataSet.fieldbyname('姓名').AsString);
+    sSex:=DBGrid1.DataSource.DataSet.fieldbyname('性别').AsString;
+    sAge:=DBGrid1.DataSource.DataSet.fieldbyname('年龄').AsString;
 
     //判断该就诊人员是否存在未审核结果START
     if strtoint(ScalarSQLCmd(LisConn,'select count(*) from chk_con where Patientname='''+sPatientname+''' and isnull(sex,'''')='''+sSex+''' and dbo.uf_GetAgeReal(age)=dbo.uf_GetAgeReal('''+sAge+''') and isnull(report_doctor,'''')='''' '))>0 then
@@ -763,7 +698,6 @@ begin
       memo1.Lines.Add(FormatDatetime('YYYY-MM-DD HH:NN:SS', Now) + ':['+sPatientname+']加载默认通用打印模板report_cur.frf失败，请设置:选项->打印模板');
       WriteLog(pchar('['+sPatientname+']加载默认通用打印模板report_cur.frf失败，请设置:选项->打印模板'));
       
-      adotemp22.Next;
       continue;
     end;
 
@@ -792,32 +726,19 @@ begin
       memo1.Lines.Add(FormatDatetime('YYYY-MM-DD HH:NN:SS', Now) + ':['+sPatientname+']无效结果!');
       WriteLog(pchar('['+sPatientname+']无效结果!'));
       
-      adotemp22.Next;
       continue;
     end;
-
-    //报表需要用到ADObasic的值START
-    if not ADObasic.Locate('唯一编号',sUnid,[loCaseInsensitive]) then
-    begin
-      if length(memo1.Lines.Text)>=60000 then memo1.Lines.Clear;//memo只能接受64K个字符
-      memo1.Lines.Add(FormatDatetime('YYYY-MM-DD HH:NN:SS', Now) + ':无法定位唯一编号为['+sUnid+']的就诊人员['+sPatientname+']!');
-      WriteLog(pchar('无法定位唯一编号为['+sUnid+']的就诊人员['+sPatientname+']!'));
-
-      adotemp22.Next;
-      continue;
-    end;
-    //=========================STOP
 
     if CheckBox1.Checked then  //预览模式
       frReport1.ShowReport
     else  //直接打印模式
     begin
       if frReport1.PrepareReport then frReport1.PrintPreparedReport('', 1, True, frAll);
-    end;
-
-    adotemp22.Next;
+    end;    
   end;
-  adotemp22.Free;
+  DBGrid1.DataSource.DataSet.GotoBookmark(OldCurrent);
+  DBGrid1.DataSource.DataSet.EnableControls;
+  //Grid勾选记录判断方式二 end}
 
   Screen.Cursor := Save_Cursor;  { Always restore to normal }
   
@@ -1170,44 +1091,38 @@ var
 
   sUnid,sCombin_Id,sReport_Doctor:string;
 
-  adotemp22:tadoquery;
-  ifSelect:boolean;
   i,iIfCompleted:integer;  
 
   sPatientname,sSex,sAge:string;
   
   Save_Cursor:TCursor;
+  OldCurrent:TBookmark;
 begin
   if not ifhaspower(sender,powerstr_js_main) then exit;
 
   if not ADObasic.Active then exit;
   if ADObasic.RecordCount=0 then exit;
 
+  if DBGrid1.SelectedRows.Count<=0 then exit;
+
   Save_Cursor := Screen.Cursor;
   Screen.Cursor := crHourGlass;
 
-  adotemp22:=tadoquery.Create(nil);
-  adotemp22.clone(ADObasic);
-  while not adotemp22.Eof do
+  //Grid勾选记录判断方式二 begin
+  //该方式无需循环全部数据集,只需循环所选记录
+  OldCurrent:=DBGrid1.DataSource.DataSet.GetBookmark;
+  DBGrid1.DataSource.DataSet.DisableControls;
+  for i:=0 to DBGrid1.SelectedRows.Count-1 do
   begin
-    ifSelect:=false;
-    for i :=low(ArCheckBoxValue)  to high(ArCheckBoxValue) do//循环ArCheckBoxValue
-    begin
-      if (ArCheckBoxValue[i,1]=adotemp22.fieldbyname('唯一编号').AsInteger)and(ArCheckBoxValue[i,0]=1) then
-      begin
-        ifSelect:=true;
-        break;
-      end;
-    end;
-    if not ifSelect then begin adotemp22.Next;continue;end;//如果未选择，则跳过
-    
-    sUnid:=adotemp22.fieldbyname('唯一编号').AsString;
-    sCombin_Id:=adotemp22.FieldByName('工作组').AsString;
-    sReport_Doctor:=trim(adotemp22.FieldByName('审核者').AsString);
-    iIfCompleted:=adotemp22.FieldByName('ifCompleted').AsInteger;
-    sPatientname:=trim(adotemp22.fieldbyname('姓名').AsString);
-    sSex:=adotemp22.fieldbyname('性别').AsString;
-    sAge:=adotemp22.fieldbyname('年龄').AsString;
+    DBGrid1.DataSource.DataSet.Bookmark:=DBGrid1.SelectedRows[i];
+
+    sUnid:=DBGrid1.DataSource.DataSet.fieldbyname('唯一编号').AsString;
+    sCombin_Id:=DBGrid1.DataSource.DataSet.FieldByName('工作组').AsString;
+    sReport_Doctor:=trim(DBGrid1.DataSource.DataSet.FieldByName('审核者').AsString);
+    iIfCompleted:=DBGrid1.DataSource.DataSet.FieldByName('ifCompleted').AsInteger;
+    sPatientname:=trim(DBGrid1.DataSource.DataSet.fieldbyname('姓名').AsString);
+    sSex:=DBGrid1.DataSource.DataSet.fieldbyname('性别').AsString;
+    sAge:=DBGrid1.DataSource.DataSet.fieldbyname('年龄').AsString;
 
     //判断该就诊人员是否存在未审核结果START
     if strtoint(ScalarSQLCmd(LisConn,'select count(*) from chk_con where Patientname='''+sPatientname+''' and isnull(sex,'''')='''+sSex+''' and dbo.uf_GetAgeReal(age)=dbo.uf_GetAgeReal('''+sAge+''') and isnull(report_doctor,'''')='''' '))>0 then
@@ -1236,7 +1151,6 @@ begin
       memo1.Lines.Add(FormatDatetime('YYYY-MM-DD HH:NN:SS', Now) + ':['+sPatientname+']加载默认分组打印模板report_Cur_group.frf失败，请设置:选项->打印模板');
       WriteLog(pchar('['+sPatientname+']加载默认分组打印模板report_Cur_group.frf失败，请设置:选项->打印模板'));
       
-      adotemp22.Next;
       continue;
     end;
 
@@ -1244,7 +1158,6 @@ begin
     if(frGH=nil)then
     begin
       showmessage('报表模板中没有发现GroupHeader1');
-      adotemp22.Next;
       continue;
     end;
 
@@ -1275,21 +1188,8 @@ begin
       memo1.Lines.Add(FormatDatetime('YYYY-MM-DD HH:NN:SS', Now) + ':['+sPatientname+']无效结果!');
       WriteLog(pchar('['+sPatientname+']无效结果!'));
       
-      adotemp22.Next;
       continue;
     end;
-
-    //报表需要用到ADObasic的值START
-    if not ADObasic.Locate('唯一编号',sUnid,[loCaseInsensitive]) then
-    begin
-      if length(memo1.Lines.Text)>=60000 then memo1.Lines.Clear;//memo只能接受64K个字符
-      memo1.Lines.Add(FormatDatetime('YYYY-MM-DD HH:NN:SS', Now) + ':无法定位唯一编号为['+sUnid+']的就诊人员['+sPatientname+']!');
-      WriteLog(pchar('无法定位唯一编号为['+sUnid+']的就诊人员['+sPatientname+']!'));
-
-      adotemp22.Next;
-      continue;
-    end;
-    //=========================STOP
 
     if CheckBox1.Checked then  //预览模式
       frReport1.ShowReport
@@ -1297,75 +1197,19 @@ begin
     begin
       if frReport1.PrepareReport then frReport1.PrintPreparedReport('', 1, True, frAll);
     end;
-
-    adotemp22.Next;
   end;
-  adotemp22.Free;
+  DBGrid1.DataSource.DataSet.GotoBookmark(OldCurrent);
+  DBGrid1.DataSource.DataSet.EnableControls;
+  //Grid勾选记录判断方式二 end}
 
   Screen.Cursor := Save_Cursor;  { Always restore to normal }
   
   MessageDlg('打印操作完成！',mtInformation,[mbOK],0);
 end;
 
-procedure TfrmMain.DBGrid1CellClick(Column: TColumn);
-var
-  iUNID,i,k:INTEGER;
-begin
-  if not Column.Grid.DataSource.DataSet.Active then exit;  
-  if Column.Field.FieldName <>'选择' then exit;
-
-  k:=strtointdef(StatusBar1.Panels[0].Text,0);
-  
-  iUNID:=Column.Grid.DataSource.DataSet.FieldByName('唯一编号').AsInteger;
-  for i :=low(ArCheckBoxValue)  to high(ArCheckBoxValue) do//循环ArCheckBoxValue
-  begin
-    if ArCheckBoxValue[i,1]=iUNID then
-    begin
-      k:=ifThen(ArCheckBoxValue[i,0]=1,k-1,k+1);
-
-      ArCheckBoxValue[i,0]:=ifThen(ArCheckBoxValue[i,0]=1,0,1);
-      Column.Grid.Refresh;//调用DBGrid1DrawColumnCell事件
-      break;
-    end;
-  end;
-
-  UpdateStatusBar(#$2+'0:'+inttostr(k));
-end;
-
 procedure TfrmMain.SpeedButton2Click(Sender: TObject);
 begin
   frmLogin.ShowModal;
-end;
-
-procedure TfrmMain.SpeedButton3Click(Sender: TObject);
-var
-  i:integer;
-begin
-  if length(ArCheckBoxValue)>50 then
-  begin
-    if (MessageDlg('报告单数量大于50，确定要全选？', mtConfirmation, [mbYes, mbNo], 0) <> mrYes) then exit;
-  end;
-
-  for i:=LOW(ArCheckBoxValue) to HIGH(ArCheckBoxValue) do
-  begin
-    ArCheckBoxValue[I,0]:=1;
-  end;
-  DBGrid1.Refresh;//调用DBGrid1DrawColumnCell事件
-  
-  UpdateStatusBar(#$2+'0:'+inttostr(length(ArCheckBoxValue)));
-end;
-
-procedure TfrmMain.SpeedButton7Click(Sender: TObject);
-var
-  i:integer;
-begin
-  for i:=LOW(ArCheckBoxValue) to HIGH(ArCheckBoxValue) do
-  begin
-    ArCheckBoxValue[I,0]:=0;
-  end;
-  DBGrid1.Refresh;//调用DBGrid1DrawColumnCell事件
-  
-  UpdateStatusBar(#$2+'0:0');
 end;
 
 procedure TfrmMain.ShowPictureValue(const ACheckUnid,AifCompleted: integer);
@@ -1499,6 +1343,19 @@ end;
 procedure TfrmMain.SpeedButton8Click(Sender: TObject);
 begin
   frmModifyPwd.ShowModal;
+end;
+
+procedure TfrmMain.DBGrid1TitleBtnClick(Sender: TObject; ACol: Integer;
+  Column: TColumnEh);
+begin
+  //因为排序时原有的勾选会产生紊乱,故点击排序按钮时索性清除掉所有勾选
+  //另注意,点击排序按钮后会调用ADOQuery1AfterOpen事件
+  DBGrid1.SelectedRows.Clear;
+end;
+
+procedure TfrmMain.DBGrid1SelectionChanged(Sender: TObject);
+begin
+  UpdateStatusBar(#$2+'0:'+IntToStr(DBGrid1.SelectedRows.Count));
 end;
 
 end.

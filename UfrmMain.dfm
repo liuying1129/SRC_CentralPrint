@@ -174,27 +174,13 @@ object frmMain: TfrmMain
       TabOrder = 10
       OnClick = RadioGroup1Click
     end
-    object RadioGroup2: TRadioGroup
-      Left = 8
-      Top = 329
-      Width = 193
-      Height = 49
-      Caption = #25490#24207
-      Columns = 2
-      ItemIndex = 0
-      Items.Strings = (
-        #24739#32773#22995#21517
-        #30149#21382#21495
-        #25152#23646#20844#21496)
-      TabOrder = 11
-    end
     object ComboBox1: TComboBox
       Left = 78
       Top = 187
       Width = 121
       Height = 21
       ItemHeight = 13
-      TabOrder = 12
+      TabOrder = 11
     end
     object LabeledEdit5: TLabeledEdit
       Left = 78
@@ -207,7 +193,7 @@ object frmMain: TfrmMain
       EditLabel.Caption = #25152#23646#20844#21496
       LabelPosition = lpLeft
       ParentCtl3D = False
-      TabOrder = 13
+      TabOrder = 12
     end
   end
   object CoolBar1: TCoolBar
@@ -321,22 +307,6 @@ object frmMain: TfrmMain
         ImageIndex = 3
         Style = tbsSeparator
       end
-      object SpeedButton3: TSpeedButton
-        Left = 632
-        Top = 2
-        Width = 35
-        Height = 22
-        Caption = #20840#36873
-        OnClick = SpeedButton3Click
-      end
-      object SpeedButton7: TSpeedButton
-        Left = 667
-        Top = 2
-        Width = 45
-        Height = 22
-        Caption = #20840#19981#36873
-        OnClick = SpeedButton7Click
-      end
     end
   end
   object Panel2: TPanel
@@ -351,33 +321,13 @@ object frmMain: TfrmMain
       Top = 1
       Height = 439
     end
-    object DBGrid1: TDBGrid
-      Left = 1
-      Top = 1
-      Width = 304
-      Height = 439
-      Align = alLeft
-      Color = 16767438
-      Ctl3D = False
-      DataSource = DataSource1
-      ParentCtl3D = False
-      ReadOnly = True
-      TabOrder = 0
-      TitleFont.Charset = ANSI_CHARSET
-      TitleFont.Color = clWindowText
-      TitleFont.Height = -13
-      TitleFont.Name = #23435#20307
-      TitleFont.Style = []
-      OnCellClick = DBGrid1CellClick
-      OnDrawColumnCell = DBGrid1DrawColumnCell
-    end
     object Panel3: TPanel
       Left = 308
       Top = 1
       Width = 394
       Height = 439
       Align = alClient
-      TabOrder = 1
+      TabOrder = 0
       object Splitter2: TSplitter
         Left = 1
         Top = 292
@@ -441,6 +391,26 @@ object frmMain: TfrmMain
             TabOrder = 0
           end
         end
+      end
+    end
+    object DBGrid1: TDBGridEh
+      Left = 1
+      Top = 1
+      Width = 304
+      Height = 439
+      Align = alLeft
+      AllowedSelections = [gstRecordBookmarks, gstRectangle, gstColumns]
+      Color = 16767438
+      DataSource = DataSource1
+      DynProps = <>
+      IndicatorOptions = [gioShowRowIndicatorEh, gioShowRowselCheckboxesEh]
+      Options = [dgEditing, dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit, dgMultiSelect]
+      OptionsEh = [dghFixed3D, dghHighlightFocus, dghAutoSortMarking, dghDialogFind, dghColumnResize, dghColumnMove, dghExtendVertLines]
+      ReadOnly = True
+      TabOrder = 1
+      OnSelectionChanged = DBGrid1SelectionChanged
+      OnTitleBtnClick = DBGrid1TitleBtnClick
+      object RowDetailData: TRowDetailPanelControlEh
       end
     end
   end
