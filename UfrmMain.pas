@@ -48,7 +48,6 @@ type
     frDBDataSet1: TfrDBDataSet;
     CheckBox1: TCheckBox;
     SpeedButton6: TSpeedButton;
-    CheckBox2: TCheckBox;
     SpeedButton2: TSpeedButton;
     ToolButton3: TToolButton;
     ToolButton4: TToolButton;
@@ -161,7 +160,6 @@ begin
   CONFIGINI:=TINIFILE.Create(ChangeFileExt(Application.ExeName,'.ini'));
 
   CheckBox1.Checked:=configini.ReadBool('Interface','ifPreview',false);{记录是否打印预览模式}
-  CheckBox2.Checked:=configini.ReadBool('Interface','ifPagination',false);{记录是否按组分页}
   CheckBox3.Checked:=configini.ReadBool('Interface','ifPDFExport',false);{记录是否导出PDF}
   DBGrid1.Width:=configini.ReadInteger('Interface','gridBaseInfoWidth',680);{记录基本信息框宽度}
   Memo1.Height:=configini.ReadInteger('Interface','memoLogHeight',150);{记录组合项目选择框高度}
@@ -329,7 +327,6 @@ begin
   configini.WriteInteger('Interface','ifPrintRadio',RadioGroup3.ItemIndex);
 
   configini.WriteBool('Interface','ifPreview',CheckBox1.Checked);{记录是否打印预览模式}
-  configini.WriteBool('Interface','ifPagination',CheckBox2.Checked);{记录是否按组分页}
   configini.WriteBool('Interface','ifPDFExport',CheckBox3.Checked);{记录是否导出PDF}
 
   configini.WriteString('Interface','check_doctor',LabeledEdit4.Text);{记录送检医生,实现“仅看自己送检的样本”功能}
@@ -1103,7 +1100,6 @@ end;
 procedure TfrmMain.SpeedButton6Click(Sender: TObject);
 var
   strsqlPrint:string;
-  frGH: TfrBandView;//分组头
 
   sUnid,sCombin_Id,sReport_Doctor:string;
 
@@ -1169,18 +1165,6 @@ begin
       
       continue;
     end;
-
-    frGH := TfrBandView(frReport1.FindObject('GroupHeader1'));
-    if(frGH=nil)then
-    begin
-      showmessage('报表模板中没有发现GroupHeader1');
-      continue;
-    end;
-
-    if CheckBox2.Checked then//按组分页
-      frGH.Prop['formnewpage'] := True
-    else
-      frGH.Prop['formnewpage'] := false;
 
     strsqlPrint:='select cv.combin_name as name,cv.name as 名称,cv.english_name as 英文名,cv.itemvalue as 检验结果,'+
       'cv.unit as 单位,cv.min_value as 最小值,cv.max_value as 最大值,'+
@@ -1525,7 +1509,6 @@ end;
 procedure TfrmMain.SpeedButton9Click(Sender: TObject);
 var
   strsqlPrint:string;
-  frGH: TfrBandView;//分组头
 
   sUnid,sCombin_Id,sReport_Doctor:string;
 
@@ -1595,18 +1578,6 @@ begin
       
       continue;
     end;
-
-    frGH := TfrBandView(frReport1.FindObject('GroupHeader1'));
-    if(frGH=nil)then
-    begin
-      showmessage('报表模板中没有发现GroupHeader1');
-      continue;
-    end;
-
-    if CheckBox2.Checked then//按组分页
-      frGH.Prop['formnewpage'] := True
-    else
-      frGH.Prop['formnewpage'] := false;
 
     strsqlPrint:='select cv.combin_name as name,cv.name as 名称,cv.english_name as 英文名,cv.itemvalue as 检验结果,'+
       'cv.unit as 单位,cv.min_value as 最小值,cv.max_value as 最大值,'+
