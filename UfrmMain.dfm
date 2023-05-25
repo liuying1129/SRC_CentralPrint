@@ -103,7 +103,7 @@ object frmMain: TfrmMain
     end
     object BitBtn1: TBitBtn
       Left = 78
-      Top = 385
+      Top = 345
       Width = 121
       Height = 25
       Caption = #26597#35810'F3'
@@ -124,7 +124,7 @@ object frmMain: TfrmMain
     end
     object CheckBox1: TCheckBox
       Left = 8
-      Top = 415
+      Top = 375
       Width = 75
       Height = 17
       Caption = #25171#21360#39044#35272
@@ -134,7 +134,7 @@ object frmMain: TfrmMain
     end
     object CheckBox2: TCheckBox
       Left = 128
-      Top = 415
+      Top = 375
       Width = 75
       Height = 17
       Caption = #25353#32452#20998#39029
@@ -194,6 +194,14 @@ object frmMain: TfrmMain
       LabelPosition = lpLeft
       ParentCtl3D = False
       TabOrder = 12
+    end
+    object CheckBox3: TCheckBox
+      Left = 8
+      Top = 400
+      Width = 97
+      Height = 17
+      Caption = #23548#20986'PDF'
+      TabOrder = 13
     end
   end
   object CoolBar1: TCoolBar
@@ -306,6 +314,22 @@ object frmMain: TfrmMain
         Caption = 'ToolButton5'
         ImageIndex = 3
         Style = tbsSeparator
+      end
+      object SpeedButton3: TSpeedButton
+        Left = 632
+        Top = 2
+        Width = 81
+        Height = 22
+        Caption = #25171#21360'V2'
+        OnClick = SpeedButton3Click
+      end
+      object SpeedButton9: TSpeedButton
+        Left = 713
+        Top = 2
+        Width = 112
+        Height = 22
+        Caption = #20998#32452#25171#21360'V2'
+        OnClick = SpeedButton9Click
       end
     end
   end
@@ -529,5 +553,132 @@ object frmMain: TfrmMain
       ShortCut = 120
       OnExecute = SpeedButton6Click
     end
+  end
+  object frxReport1: TfrxReport
+    Version = '5.4.6'
+    DotMatrixReport = False
+    IniFile = '\Software\Fast Reports'
+    PreviewOptions.Buttons = [pbPrint, pbLoad, pbSave, pbExport, pbZoom, pbFind, pbOutline, pbPageSetup, pbTools, pbEdit, pbNavigator, pbExportQuick]
+    PreviewOptions.Zoom = 1.000000000000000000
+    PrintOptions.Printer = 'Default'
+    PrintOptions.PrintOnSheet = 0
+    ReportOptions.CreateDate = 45065.723701713000000000
+    ReportOptions.LastChange = 45070.776058761580000000
+    ScriptLanguage = 'PascalScript'
+    ScriptText.Strings = (
+      'begin'
+      ''
+      'end.')
+    OnBeforePrint = frxReport1BeforePrint
+    OnGetValue = frxReport1GetValue
+    OnPrintReport = frxReport1PrintReport
+    Left = 305
+    Top = 285
+    Datasets = <
+      item
+        DataSet = frxDBDataset2
+        DataSetName = 'ADO_print'
+      end
+      item
+        DataSet = frxDBDataset1
+        DataSetName = 'ADObasic'
+      end>
+    Variables = <>
+    Style = <>
+    object Data: TfrxDataPage
+      Height = 1000.000000000000000000
+      Width = 1000.000000000000000000
+    end
+    object Page1: TfrxReportPage
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = #23435#20307
+      Font.Style = []
+      PaperWidth = 210.000000000000000000
+      PaperHeight = 297.000000000000000000
+      PaperSize = 9
+      LeftMargin = 10.000000000000000000
+      RightMargin = 10.000000000000000000
+      TopMargin = 10.000000000000000000
+      BottomMargin = 10.000000000000000000
+      object PageHeader1: TfrxPageHeader
+        FillType = ftBrush
+        Height = 83.149660000000000000
+        Top = 18.897650000000000000
+        Width = 718.110700000000000000
+        object Memo1: TfrxMemoView
+          Left = 45.354360000000000000
+          Top = 41.574830000000000000
+          Width = 291.023810000000000000
+          Height = 18.897650000000000000
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = #23435#20307
+          Font.Style = []
+          Memo.UTF8 = (
+            #33064#33070'  '#33049#27809#25314#28510'[ADObasic."patientname"]')
+          ParentFont = False
+        end
+      end
+      object MasterData1: TfrxMasterData
+        FillType = ftBrush
+        Height = 22.677180000000000000
+        Top = 162.519790000000000000
+        Width = 718.110700000000000000
+        DataSet = frxDBDataset2
+        DataSetName = 'ADO_print'
+        RowCount = 0
+        object Memo2: TfrxMemoView
+          Left = 15.118120000000000000
+          Top = 3.779530000000000000
+          Width = 245.669450000000000000
+          Height = 18.897650000000000000
+          Memo.UTF8 = (
+            #33063#21359#33051#39540#33049#27809#40065#33053#25314#28510'[ADO_print."'#33049#27809#40065#33053'"]')
+        end
+      end
+    end
+  end
+  object frxDBDataset1: TfrxDBDataset
+    UserName = 'ADObasic'
+    CloseDataSource = False
+    DataSet = ADObasic
+    BCDToCurrency = False
+    Left = 337
+    Top = 285
+  end
+  object frxDBDataset2: TfrxDBDataset
+    UserName = 'ADO_print'
+    CloseDataSource = False
+    DataSet = ado_print
+    BCDToCurrency = False
+    Left = 337
+    Top = 317
+  end
+  object frxPDFExport1: TfrxPDFExport
+    UseFileCache = True
+    ShowProgress = True
+    OverwritePrompt = False
+    DataOnly = False
+    PrintOptimized = False
+    Outline = False
+    Background = False
+    HTMLTags = True
+    Quality = 95
+    Transparency = False
+    Author = 'FastReport'
+    Subject = 'FastReport PDF export'
+    ProtectionFlags = [ePrint, eModify, eCopy, eAnnot]
+    HideToolbar = False
+    HideMenubar = False
+    HideWindowUI = False
+    FitWindow = False
+    CenterWindow = False
+    PrintScaling = False
+    PdfA = False
+    Left = 369
+    Top = 285
   end
 end
