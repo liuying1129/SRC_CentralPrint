@@ -312,7 +312,7 @@ object frmMain: TfrmMain
         Top = 2
         Width = 81
         Height = 22
-        Caption = #25171#21360'V2'
+        Caption = #25171#21360'V3'
         OnClick = SpeedButton3Click
       end
       object SpeedButton9: TSpeedButton
@@ -320,7 +320,7 @@ object frmMain: TfrmMain
         Top = 2
         Width = 112
         Height = 22
-        Caption = #20998#32452#25171#21360'V2'
+        Caption = #20998#32452#25171#21360'V3'
         OnClick = SpeedButton9Click
       end
     end
