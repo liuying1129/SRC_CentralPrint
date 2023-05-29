@@ -1060,6 +1060,7 @@ begin
     ChartHistogram.View3D:=false;
     ChartHistogram.Legend.Visible:=false;
     ChartHistogram.Color:=clWhite;
+    ChartHistogram.BevelOuter:=bvNone;//如不设置该属性,则打印时底部、右边各有一条灰色线
     ChartHistogram.BackWall.Pen.Visible:=false;//隐藏top、right的框
     ChartHistogram.BottomAxis.Axis.Width:=1;
     ChartHistogram.LeftAxis.Axis.Width:=1;
