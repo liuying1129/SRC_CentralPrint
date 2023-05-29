@@ -1723,7 +1723,7 @@ begin
   iIfCompleted:=ADObasic.FieldByName('ifCompleted').AsInteger;
 
   //加载血流变曲线、直方图、散点图 start
-  if(Sender is TfrxChartView)and(pos('CURVE',uppercase(Sender.Name))>0)then
+  if(Sender is TfrxPictureView)and(pos('CURVE',uppercase(Sender.Name))>0)then
   begin
     Sender.Visible:=false;
     strsqlPrint:='select Reserve8,itemValue,Min_Value,Max_Value '+
@@ -1758,17 +1758,17 @@ begin
       Draw_MVIS2035_Curve(Chart_XLB,Reserve8_1,strtofloatdef(mPa_1,-1),Reserve8_2,strtofloatdef(mPa_2,-1),
                           Reserve8_1,strtofloatdef(mPa_min_1,-1),Reserve8_2,strtofloatdef(mPa_min_2,-1),
                           Reserve8_1,strtofloatdef(mPa_max_1,-1),Reserve8_2,strtofloatdef(mPa_max_2,-1));
-      TfrxChartView(Sender).Assign(Chart_XLB);//指定统计图給FastReport
+      TfrxPictureView(Sender).Picture.Assign(Chart_XLB.TeeCreateMetafile(False,Rect(0,0,Round(Sender.Width),Round(Sender.Height))));//指定统计图給FastReport
 
       Chart_XLB.Free;
     end;
     adotemp11.Free;
   end;
     
-  if(Sender is TfrxChartView)and(pos('CHART',uppercase(Sender.Name))>0)then
+  if(Sender is TfrxPictureView)and(pos('CHART',uppercase(Sender.Name))>0)then
   begin
     Sender.Visible:=false;
-    strEnglishName:=(Sender as TfrxChartView).Name;
+    strEnglishName:=(Sender as TfrxPictureView).Name;
     strEnglishName:=stringreplace(strEnglishName,'Chart','',[rfIgnoreCase]);
     strsqlPrint:='select top 1 histogram,Dosage1 '+
        ' from '+
@@ -1796,7 +1796,7 @@ begin
       Chart_ZFT.Visible:=false;
 
       updatechart(Chart_ZFT,strHistogram,strEnglishName,strXTitle);
-      TfrxChartView(Sender).Assign(Chart_ZFT);//指定统计图給FastReport
+      TfrxPictureView(Sender).Picture.Assign(Chart_ZFT.TeeCreateMetafile(False,Rect(0,0,Round(Sender.Width),Round(Sender.Height))));//指定统计图給FastReport
 
       Chart_ZFT.Free;
     end;
