@@ -236,71 +236,8 @@ object frmMain: TfrmMain
         Caption = #20998#32452#25171#21360'F9'
         OnClick = SpeedButton6Click
       end
-      object ToolButton1: TToolButton
-        Left = 193
-        Top = 2
-        Width = 3
-        Caption = 'ToolButton1'
-        Style = tbsSeparator
-      end
-      object SpeedButton4: TSpeedButton
-        Left = 196
-        Top = 2
-        Width = 88
-        Height = 22
-        Caption = #36873#39033
-        OnClick = SpeedButton4Click
-      end
-      object ToolButton2: TToolButton
-        Left = 284
-        Top = 2
-        Width = 3
-        Caption = 'ToolButton2'
-        ImageIndex = 0
-        Style = tbsSeparator
-      end
-      object SpeedButton5: TSpeedButton
-        Left = 287
-        Top = 2
-        Width = 112
-        Height = 22
-        Caption = #25253#34920#32534#36753#22120
-        OnClick = SpeedButton5Click
-      end
-      object ToolButton3: TToolButton
-        Left = 399
-        Top = 2
-        Width = 3
-        Caption = 'ToolButton3'
-        ImageIndex = 1
-        Style = tbsSeparator
-      end
-      object SpeedButton2: TSpeedButton
-        Left = 402
-        Top = 2
-        Width = 112
-        Height = 22
-        Caption = #20999#25442#24080#21495
-        OnClick = SpeedButton2Click
-      end
-      object ToolButton4: TToolButton
-        Left = 514
-        Top = 2
-        Width = 3
-        Caption = 'ToolButton4'
-        ImageIndex = 2
-        Style = tbsSeparator
-      end
-      object SpeedButton8: TSpeedButton
-        Left = 517
-        Top = 2
-        Width = 112
-        Height = 22
-        Caption = #20462#25913#23494#30721
-        OnClick = SpeedButton8Click
-      end
       object ToolButton5: TToolButton
-        Left = 629
+        Left = 193
         Top = 2
         Width = 3
         Caption = 'ToolButton5'
@@ -308,7 +245,7 @@ object frmMain: TfrmMain
         Style = tbsSeparator
       end
       object SpeedButton3: TSpeedButton
-        Left = 632
+        Left = 196
         Top = 2
         Width = 81
         Height = 22
@@ -316,12 +253,75 @@ object frmMain: TfrmMain
         OnClick = SpeedButton3Click
       end
       object SpeedButton9: TSpeedButton
-        Left = 713
+        Left = 277
         Top = 2
         Width = 112
         Height = 22
         Caption = #20998#32452#25171#21360'V3'
         OnClick = SpeedButton9Click
+      end
+      object ToolButton1: TToolButton
+        Left = 389
+        Top = 2
+        Width = 3
+        Caption = 'ToolButton1'
+        Style = tbsSeparator
+      end
+      object SpeedButton4: TSpeedButton
+        Left = 392
+        Top = 2
+        Width = 88
+        Height = 22
+        Caption = #36873#39033
+        OnClick = SpeedButton4Click
+      end
+      object ToolButton2: TToolButton
+        Left = 480
+        Top = 2
+        Width = 3
+        Caption = 'ToolButton2'
+        ImageIndex = 0
+        Style = tbsSeparator
+      end
+      object SpeedButton5: TSpeedButton
+        Left = 483
+        Top = 2
+        Width = 112
+        Height = 22
+        Caption = #25253#34920#32534#36753#22120
+        OnClick = SpeedButton5Click
+      end
+      object ToolButton3: TToolButton
+        Left = 595
+        Top = 2
+        Width = 3
+        Caption = 'ToolButton3'
+        ImageIndex = 1
+        Style = tbsSeparator
+      end
+      object SpeedButton2: TSpeedButton
+        Left = 598
+        Top = 2
+        Width = 112
+        Height = 22
+        Caption = #20999#25442#24080#21495
+        OnClick = SpeedButton2Click
+      end
+      object ToolButton4: TToolButton
+        Left = 710
+        Top = 2
+        Width = 3
+        Caption = 'ToolButton4'
+        ImageIndex = 2
+        Style = tbsSeparator
+      end
+      object SpeedButton8: TSpeedButton
+        Left = 713
+        Top = 2
+        Width = 112
+        Height = 22
+        Caption = #20462#25913#23494#30721
+        OnClick = SpeedButton8Click
       end
     end
   end
