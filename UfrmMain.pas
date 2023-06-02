@@ -46,7 +46,6 @@ type
     frReport1: TfrReport;
     ado_print: TADOQuery;
     frDBDataSet1: TfrDBDataSet;
-    CheckBox1: TCheckBox;
     SpeedButton6: TSpeedButton;
     SpeedButton2: TSpeedButton;
     ToolButton3: TToolButton;
@@ -78,7 +77,7 @@ type
     frxPDFExport1: TfrxPDFExport;
     SpeedButton3: TSpeedButton;
     SpeedButton9: TSpeedButton;
-    CheckBox3: TCheckBox;
+    RadioGroup2: TRadioGroup;
     procedure FormShow(Sender: TObject);
     procedure SpeedButton4Click(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -159,8 +158,7 @@ var
 begin
   CONFIGINI:=TINIFILE.Create(ChangeFileExt(Application.ExeName,'.ini'));
 
-  CheckBox1.Checked:=configini.ReadBool('Interface','ifPreview',false);{记录是否打印预览模式}
-  CheckBox3.Checked:=configini.ReadBool('Interface','ifPDFExport',false);{记录是否导出PDF}
+  RadioGroup2.ItemIndex:=configini.ReadInteger('Interface','ifPreview',0);{记录打印预览、直接打印、导出PDF}
   DBGrid1.Width:=configini.ReadInteger('Interface','gridBaseInfoWidth',680);{记录基本信息框宽度}
   Memo1.Height:=configini.ReadInteger('Interface','memoLogHeight',150);{记录组合项目选择框高度}
 
@@ -325,9 +323,7 @@ begin
   configini.WriteInteger('Interface','memoLogHeight',Memo1.Height);{记录结果框高度}
   
   configini.WriteInteger('Interface','ifPrintRadio',RadioGroup3.ItemIndex);
-
-  configini.WriteBool('Interface','ifPreview',CheckBox1.Checked);{记录是否打印预览模式}
-  configini.WriteBool('Interface','ifPDFExport',CheckBox3.Checked);{记录是否导出PDF}
+  configini.WriteInteger('Interface','ifPreview',RadioGroup2.ItemIndex);{记录是否打印预览模式}
 
   configini.WriteString('Interface','check_doctor',LabeledEdit4.Text);{记录送检医生,实现“仅看自己送检的样本”功能}
 
@@ -742,7 +738,7 @@ begin
       continue;
     end;
 
-    if CheckBox1.Checked then  //预览模式
+    if RadioGroup2.ItemIndex=0 then  //预览模式
       frReport1.ShowReport
     else  //直接打印模式
     begin
@@ -1192,7 +1188,7 @@ begin
       continue;
     end;
 
-    if CheckBox1.Checked then  //预览模式
+    if RadioGroup2.ItemIndex=0 then  //预览模式
       frReport1.ShowReport
     else  //直接打印模式
     begin
@@ -1365,13 +1361,15 @@ var
   sUnid,sCombin_Id:string;
   iIfCompleted:integer;
 
-  i:integer;
+  i,j,k:integer;
 
   sPatientname,sSex,sAge:string;
   
   Save_Cursor:TCursor;
   OldCurrent:TBookmark;
   PDFExportPath:String;
+
+  mvPictureTitle:TfrxMemoView;
 begin
   if not ifhaspower(sender,powerstr_js_main) then exit;
 
@@ -1380,7 +1378,7 @@ begin
 
   if DBGrid1.SelectedRows.Count<=0 then exit;
 
-  if CheckBox3.Checked then
+  if RadioGroup2.ItemIndex=2 then
     if not SelectDirectory('请选择PDF导出目录','',PDFExportPath) then exit;
 
   Save_Cursor := Screen.Cursor;
@@ -1455,6 +1453,25 @@ begin
       continue;
     end;
 
+    //动态创建图片标题begin
+    //待处理问题:是否需要释放mvPictureTitle?何时释放?
+    for j:=0 to frxReport1.PagesCount-1 do
+    begin
+      for k:=0 to frxReport1.Pages[j].Objects.Count-1 do
+      begin
+        if TObject(frxReport1.Pages[j].Objects.Items[k]) is TfrxPictureView then
+        begin
+          if uppercase(leftstr(TfrxPictureView(frxReport1.Pages[j].Objects.Items[k]).Name,7))='PICTURE' then
+          begin
+            mvPictureTitle:=TfrxMemoView.Create(frxReport1.Pages[j]);
+            mvPictureTitle.Name:='mv'+TfrxPictureView(frxReport1.Pages[j].Objects.Items[k]).Name;
+            mvPictureTitle.Visible:=false;
+          end;
+        end;
+      end;
+    end;
+    //动态创建图片标题end
+
     strsqlPrint:='select itemid as 项目代码,name as 名称,english_name as 英文名,'+
             ' itemvalue as 检验结果,'+
             ' min_value as 最小值,max_value as 最大值,'+
@@ -1483,7 +1500,7 @@ begin
       continue;
     end;
 
-    if CheckBox3.Checked then//导出PDF
+    if RadioGroup2.ItemIndex=2 then//导出PDF
     begin
       frxReport1.PrepareReport;
       frxPDFExport1.ShowDialog:=False;
@@ -1491,7 +1508,7 @@ begin
       frxPDFExport1.FileName:=sUnid+sPatientname+'.pdf';
       frxReport1.Export(frxPDFExport1);
     end else
-    if CheckBox1.Checked then  //预览模式
+    if RadioGroup2.ItemIndex=0 then  //预览模式
       frxReport1.ShowReport
     else  //直接打印模式
     begin
@@ -1513,13 +1530,15 @@ var
 
   sUnid,sCombin_Id,sReport_Doctor:string;
 
-  i,iIfCompleted:integer;
+  i,j,k,iIfCompleted:integer;
 
   sPatientname,sSex,sAge:string;
 
   Save_Cursor:TCursor;
   OldCurrent:TBookmark;
   PDFExportPath:String;
+
+  mvPictureTitle:TfrxMemoView;
 begin
   if not ifhaspower(sender,powerstr_js_main) then exit;
 
@@ -1528,7 +1547,7 @@ begin
 
   if DBGrid1.SelectedRows.Count<=0 then exit;
 
-  if CheckBox3.Checked then
+  if RadioGroup2.ItemIndex=2 then
     if not SelectDirectory('请选择PDF导出目录','',PDFExportPath) then exit;
 
   Save_Cursor := Screen.Cursor;
@@ -1580,6 +1599,25 @@ begin
       continue;
     end;
 
+    //动态创建图片标题begin
+    //待处理问题:是否需要释放mvPictureTitle?何时释放?
+    for j:=0 to frxReport1.PagesCount-1 do
+    begin
+      for k:=0 to frxReport1.Pages[j].Objects.Count-1 do
+      begin
+        if TObject(frxReport1.Pages[j].Objects.Items[k]) is TfrxPictureView then
+        begin
+          if uppercase(leftstr(TfrxPictureView(frxReport1.Pages[j].Objects.Items[k]).Name,7))='PICTURE' then
+          begin
+            mvPictureTitle:=TfrxMemoView.Create(frxReport1.Pages[j]);
+            mvPictureTitle.Name:='mv'+TfrxPictureView(frxReport1.Pages[j].Objects.Items[k]).Name;
+            mvPictureTitle.Visible:=false;
+          end;
+        end;
+      end;
+    end;
+    //动态创建图片标题end
+
     strsqlPrint:='select cv.combin_name as name,cv.name as 名称,cv.english_name as 英文名,cv.itemvalue as 检验结果,'+
       'cv.unit as 单位,cv.min_value as 最小值,cv.max_value as 最大值,'+
       ' dbo.uf_Reference_Value_B1(cv.min_value,cv.max_value) as 前段参考范围,dbo.uf_Reference_Value_B2(cv.min_value,cv.max_value) as 后段参考范围,'+
@@ -1605,7 +1643,7 @@ begin
       continue;
     end;
 
-    if CheckBox3.Checked then//导出PDF
+    if RadioGroup2.ItemIndex=2 then//导出PDF
     begin
       frxReport1.PrepareReport;
       frxPDFExport1.ShowDialog:=False;
@@ -1613,7 +1651,7 @@ begin
       frxPDFExport1.FileName:=sUnid+sPatientname+'.pdf';
       frxReport1.Export(frxPDFExport1);
     end else
-    if CheckBox1.Checked then  //预览模式
+    if RadioGroup2.ItemIndex=0 then  //预览模式
       frxReport1.ShowReport
     else  //直接打印模式
     begin
@@ -1716,6 +1754,8 @@ var
   mPa_max_1,mPa_max_2:string;//粘度
   Chart_XLB:TChart;
   //血流变变量stop
+
+  mvPictureTitle:TfrxMemoView;
 begin
   if not ADObasic.Active then exit;
   if not ADObasic.RecordCount=0 then exit;
@@ -1836,6 +1876,18 @@ begin
       MS.Free;
       TfrxPictureView(Sender).Picture.assign(tempjpeg);
       tempjpeg.Free;
+      
+      //显示图片标题begin
+      mvPictureTitle:=TfrxMemoView(frxReport1.FindObject('mv'+Sender.Name));
+      if (mvPictureTitle<>nil) and (mvPictureTitle is TfrxMemoView) then
+      begin
+        mvPictureTitle.AutoWidth:=True;
+        mvPictureTitle.Font.Name:='宋体';
+        mvPictureTitle.SetBounds((Sender as TfrxPictureView).Left, (Sender as TfrxPictureView).Top-20, 50, 20);
+        mvPictureTitle.Text:=adotemp11.fieldbyname('english_name').AsString;
+        mvPictureTitle.Visible:=true;
+      end;
+      //显示图片标题end
     end;
     adotemp11.Free;
   end;

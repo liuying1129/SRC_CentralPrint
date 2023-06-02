@@ -122,16 +122,6 @@ object frmMain: TfrmMain
         #26410#25171#21360)
       TabOrder = 5
     end
-    object CheckBox1: TCheckBox
-      Left = 8
-      Top = 390
-      Width = 75
-      Height = 17
-      Caption = #25171#21360#39044#35272
-      Ctl3D = True
-      ParentCtl3D = False
-      TabOrder = 6
-    end
     object DateTimePicker1: TDateTimePicker
       Left = 8
       Top = 33
@@ -139,7 +129,7 @@ object frmMain: TfrmMain
       Height = 21
       Date = 45272.000000000000000000
       Time = 45272.000000000000000000
-      TabOrder = 7
+      TabOrder = 6
     end
     object DateTimePicker2: TDateTimePicker
       Left = 8
@@ -148,7 +138,7 @@ object frmMain: TfrmMain
       Height = 21
       Date = 45272.999988425920000000
       Time = 45272.999988425920000000
-      TabOrder = 8
+      TabOrder = 7
     end
     object RadioGroup1: TRadioGroup
       Left = 108
@@ -163,7 +153,7 @@ object frmMain: TfrmMain
         #26368#36817'1'#21608
         #26368#36817'1'#26376)
       ParentCtl3D = False
-      TabOrder = 9
+      TabOrder = 8
       OnClick = RadioGroup1Click
     end
     object ComboBox1: TComboBox
@@ -172,7 +162,7 @@ object frmMain: TfrmMain
       Width = 121
       Height = 21
       ItemHeight = 13
-      TabOrder = 10
+      TabOrder = 9
     end
     object LabeledEdit5: TLabeledEdit
       Left = 78
@@ -185,15 +175,20 @@ object frmMain: TfrmMain
       EditLabel.Caption = #25152#23646#20844#21496
       LabelPosition = lpLeft
       ParentCtl3D = False
-      TabOrder = 11
+      TabOrder = 10
     end
-    object CheckBox3: TCheckBox
-      Left = 128
-      Top = 390
-      Width = 73
-      Height = 17
-      Caption = #23548#20986'PDF'
-      TabOrder = 12
+    object RadioGroup2: TRadioGroup
+      Left = 8
+      Top = 382
+      Width = 193
+      Height = 41
+      Columns = 3
+      ItemIndex = 0
+      Items.Strings = (
+        #25171#21360#39044#35272
+        #30452#25509#25171#21360
+        #23548#20986'PDF')
+      TabOrder = 11
     end
   end
   object CoolBar1: TCoolBar
