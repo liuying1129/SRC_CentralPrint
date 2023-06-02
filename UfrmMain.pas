@@ -1848,7 +1848,7 @@ begin
     Sender.Visible:=false;
     strEnglishName:=(Sender as TfrxPictureView).Name;
     strEnglishName:=stringreplace(strEnglishName,'Picture','',[rfIgnoreCase]);
-    strsqlPrint:='select top 1 Photo '+
+    strsqlPrint:='select top 1 Photo,english_name '+
        ' from '+
        ifThen(iIfCompleted=1,'chk_valu_bak','chk_valu') +
        ' WITH(NOLOCK) where pkunid=:pkunid '+
