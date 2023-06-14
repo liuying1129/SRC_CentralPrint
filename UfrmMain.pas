@@ -111,6 +111,7 @@ type
     procedure frxReport1GetValue(const VarName: String;
       var Value: Variant);
     procedure frxReport1BeforePrint(Sender: TfrxReportComponent);
+    procedure frxReport1BeginDoc(Sender: TObject);
   private
     procedure WriteProfile;
     procedure ReadConfig;
@@ -1361,7 +1362,7 @@ var
   sUnid,sCombin_Id:string;
   iIfCompleted:integer;
 
-  i,j,k:integer;
+  i:integer;
 
   sPatientname,sSex,sAge:string;
   
@@ -1369,7 +1370,6 @@ var
   OldCurrent:TBookmark;
   PDFExportPath:String;
 
-  mvPictureTitle:TfrxMemoView;
   frxMasterData:TfrxMasterData;  
 begin
   if not ifhaspower(sender,powerstr_js_main) then exit;
@@ -1458,25 +1458,6 @@ begin
       continue;
     end;
 
-    //动态创建图片标题begin
-    //待处理问题:是否需要释放mvPictureTitle?何时释放?
-    for j:=0 to frxReport1.PagesCount-1 do
-    begin
-      for k:=0 to frxReport1.Pages[j].Objects.Count-1 do
-      begin
-        if TObject(frxReport1.Pages[j].Objects.Items[k]) is TfrxPictureView then
-        begin
-          if uppercase(leftstr(TfrxPictureView(frxReport1.Pages[j].Objects.Items[k]).Name,7))='PICTURE' then
-          begin
-            mvPictureTitle:=TfrxMemoView.Create(frxReport1.Pages[j]);
-            mvPictureTitle.Name:='mv'+TfrxPictureView(frxReport1.Pages[j].Objects.Items[k]).Name;
-            mvPictureTitle.Visible:=false;
-          end;
-        end;
-      end;
-    end;
-    //动态创建图片标题end
-
     strsqlPrint:='select itemid as 项目代码,name as 名称,english_name as 英文名,'+
             ' itemvalue as 检验结果,'+
             ' min_value as 最小值,max_value as 最大值,'+
@@ -1544,7 +1525,7 @@ var
 
   sUnid,sCombin_Id,sReport_Doctor:string;
 
-  i,j,k,iIfCompleted:integer;
+  i,iIfCompleted:integer;
 
   sPatientname,sSex,sAge:string;
 
@@ -1552,7 +1533,6 @@ var
   OldCurrent:TBookmark;
   PDFExportPath:String;
 
-  mvPictureTitle:TfrxMemoView;
   frxMasterData:TfrxMasterData;  
 begin
   if not ifhaspower(sender,powerstr_js_main) then exit;
@@ -1618,25 +1598,6 @@ begin
       continue;
     end;
 
-    //动态创建图片标题begin
-    //待处理问题:是否需要释放mvPictureTitle?何时释放?
-    for j:=0 to frxReport1.PagesCount-1 do
-    begin
-      for k:=0 to frxReport1.Pages[j].Objects.Count-1 do
-      begin
-        if TObject(frxReport1.Pages[j].Objects.Items[k]) is TfrxPictureView then
-        begin
-          if uppercase(leftstr(TfrxPictureView(frxReport1.Pages[j].Objects.Items[k]).Name,7))='PICTURE' then
-          begin
-            mvPictureTitle:=TfrxMemoView.Create(frxReport1.Pages[j]);
-            mvPictureTitle.Name:='mv'+TfrxPictureView(frxReport1.Pages[j].Objects.Items[k]).Name;
-            mvPictureTitle.Visible:=false;
-          end;
-        end;
-      end;
-    end;
-    //动态创建图片标题end
-
     strsqlPrint:='select cv.combin_name as name,cv.name as 名称,cv.english_name as 英文名,cv.itemvalue as 检验结果,'+
       'cv.unit as 单位,cv.min_value as 最小值,cv.max_value as 最大值,'+
       ' dbo.uf_Reference_Value_B1(cv.min_value,cv.max_value) as 前段参考范围,dbo.uf_Reference_Value_B2(cv.min_value,cv.max_value) as 后段参考范围,'+
@@ -1693,76 +1654,6 @@ begin
   Screen.Cursor := Save_Cursor;  { Always restore to normal }
 
   MessageDlg('打印操作完成！',mtInformation,[mbOK],0);
-end;
-
-procedure TfrmMain.frxReport1PrintReport(Sender: TObject);
-var
-  unid,printtimes,iIfCompleted:integer;
-begin
-  if not ADObasic.Active then exit;
-  if not ADObasic.RecordCount=0 then exit;
-
-  unid:=ADObasic.fieldbyname('唯一编号').AsInteger;
-  printtimes:=ADObasic.fieldbyname('打印次数').AsInteger;
-  iIfCompleted:=ADObasic.FieldByName('ifCompleted').AsInteger;
-
-  if printtimes=0 then//修改打印次数
-    ExecSQLCmd(LisConn,'update '+ifThen(iIfCompleted=1,'chk_con_bak','chk_con')+' set printtimes='+inttostr(printtimes+1)+' where unid='+inttostr(unid));
-  
-  ExecSQLCmd(LisConn,'insert into pix_tran (pkunid,Reserve1,Reserve2,OpType) values ('+inttostr(unid)+','''+operator_name+''',''Class_Print'',''Nurse'')');
-end;
-
-procedure TfrmMain.frxReport1GetValue(const VarName: String;
-  var Value: Variant);
-var
-  ItemChnName:string;
-  cur_value:string;
-  min_value:string;
-  max_value:string;
-  i:integer;
-  adotemp22:Tadoquery;
-begin
-    if VarName='SCSYDW' then Value:=SCSYDW;
-
-    if VarName='CXZF' then
-    BEGIN
-      ItemChnName:=trim(ADO_print.fieldbyname('项目代码').AsString);
-      cur_value:=trim(ADO_print.fieldbyname('检验结果').AsString);
-      min_value:=trim(ADO_print.fieldbyname('最小值').AsString);
-      max_value:=trim(ADO_print.fieldbyname('最大值').AsString);
-
-      adotemp22:=Tadoquery.Create(nil);
-      adotemp22.Connection:=dm.ADOConnection1;
-      adotemp22.Close;
-      adotemp22.SQL.Clear;
-      adotemp22.SQL.Text:='select dbo.uf_ValueAlarm('''+ItemChnName+''','''+min_value+''','''+max_value+''','''+cur_value+''') as ifValueAlarm';
-      try//uf_ValueAlarm中的convert函数可能抛出异常
-        adotemp22.Open;
-        i:=adotemp22.fieldbyname('ifValueAlarm').AsInteger;
-      except
-        i:=0;
-      end;
-      adotemp22.Free;
-      if i=1 then
-        Value := TRIM(COPY(CXZF,3,2))
-      else if i=2 then
-        Value := TRIM(COPY(CXZF,1,2))
-      else Value:='';
-    END;
-
-    if VarName='打印者' then Value:=operator_name;
-    if VarName='所属公司' then Value:=trim(ADObasic.fieldbyname('所属公司').AsString);
-    if VarName='姓名' then Value:=trim(ADObasic.fieldbyname('姓名').AsString);
-    if VarName='性别' then Value:=trim(ADObasic.fieldbyname('性别').AsString);
-    if VarName='体检日期' then Value:=ADObasic.fieldbyname('检查日期').AsDateTime;
-    if VarName='年龄' then Value:=trim(ADObasic.fieldbyname('年龄').AsString);
-    if VarName='婚否' then Value:=trim(ADObasic.fieldbyname('婚否').AsString);
-    if VarName='工种' then Value:=trim(ADObasic.fieldbyname('工种').AsString);
-    if VarName='籍贯' then Value:=trim(ADObasic.fieldbyname('籍贯').AsString);
-    if VarName='住址' then Value:=trim(ADObasic.fieldbyname('住址').AsString);
-    if VarName='电话' then Value:=trim(ADObasic.fieldbyname('电话').AsString);
-
-    if VarName='检验设备' then Value:=ScalarSQLCmd(LisConn,'select dbo.uf_GetEquipFromChkUnid('+ADObasic.fieldbyname('ifCompleted').AsString+','+ADObasic.fieldbyname('唯一编号').AsString+')');
 end;
 
 procedure TfrmMain.frxReport1BeforePrint(Sender: TfrxReportComponent);
@@ -1880,7 +1771,6 @@ begin
        ' from '+
        ifThen(iIfCompleted=1,'chk_valu_bak','chk_valu') +
        ' WITH(NOLOCK) where pkunid=:pkunid '+
-       //' and english_name=:english_name '+
        ' and itemid=:itemid '+//edit by liuying 20110414
        ' and Photo is not null '+
        ' and issure=1 ';
@@ -1890,7 +1780,6 @@ begin
     adotemp11.SQL.Clear;
     adotemp11.SQL.Text:=strsqlPrint;
     adotemp11.Parameters.ParamByName('pkunid').Value:=unid;
-    //adotemp11.Parameters.ParamByName('english_name').Value:=strEnglishName;
     adotemp11.Parameters.ParamByName('itemid').Value:=strEnglishName;//edit by liuying 20110414
     adotemp11.Open;
     if not adotemp11.fieldbyname('photo').IsNull then
@@ -1920,6 +1809,101 @@ begin
     adotemp11.Free;
   end;
   //加载血流变曲线、直方图、散点图 stop
+end;
+
+procedure TfrmMain.frxReport1BeginDoc(Sender: TObject);
+var
+  j,k:integer;
+  mvPictureTitle:TfrxMemoView;
+begin
+  //动态创建图片标题begin
+  //待处理问题:是否需要释放mvPictureTitle?何时释放?
+  for j:=0 to (Sender as TfrxReport).PagesCount-1 do
+  begin
+    for k:=0 to (Sender as TfrxReport).Pages[j].Objects.Count-1 do
+    begin
+      if TObject((Sender as TfrxReport).Pages[j].Objects.Items[k]) is TfrxPictureView then
+      begin
+        if uppercase(leftstr(TfrxPictureView((Sender as TfrxReport).Pages[j].Objects.Items[k]).Name,7))='PICTURE' then
+        begin
+          mvPictureTitle:=TfrxMemoView.Create((Sender as TfrxReport).Pages[j]);
+          mvPictureTitle.Name:='mv'+TfrxPictureView((Sender as TfrxReport).Pages[j].Objects.Items[k]).Name;
+          mvPictureTitle.Visible:=false;
+        end;
+      end;
+    end;
+  end;
+  //动态创建图片标题end
+end;
+
+procedure TfrmMain.frxReport1GetValue(const VarName: String;
+  var Value: Variant);
+var
+  ItemChnName:string;
+  cur_value:string;
+  min_value:string;
+  max_value:string;
+  i:integer;
+  adotemp22:Tadoquery;
+begin
+    if VarName='SCSYDW' then Value:=SCSYDW;
+
+    if VarName='CXZF' then
+    BEGIN
+      ItemChnName:=trim(ADO_print.fieldbyname('项目代码').AsString);
+      cur_value:=trim(ADO_print.fieldbyname('检验结果').AsString);
+      min_value:=trim(ADO_print.fieldbyname('最小值').AsString);
+      max_value:=trim(ADO_print.fieldbyname('最大值').AsString);
+
+      adotemp22:=Tadoquery.Create(nil);
+      adotemp22.Connection:=dm.ADOConnection1;
+      adotemp22.Close;
+      adotemp22.SQL.Clear;
+      adotemp22.SQL.Text:='select dbo.uf_ValueAlarm('''+ItemChnName+''','''+min_value+''','''+max_value+''','''+cur_value+''') as ifValueAlarm';
+      try//uf_ValueAlarm中的convert函数可能抛出异常
+        adotemp22.Open;
+        i:=adotemp22.fieldbyname('ifValueAlarm').AsInteger;
+      except
+        i:=0;
+      end;
+      adotemp22.Free;
+      if i=1 then
+        Value := TRIM(COPY(CXZF,3,2))
+      else if i=2 then
+        Value := TRIM(COPY(CXZF,1,2))
+      else Value:='';
+    END;
+
+    if VarName='打印者' then Value:=operator_name;
+    if VarName='所属公司' then Value:=trim(ADObasic.fieldbyname('所属公司').AsString);
+    if VarName='姓名' then Value:=trim(ADObasic.fieldbyname('姓名').AsString);
+    if VarName='性别' then Value:=trim(ADObasic.fieldbyname('性别').AsString);
+    if VarName='体检日期' then Value:=ADObasic.fieldbyname('检查日期').AsDateTime;
+    if VarName='年龄' then Value:=trim(ADObasic.fieldbyname('年龄').AsString);
+    if VarName='婚否' then Value:=trim(ADObasic.fieldbyname('婚否').AsString);
+    if VarName='工种' then Value:=trim(ADObasic.fieldbyname('工种').AsString);
+    if VarName='籍贯' then Value:=trim(ADObasic.fieldbyname('籍贯').AsString);
+    if VarName='住址' then Value:=trim(ADObasic.fieldbyname('住址').AsString);
+    if VarName='电话' then Value:=trim(ADObasic.fieldbyname('电话').AsString);
+
+    if VarName='检验设备' then Value:=ScalarSQLCmd(LisConn,'select dbo.uf_GetEquipFromChkUnid('+ADObasic.fieldbyname('ifCompleted').AsString+','+ADObasic.fieldbyname('唯一编号').AsString+')');
+end;
+
+procedure TfrmMain.frxReport1PrintReport(Sender: TObject);
+var
+  unid,printtimes,iIfCompleted:integer;
+begin
+  if not ADObasic.Active then exit;
+  if not ADObasic.RecordCount=0 then exit;
+
+  unid:=ADObasic.fieldbyname('唯一编号').AsInteger;
+  printtimes:=ADObasic.fieldbyname('打印次数').AsInteger;
+  iIfCompleted:=ADObasic.FieldByName('ifCompleted').AsInteger;
+
+  if printtimes=0 then//修改打印次数
+    ExecSQLCmd(LisConn,'update '+ifThen(iIfCompleted=1,'chk_con_bak','chk_con')+' set printtimes='+inttostr(printtimes+1)+' where unid='+inttostr(unid));
+  
+  ExecSQLCmd(LisConn,'insert into pix_tran (pkunid,Reserve1,Reserve2,OpType) values ('+inttostr(unid)+','''+operator_name+''',''Class_Print'',''Nurse'')');
 end;
 
 end.
