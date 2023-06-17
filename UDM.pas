@@ -59,7 +59,6 @@ var
   ifEnterGetCode:boolean;//记录是否 填写病人基本信息时,直接回车弹出取码框
   deptname_match:string;//记录送检科室的取码匹配方式
   check_doctor_match:string;////记录送检医生的取码匹配方式
-  CXZF:STRING;//检验结果超限字符
   SCSYDW:STRING;//授权使用单位
   SmoothNum:integer;//直方图光滑次数
   LisConn:string;//Lis连接字符串,MakeDBConn过程中被赋值,然后传入QC.DLL、CalcItemPro.dll
