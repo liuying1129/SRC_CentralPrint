@@ -650,6 +650,7 @@ object frmMain: TfrmMain
     ShowProgress = True
     OverwritePrompt = False
     DataOnly = False
+    EmbeddedFonts = True
     PrintOptimized = False
     Outline = False
     Background = False
