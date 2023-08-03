@@ -1513,7 +1513,8 @@ begin
 
   Screen.Cursor := Save_Cursor;  { Always restore to normal }
   
-  MessageDlg('打印操作完成！',mtInformation,[mbOK],0);
+  if length(memo1.Lines.Text)>=60000 then memo1.Lines.Clear;//memo只能接受64K个字符
+  memo1.Lines.Add(FormatDatetime('YYYY-MM-DD HH:NN:SS', Now) + ':打印操作完成！');
 end;
 
 procedure TfrmMain.SpeedButton9Click(Sender: TObject);
@@ -1650,7 +1651,8 @@ begin
 
   Screen.Cursor := Save_Cursor;  { Always restore to normal }
 
-  MessageDlg('打印操作完成！',mtInformation,[mbOK],0);
+  if length(memo1.Lines.Text)>=60000 then memo1.Lines.Clear;//memo只能接受64K个字符
+  memo1.Lines.Add(FormatDatetime('YYYY-MM-DD HH:NN:SS', Now) + ':打印操作完成！');
 end;
 
 procedure TfrmMain.frxReport1BeforePrint(Sender: TfrxReportComponent);
