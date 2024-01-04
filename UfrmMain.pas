@@ -78,6 +78,11 @@ type
     SpeedButton3: TSpeedButton;
     SpeedButton9: TSpeedButton;
     RadioGroup2: TRadioGroup;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
     procedure FormShow(Sender: TObject);
     procedure SpeedButton4Click(Sender: TObject);
     procedure FormDestroy(Sender: TObject);

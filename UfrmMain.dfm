@@ -1,8 +1,8 @@
 object frmMain: TfrmMain
-  Left = 192
-  Top = 122
+  Left = 196
+  Top = 32
   Width = 928
-  Height = 536
+  Height = 649
   Caption = #38598#20013#25171#21360
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
@@ -22,7 +22,7 @@ object frmMain: TfrmMain
     Left = 0
     Top = 37
     Width = 209
-    Height = 441
+    Height = 554
     Align = alLeft
     Color = 16767438
     TabOrder = 0
@@ -46,6 +46,71 @@ object frmMain: TfrmMain
       Width = 39
       Height = 13
       Caption = #24037#20316#32452
+    end
+    object Label4: TLabel
+      Left = 8
+      Top = 445
+      Width = 26
+      Height = 13
+      Caption = #27880#65306
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlue
+      Font.Height = -13
+      Font.Name = #23435#20307
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label5: TLabel
+      Left = 8
+      Top = 465
+      Width = 189
+      Height = 13
+      Caption = '1'#12289#28857#20987#22995#21517#12289#30149#21382#21495#12289#25152#23646#20844#21496
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlue
+      Font.Height = -13
+      Font.Name = #23435#20307
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label6: TLabel
+      Left = 8
+      Top = 503
+      Width = 137
+      Height = 13
+      Caption = '2'#12289#28857#20987#21246#36873#26694#30340#26631#39064#26639
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlue
+      Font.Height = -13
+      Font.Name = #23435#20307
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label7: TLabel
+      Left = 28
+      Top = 483
+      Width = 117
+      Height = 13
+      Caption = #30340#26631#39064#26639#21487#36827#34892#25490#24207
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlue
+      Font.Height = -13
+      Font.Name = #23435#20307
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label8: TLabel
+      Left = 28
+      Top = 521
+      Width = 117
+      Height = 13
+      Caption = #21487#23454#29616#20840#36873#12289#20840#19981#36873
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlue
+      Font.Height = -13
+      Font.Name = #23435#20307
+      Font.Style = []
+      ParentFont = False
     end
     object LabeledEdit1: TLabeledEdit
       Left = 78
@@ -161,6 +226,7 @@ object frmMain: TfrmMain
       Top = 187
       Width = 121
       Height = 21
+      DropDownCount = 20
       ItemHeight = 13
       TabOrder = 9
     end
@@ -324,24 +390,24 @@ object frmMain: TfrmMain
     Left = 209
     Top = 37
     Width = 703
-    Height = 441
+    Height = 554
     Align = alClient
     TabOrder = 2
     object Splitter1: TSplitter
       Left = 305
       Top = 1
-      Height = 439
+      Height = 552
     end
     object Panel3: TPanel
       Left = 308
       Top = 1
       Width = 394
-      Height = 439
+      Height = 552
       Align = alClient
       TabOrder = 0
       object Splitter2: TSplitter
         Left = 1
-        Top = 292
+        Top = 405
         Width = 392
         Height = 3
         Cursor = crVSplit
@@ -349,7 +415,7 @@ object frmMain: TfrmMain
       end
       object Memo1: TMemo
         Left = 1
-        Top = 295
+        Top = 408
         Width = 392
         Height = 143
         Align = alBottom
@@ -364,7 +430,7 @@ object frmMain: TfrmMain
         Left = 1
         Top = 1
         Width = 392
-        Height = 291
+        Height = 404
         ActivePage = TabSheet2
         Align = alClient
         TabOrder = 1
@@ -397,7 +463,7 @@ object frmMain: TfrmMain
             Left = 0
             Top = 0
             Width = 384
-            Height = 263
+            Height = 376
             Align = alClient
             TabOrder = 0
           end
@@ -408,7 +474,7 @@ object frmMain: TfrmMain
       Left = 1
       Top = 1
       Width = 304
-      Height = 439
+      Height = 552
       Align = alLeft
       AllowedSelections = [gstRecordBookmarks, gstRectangle, gstColumns]
       Color = 16767438
@@ -427,7 +493,7 @@ object frmMain: TfrmMain
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 478
+    Top = 591
     Width = 912
     Height = 19
     Panels = <
