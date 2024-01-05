@@ -503,6 +503,8 @@ begin
   dbgrid1.Columns[0].Title.TitleButton:=true;//排序,姓名
   dbgrid1.Columns[4].Title.TitleButton:=true;//排序,病历号
   dbgrid1.Columns[21].Title.TitleButton:=true;//排序,所属公司
+
+  dbgrid1.FrozenCols:=1;//第1列冻结
 end;
 
 procedure TfrmMain.ADOQuery2AfterOpen(DataSet: TDataSet);

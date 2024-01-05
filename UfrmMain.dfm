@@ -245,10 +245,10 @@ object frmMain: TfrmMain
     end
     object RadioGroup2: TRadioGroup
       Left = 8
-      Top = 382
+      Top = 376
       Width = 193
-      Height = 41
-      Columns = 3
+      Height = 60
+      Columns = 2
       ItemIndex = 0
       Items.Strings = (
         #25171#21360#39044#35272
