@@ -1368,7 +1368,7 @@ var
 
   i:integer;
 
-  sPatientname,sSex,sAge:string;
+  sPatientname,sSex,sAge,sCheck_Date:string;
   
   Save_Cursor:TCursor;
   OldCurrent:TBookmark;
@@ -1403,6 +1403,7 @@ begin
     sPatientname:=trim(DBGrid1.DataSource.DataSet.fieldbyname('姓名').AsString);
     sSex:=DBGrid1.DataSource.DataSet.fieldbyname('性别').AsString;
     sAge:=DBGrid1.DataSource.DataSet.fieldbyname('年龄').AsString;
+    sCheck_Date:=FormatDateTime('yyyymmdd',DBGrid1.DataSource.DataSet.fieldbyname('检查日期').AsDateTime);
 
     //判断该就诊人员是否存在未审核结果START
     if strtoint(ScalarSQLCmd(LisConn,'select count(*) from chk_con where Patientname='''+sPatientname+''' and isnull(sex,'''')='''+sSex+''' and dbo.uf_GetAgeReal(age)=dbo.uf_GetAgeReal('''+sAge+''') and isnull(report_doctor,'''')='''' '))>0 then
@@ -1504,7 +1505,7 @@ begin
       frxReport1.PrepareReport;
       frxPDFExport1.ShowDialog:=False;
       frxPDFExport1.DefaultPath:=PDFExportPath;
-      frxPDFExport1.FileName:=sUnid+sPatientname+'.pdf';
+      frxPDFExport1.FileName:=sPatientname+'&'+sCheck_Date+'-'+sUnid+'.pdf';
       frxReport1.Export(frxPDFExport1);
     end else
     if RadioGroup2.ItemIndex=0 then  //预览模式
@@ -1532,7 +1533,7 @@ var
 
   i,iIfCompleted:integer;
 
-  sPatientname,sSex,sAge:string;
+  sPatientname,sSex,sAge,sCheck_Date:string;
 
   Save_Cursor:TCursor;
   OldCurrent:TBookmark;
@@ -1568,6 +1569,7 @@ begin
     sPatientname:=trim(DBGrid1.DataSource.DataSet.fieldbyname('姓名').AsString);
     sSex:=DBGrid1.DataSource.DataSet.fieldbyname('性别').AsString;
     sAge:=DBGrid1.DataSource.DataSet.fieldbyname('年龄').AsString;
+    sCheck_Date:=FormatDateTime('yyyymmdd',DBGrid1.DataSource.DataSet.fieldbyname('检查日期').AsDateTime);
 
     //判断该就诊人员是否存在未审核结果START
     if strtoint(ScalarSQLCmd(LisConn,'select count(*) from chk_con where Patientname='''+sPatientname+''' and isnull(sex,'''')='''+sSex+''' and dbo.uf_GetAgeReal(age)=dbo.uf_GetAgeReal('''+sAge+''') and isnull(report_doctor,'''')='''' '))>0 then
@@ -1642,7 +1644,7 @@ begin
       frxReport1.PrepareReport;
       frxPDFExport1.ShowDialog:=False;
       frxPDFExport1.DefaultPath:=PDFExportPath;
-      frxPDFExport1.FileName:=sUnid+sPatientname+'.pdf';
+      frxPDFExport1.FileName:=sPatientname+'&'+sCheck_Date+'-'+sUnid+'.pdf';
       frxReport1.Export(frxPDFExport1);
     end else
     if RadioGroup2.ItemIndex=0 then  //预览模式
