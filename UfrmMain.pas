@@ -1509,10 +1509,10 @@ begin
       frxReport1.Export(frxPDFExport1);
     end else
     if RadioGroup2.ItemIndex=0 then  //预览模式
-      frxReport1.ShowReport
+      begin frxReport1.PrintOptions.ShowDialog:=false;frxReport1.ShowReport; end
     else  //直接打印模式
     begin
-      if frxReport1.PrepareReport then frxReport1.Print;
+      if frxReport1.PrepareReport then begin frxReport1.PrintOptions.ShowDialog:=false;frxReport1.Print;end;
     end;    
   end;
   DBGrid1.DataSource.DataSet.GotoBookmark(OldCurrent);
@@ -1648,10 +1648,10 @@ begin
       frxReport1.Export(frxPDFExport1);
     end else
     if RadioGroup2.ItemIndex=0 then  //预览模式
-      frxReport1.ShowReport
+      begin frxReport1.PrintOptions.ShowDialog:=false;frxReport1.ShowReport; end
     else  //直接打印模式
     begin
-      if frxReport1.PrepareReport then frxReport1.Print;
+      if frxReport1.PrepareReport then begin frxReport1.PrintOptions.ShowDialog:=false;frxReport1.Print;end;
     end;
   end;
   DBGrid1.DataSource.DataSet.GotoBookmark(OldCurrent);
