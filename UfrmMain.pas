@@ -199,6 +199,7 @@ begin
   CONFIGINI:=TINIFILE.Create(ChangeFileExt(Application.ExeName,'.ini'));
 
   SmoothNum:=configini.ReadInteger('报表','直方图光滑次数',0);
+  ifShowPrintDialog:=configini.ReadBool('报表','打印对话框',false);
   ifEnterGetCode:=configini.ReadBool('选项','填写病人基本信息时,直接回车弹出取码框',false);
   deptname_match:=configini.ReadString('选项','送检科室取码的匹配方式','');
   check_doctor_match:=configini.ReadString('选项','送检医生取码的匹配方式','');
@@ -255,6 +256,7 @@ begin
   sWorkGroup:=trim(sWorkGroup);
 
   ss:='直方图光滑次数'+#2+'Edit'+#2+#2+'0'+#2+'注:次数越多曲线越光滑,但曲线偏离越多'+#2+#3+
+      '打印对话框'+#2+'CheckListBox'+#2+#2+'0'+#2+'打印预览模式的高级选项(打印机、页码、份数等)'+#2+#3+
       '填写病人基本信息时,直接回车弹出取码框'+#2+'CheckListBox'+#2+#2+'1'+#2+#2+#3+
       '送检科室取码的匹配方式'+#2+'Combobox'+#2+'模糊匹配'+#13+'左匹配'+#13+'右匹配'+#13+'全匹配'+#2+'1'+#2+#2+#3+
       '送检医生取码的匹配方式'+#2+'Combobox'+#2+'模糊匹配'+#13+'左匹配'+#13+'右匹配'+#13+'全匹配'+#2+'1'+#2+#2+#3+
@@ -1509,7 +1511,7 @@ begin
       frxReport1.Export(frxPDFExport1);
     end else
     if RadioGroup2.ItemIndex=0 then  //预览模式
-      begin frxReport1.PrintOptions.ShowDialog:=false;frxReport1.ShowReport; end
+      begin frxReport1.PrintOptions.ShowDialog:=ifShowPrintDialog;frxReport1.ShowReport; end
     else  //直接打印模式
     begin
       if frxReport1.PrepareReport then begin frxReport1.PrintOptions.ShowDialog:=false;frxReport1.Print;end;
@@ -1648,7 +1650,7 @@ begin
       frxReport1.Export(frxPDFExport1);
     end else
     if RadioGroup2.ItemIndex=0 then  //预览模式
-      begin frxReport1.PrintOptions.ShowDialog:=false;frxReport1.ShowReport; end
+      begin frxReport1.PrintOptions.ShowDialog:=ifShowPrintDialog;frxReport1.ShowReport; end
     else  //直接打印模式
     begin
       if frxReport1.PrepareReport then begin frxReport1.PrintOptions.ShowDialog:=false;frxReport1.Print;end;

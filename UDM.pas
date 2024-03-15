@@ -65,6 +65,7 @@ var
   gServerName:string;//服务名,用于显示在状态栏
   gDbName:string;//数据库名,用于显示在状态栏
   BASE_URL:STRING;//http://211.97.0.5:8080/YkAPI/service
+  ifShowPrintDialog:boolean;//打印对话框
 
   WorkGroup_T1:string;
   TempFile_T1:string;
