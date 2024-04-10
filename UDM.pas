@@ -85,6 +85,18 @@ var
   TempFile_T8:string;
   WorkGroup_T9:string;
   TempFile_T9:string;
+  WorkGroup_T10:string;
+  TempFile_T10:string;
+  WorkGroup_T11:string;
+  TempFile_T11:string;
+  WorkGroup_T12:string;
+  TempFile_T12:string;
+  WorkGroup_T13:string;
+  TempFile_T13:string;
+  WorkGroup_T14:string;
+  TempFile_T14:string;
+  WorkGroup_T15:string;
+  TempFile_T15:string;
   GP_WorkGroup_T1:string;//分组模板1工作组
   GP_TempFile_T1:string;//分组模板1文件
   GP_WorkGroup_T2:string;//分组模板2工作组

@@ -222,6 +222,18 @@ begin
   TempFile_T8:=configini.ReadString('打印模板','特殊模板8文件','');
   WorkGroup_T9:=configini.ReadString('打印模板','特殊模板9工作组','');
   TempFile_T9:=configini.ReadString('打印模板','特殊模板9文件','');  
+  WorkGroup_T10:=configini.ReadString('打印模板','特殊模板10工作组','');
+  TempFile_T10:=configini.ReadString('打印模板','特殊模板10文件','');
+  WorkGroup_T11:=configini.ReadString('打印模板','特殊模板11工作组','');
+  TempFile_T11:=configini.ReadString('打印模板','特殊模板11文件','');
+  WorkGroup_T12:=configini.ReadString('打印模板','特殊模板12工作组','');
+  TempFile_T12:=configini.ReadString('打印模板','特殊模板12文件','');
+  WorkGroup_T13:=configini.ReadString('打印模板','特殊模板13工作组','');
+  TempFile_T13:=configini.ReadString('打印模板','特殊模板13文件','');
+  WorkGroup_T14:=configini.ReadString('打印模板','特殊模板14工作组','');
+  TempFile_T14:=configini.ReadString('打印模板','特殊模板14文件','');
+  WorkGroup_T15:=configini.ReadString('打印模板','特殊模板15工作组','');
+  TempFile_T15:=configini.ReadString('打印模板','特殊模板15文件','');  
 
   GP_WorkGroup_T1:=configini.ReadString('打印模板','分组模板1工作组','');
   GP_TempFile_T1:=configini.ReadString('打印模板','分组模板1文件','');
@@ -278,6 +290,18 @@ begin
       '特殊模板8文件'+#2+'File'+#2+#2+'2'+#2+#2+#3+
       '特殊模板9工作组'+#2+'Combobox'+#2+sWorkGroup+#2+'2'+#2+#2+#3+
       '特殊模板9文件'+#2+'File'+#2+#2+'2'+#2+#2+#3+
+      '特殊模板10工作组'+#2+'Combobox'+#2+sWorkGroup+#2+'2'+#2+#2+#3+
+      '特殊模板10文件'+#2+'File'+#2+#2+'2'+#2+#2+#3+
+      '特殊模板11工作组'+#2+'Combobox'+#2+sWorkGroup+#2+'2'+#2+#2+#3+
+      '特殊模板11文件'+#2+'File'+#2+#2+'2'+#2+#2+#3+
+      '特殊模板12工作组'+#2+'Combobox'+#2+sWorkGroup+#2+'2'+#2+#2+#3+
+      '特殊模板12文件'+#2+'File'+#2+#2+'2'+#2+#2+#3+
+      '特殊模板13工作组'+#2+'Combobox'+#2+sWorkGroup+#2+'2'+#2+#2+#3+
+      '特殊模板13文件'+#2+'File'+#2+#2+'2'+#2+#2+#3+
+      '特殊模板14工作组'+#2+'Combobox'+#2+sWorkGroup+#2+'2'+#2+#2+#3+
+      '特殊模板14文件'+#2+'File'+#2+#2+'2'+#2+#2+#3+
+      '特殊模板15工作组'+#2+'Combobox'+#2+sWorkGroup+#2+'2'+#2+#2+#3+
+      '特殊模板15文件'+#2+'File'+#2+#2+'2'+#2+#2+#3+
       '分组模板1工作组'+#2+'Combobox'+#2+sWorkGroup+#2+'2'+#2+#2+#3+
       '分组模板1文件'+#2+'File'+#2+#2+'2'+#2+#2+#3+
       '分组模板2工作组'+#2+'Combobox'+#2+sWorkGroup+#2+'2'+#2+#2+#3+
@@ -706,6 +730,30 @@ begin
     end else
     if (sCombin_Id=WorkGroup_T9)
       and frReport1.LoadFromFile(TempFile_T9) then
+    begin
+    end else
+    if (sCombin_Id=WorkGroup_T10)
+      and frReport1.LoadFromFile(TempFile_T10) then
+    begin
+    end else
+    if (sCombin_Id=WorkGroup_T11)
+      and frReport1.LoadFromFile(TempFile_T11) then
+    begin
+    end else
+    if (sCombin_Id=WorkGroup_T12)
+      and frReport1.LoadFromFile(TempFile_T12) then
+    begin
+    end else
+    if (sCombin_Id=WorkGroup_T13)
+      and frReport1.LoadFromFile(TempFile_T13) then
+    begin
+    end else
+    if (sCombin_Id=WorkGroup_T14)
+      and frReport1.LoadFromFile(TempFile_T14) then
+    begin
+    end else
+    if (sCombin_Id=WorkGroup_T15)
+      and frReport1.LoadFromFile(TempFile_T15) then
     begin
     end else
     if not frReport1.LoadFromFile(ExtractFilePath(application.ExeName)+'report_cur.frf') then
@@ -1454,6 +1502,30 @@ begin
     end else
     if (sCombin_Id=WorkGroup_T9)
       and frxReport1.LoadFromFile(TempFile_T9) then
+    begin
+    end else
+    if (sCombin_Id=WorkGroup_T10)
+      and frxReport1.LoadFromFile(TempFile_T10) then
+    begin
+    end else
+    if (sCombin_Id=WorkGroup_T11)
+      and frxReport1.LoadFromFile(TempFile_T11) then
+    begin
+    end else
+    if (sCombin_Id=WorkGroup_T12)
+      and frxReport1.LoadFromFile(TempFile_T12) then
+    begin
+    end else
+    if (sCombin_Id=WorkGroup_T13)
+      and frxReport1.LoadFromFile(TempFile_T13) then
+    begin
+    end else
+    if (sCombin_Id=WorkGroup_T14)
+      and frxReport1.LoadFromFile(TempFile_T14) then
+    begin
+    end else
+    if (sCombin_Id=WorkGroup_T15)
+      and frxReport1.LoadFromFile(TempFile_T15) then
     begin
     end else
     if not frxReport1.LoadFromFile(ExtractFilePath(application.ExeName)+'report_cur.fr3') then
